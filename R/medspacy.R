@@ -13,6 +13,13 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
+spacy <- NULL
+scispacy <- NULL
+negspacy <- NULL
+nlp <- NULL
+negex <- NULL
+linker <- NULL
+
 .onLoad <- function(libname, pkgname) {
   reticulate::configure_environment(pkgname)
   packageStartupMessage('Importing spacy...')
@@ -30,6 +37,9 @@
   packageStartupMessage('Adding the UMLS entity linker and NegEx to the spacy pipeline...')
   nlp$add_pipe(linker)
   nlp$add_pipe(negex, last=TRUE)
+}
+
+.onAttach <- function(libname, pkgname) {
   packageStartupMessage('\nWelcome to medspacy. Take a look at help(medspacy) to get started.')
 }
 
