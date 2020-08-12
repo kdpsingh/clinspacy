@@ -1,0 +1,24 @@
+Package: medspacy
+Type: Package
+Title: medspacy
+Version: 0.1.0.9000
+Author: Karandeep Singh
+Maintainer: Karandeep Singh <kdpsingh@umich.edu>
+Description: This package performs biomedical named entity recognition,
+    Unified Medical Language System (UMLS) concept mapping, and negation
+    detection using the Python spaCy, scispacy, and negspacy packages.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    reticulate (>= 1.16)
+Config/reticulate:
+  list(
+    packages = list(
+      list(package = 'spacy', pip = TRUE),
+      list(package = 'scispacy', pip = TRUE),
+      list(package = 'negspacy', pip = TRUE),
+      list(package = 'https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_sm-0.2.5.tar.gz', pip = TRUE))
+    )
+  )
+RoxygenNote: 7.1.0

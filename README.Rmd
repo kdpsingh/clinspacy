@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# medspacy
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
+
+The goal of medspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
+
+## Installation
+
+You can install the GitHub version of medspacy with:
+
+```{r eval=FALSE}
+remotes::install_github('ML4LHS/medspacy')
+```
+
+## Example
+
+```{r}
+library(medspacy)
+
+medspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+```
