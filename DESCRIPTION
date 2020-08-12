@@ -1,6 +1,6 @@
 Package: medspacy
 Type: Package
-Title: medspacy
+Title: Medical Natural Language Processing using spaCy, scispacy, and negspacy
 Version: 0.1.0.9000
 Author: Karandeep Singh
 Maintainer: Karandeep Singh <kdpsingh@umich.edu>
