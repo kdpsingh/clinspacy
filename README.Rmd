@@ -13,26 +13,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-# medspacy
+# clinspacy
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of medspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
+The goal of clinspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
 
 ## Installation
 
-You can install the GitHub version of medspacy with:
+You can install the GitHub version of clinspacy with:
 
 ```{r eval=FALSE}
-remotes::install_github('ML4LHS/medspacy')
+remotes::install_github('ML4LHS/clinspacy', INSTALL_opts = '--no-multiarch')
 ```
 
 ## Example
 
 ```{r}
-library(medspacy)
+library(clinspacy)
 
-medspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 ```

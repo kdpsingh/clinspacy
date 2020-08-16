@@ -1,12 +1,3 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
 # Some useful keyboard shortcuts for package authoring:
 #
 #   Install Package:           'Ctrl + Shift + B'
@@ -61,7 +52,7 @@ linker <- NULL
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage('\nWelcome to medspacy. Take a look at help(medspacy) to get started.')
+  packageStartupMessage('\nWelcome to clinspacy. Take a look at help(clinspacy) to get started.')
 }
 
 #' Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
@@ -72,8 +63,8 @@ linker <- NULL
 #' lemmatized entities, and NegEx negation status (\code{TRUE} means negated, \code{FALSE} means *not* negated).
 #'
 #' @examples
-#' medspacy('This patient has diabetes and CKD stage 3 but no HTN.')
-medspacy <- function(text) {
+#' clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+clinspacy <- function(text) {
   parsed_text = nlp(text)
   entity_nums = length(parsed_text$ents)
 

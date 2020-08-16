@@ -602,39 +602,30 @@ body {
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<h1 id="medspacy">medspacy</h1>
+<h1 id="clinspacy">clinspacy</h1>
 <!-- badges: start -->
 
 <p><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTM4IiBoZWlnaHQ9IjIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9ImxpZmVjeWNsZTogZXhwZXJpbWVudGFsIj48dGl0bGU+bGlmZWN5Y2xlOiBleHBlcmltZW50YWw8L3RpdGxlPjxsaW5lYXJHcmFkaWVudCBpZD0icyIgeDI9IjAiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiYmIiIHN0b3Atb3BhY2l0eT0iLjEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3Atb3BhY2l0eT0iLjEiLz48L2xpbmVhckdyYWRpZW50PjxjbGlwUGF0aCBpZD0iciI+PHJlY3Qgd2lkdGg9IjEzOCIgaGVpZ2h0PSIyMCIgcng9IjMiIGZpbGw9IiNmZmYiLz48L2NsaXBQYXRoPjxnIGNsaXAtcGF0aD0idXJsKCNyKSI+PHJlY3Qgd2lkdGg9IjU1IiBoZWlnaHQ9IjIwIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iNTUiIHdpZHRoPSI4MyIgaGVpZ2h0PSIyMCIgZmlsbD0iI2ZlN2QzNyIvPjxyZWN0IHdpZHRoPSIxMzgiIGhlaWdodD0iMjAiIGZpbGw9InVybCgjcykiLz48L2c+PGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IlZlcmRhbmEsR2VuZXZhLERlamFWdSBTYW5zLHNhbnMtc2VyaWYiIHRleHQtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIGZvbnQtc2l6ZT0iMTEwIj48dGV4dCBhcmlhLWhpZGRlbj0idHJ1ZSIgeD0iMjg1IiB5PSIxNTAiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0NTAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSIyODUiIHk9IjE0MCIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIGZpbGw9IiNmZmYiIHRleHRMZW5ndGg9IjQ1MCI+bGlmZWN5Y2xlPC90ZXh0Pjx0ZXh0IGFyaWEtaGlkZGVuPSJ0cnVlIiB4PSI5NTUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjczMCI+ZXhwZXJpbWVudGFsPC90ZXh0Pjx0ZXh0IHg9Ijk1NSIgeT0iMTQwIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgZmlsbD0iI2ZmZiIgdGV4dExlbmd0aD0iNzMwIj5leHBlcmltZW50YWw8L3RleHQ+PC9nPjwvc3ZnPg==" alt="Lifecycle: experimental" /></a></p>
 <!-- badges: end -->
 
-<p>The goal of medspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.</p>
+<p>The goal of clinspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.</p>
 <h2 id="installation">Installation</h2>
-<p>You can install the GitHub version of medspacy with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;ML4LHS/medspacy&#39;</span>)</a></code></pre></div>
+<p>You can install the GitHub version of clinspacy with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;ML4LHS/clinspacy&#39;</span>, <span class="dt">INSTALL_opts =</span> <span class="st">&#39;--no-multiarch&#39;</span>)</a></code></pre></div>
 <h2 id="example">Example</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(medspacy)</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; Importing spacy...</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt; Importing scispacy...</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; Importing negspacy...</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; Loading the en_core_sci_sm language model...</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; Loading NegEx...</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; Loading the UMLS entity linker... (this may take a while)</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; Adding the UMLS entity linker and NegEx to the spacy pipeline...</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; Welcome to medspacy. Take a look at help(medspacy) to get started.</span></a>
-<a class="sourceLine" id="cb2-11" title="11"></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="kw">medspacy</span>(<span class="st">&#39;This patient has diabetes and CKD stage 3 but no HTN.&#39;</span>)</a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt;        cui      entity       lemma negated</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; 1 C0030705     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; 2 C1578486     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt; 3 C1705908     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt; 4 C1578483     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; 5 C1550655     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 6 C0011847    diabetes     diabete   FALSE</span></a>
-<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; 7 C0011849    diabetes     diabete   FALSE</span></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt; 8 C2316787 CKD stage 3 ckd stage 3   FALSE</span></a>
-<a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; 9 C0020538         HTN         htn    TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(clinspacy)</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">clinspacy</span>(<span class="st">&#39;This patient has diabetes and CKD stage 3 but no HTN.&#39;</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt;        cui      entity       lemma negated</span></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; 1 C0030705     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; 2 C1578481     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 3 C1578484     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 4 C1550655     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 5 C1578483     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 6 C0011849    diabetes     diabete   FALSE</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 7 C0011847    diabetes     diabete   FALSE</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 8 C2316787 CKD stage 3 ckd stage 3   FALSE</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 9 C0020538         HTN         htn    TRUE</span></a></code></pre></div>
 
 </body>
 </html>
