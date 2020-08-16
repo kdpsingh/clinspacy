@@ -21,7 +21,7 @@ negex <- NULL
 linker <- NULL
 
 .onLoad <- function(libname, pkgname) {
-  reticulate::configure_environment()
+  reticulate::configure_environment(force = TRUE)
   packageStartupMessage('Importing spacy...')
   spacy <<- reticulate::import('spacy', delay_load = TRUE)
   packageStartupMessage('Importing scispacy...')
