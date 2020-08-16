@@ -22,12 +22,33 @@ linker <- NULL
 
 .onLoad <- function(libname, pkgname) {
   reticulate::configure_environment(force = TRUE)
+
+  if (!reticulate::py_module_available('spacy')) {
+    packageStartupMessage('Spacy not found. Installing spacy...')
+    reticulate::py_install('spacy', pip = TRUE)
+  }
+
+  if (!reticulate::py_module_available('scispacy')) {
+    packageStartupMessage('Scispacy not found. Installing scispacy...')
+    reticulate::py_install('scispacy', pip = TRUE)
+  }
+
+  if (!reticulate::py_module_available('negspacy')) {
+    packageStartupMessage('Negspacy not found. Installing negspacy...')
+    reticulate::py_install('negspacy', pip = TRUE)
+  }
+
+  if (!reticulate::py_module_available('en_core_sci_sm')) {
+    packageStartupMessage('en_core_sci_sm language model not found. Installing en_core_sci_sm...')
+    reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_sm-0.2.5.tar.gz', pip = TRUE)
+  }
+
   packageStartupMessage('Importing spacy...')
-  spacy <<- reticulate::import('spacy', delay_load = TRUE)
+  spacy <<- reticulate::import('spacy')
   packageStartupMessage('Importing scispacy...')
-  scispacy <<-  reticulate::import('scispacy', delay_load = TRUE)
+  scispacy <<-  reticulate::import('scispacy')
   packageStartupMessage('Importing negspacy...')
-  negspacy <<- reticulate::import('negspacy', delay_load = TRUE)
+  negspacy <<- reticulate::import('negspacy')
   packageStartupMessage('Loading the en_core_sci_sm language model...')
   nlp <<- spacy$load("en_core_sci_sm")
   packageStartupMessage('Loading NegEx...')
