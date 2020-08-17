@@ -618,14 +618,45 @@ body {
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw">clinspacy</span>(<span class="st">&#39;This patient has diabetes and CKD stage 3 but no HTN.&#39;</span>)</a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt;        cui      entity       lemma negated</span></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; 1 C0030705     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; 2 C1578481     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 3 C1578484     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 4 C1550655     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 5 C1578483     patient     patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 6 C0011849    diabetes     diabete   FALSE</span></a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 7 C0011847    diabetes     diabete   FALSE</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; 2 C1705908     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 3 C1578481     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 4 C1578485     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 5 C1578486     patient     patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 6 C0011847    diabetes     diabete   FALSE</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 7 C0011849    diabetes     diabete   FALSE</span></a>
 <a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 8 C2316787 CKD stage 3 ckd stage 3   FALSE</span></a>
 <a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 9 C0020538         HTN         htn    TRUE</span></a></code></pre></div>
+<h2 id="using-the-mtsamples-dataset">Using the mtsamples dataset</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">data</span>(mtsamples)</a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">str</span>(mtsamples[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,])</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; &#39;data.frame&#39;:    5 obs. of  6 variables:</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  $ note_id          : int  1 2 3 4 5</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;  $ description      : chr  &quot;A 23-year-old white female presents with complaint of allergies.&quot; &quot;Consult for laparoscopic gastric bypass.&quot; &quot;Consult for laparoscopic gastric bypass.&quot; &quot;2-D M-Mode. Doppler.&quot; ...</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt;  $ medical_specialty: chr  &quot;Allergy / Immunology&quot; &quot;Bariatrics&quot; &quot;Bariatrics&quot; &quot;Cardiovascular / Pulmonary&quot; ...</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;  $ sample_name      : chr  &quot;Allergic Rhinitis&quot; &quot;Laparoscopic Gastric Bypass Consult - 2&quot; &quot;Laparoscopic Gastric Bypass Consult - 1&quot; &quot;2-D Echocardiogram - 1&quot; ...</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt;  $ transcription    : chr  &quot;SUBJECTIVE:,  This 23-year-old white female presents with complaint of allergies.  She used to have allergies w&quot;| __truncated__ &quot;PAST MEDICAL HISTORY:, He has difficulty climbing stairs, difficulty with airline seats, tying shoes, used to p&quot;| __truncated__ &quot;HISTORY OF PRESENT ILLNESS: , I have seen ABC today.  He is a very pleasant gentleman who is 42 years old, 344 &quot;| __truncated__ &quot;2-D M-MODE: , ,1.  Left atrial enlargement with left atrial diameter of 4.7 cm.,2.  Normal size right and left &quot;| __truncated__ ...</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt;  $ keywords         : chr  &quot;allergy / immunology, allergic rhinitis, allergies, asthma, nasal sprays, rhinitis, nasal, erythematous, allegr&quot;| __truncated__ &quot;bariatrics, laparoscopic gastric bypass, weight loss programs, gastric bypass, atkin&#39;s diet, weight watcher&#39;s, &quot;| __truncated__ &quot;bariatrics, laparoscopic gastric bypass, heart attacks, body weight, pulmonary embolism, potential complication&quot;| __truncated__ &quot;cardiovascular / pulmonary, 2-d m-mode, doppler, aortic valve, atrial enlargement, diastolic function, ejection&quot;| __truncated__ ...</span></a></code></pre></div>
+<h2 id="binding-umls-concept-unique-identifiers-to-a-data-frame">Binding UMLS Concept Unique Identifiers to a Data Frame</h2>
+<p>This function binds columns containing concept unique identifiers with which scispacy has 99% confidence of being present with values containing frequencies. Negated concepts, as identified by negspacy’s NegEx implementation, are ignored and do not count towards the frequencies.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">mtsamples_with_cuis =<span class="st"> </span><span class="kw">bind_clinspacy</span>(mtsamples[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,], <span class="dt">text =</span> <span class="st">&#39;description&#39;</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw">str</span>(mtsamples_with_cuis)</a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; &#39;data.frame&#39;:    5 obs. of  14 variables:</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;  $ note_id          : int  1 2 3 4 5</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt;  $ description      : chr  &quot;A 23-year-old white female presents with complaint of allergies.&quot; &quot;Consult for laparoscopic gastric bypass.&quot; &quot;Consult for laparoscopic gastric bypass.&quot; &quot;2-D M-Mode. Doppler.&quot; ...</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;  $ medical_specialty: chr  &quot;Allergy / Immunology&quot; &quot;Bariatrics&quot; &quot;Bariatrics&quot; &quot;Cardiovascular / Pulmonary&quot; ...</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;  $ sample_name      : chr  &quot;Allergic Rhinitis&quot; &quot;Laparoscopic Gastric Bypass Consult - 2&quot; &quot;Laparoscopic Gastric Bypass Consult - 1&quot; &quot;2-D Echocardiogram - 1&quot; ...</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt;  $ transcription    : chr  &quot;SUBJECTIVE:,  This 23-year-old white female presents with complaint of allergies.  She used to have allergies w&quot;| __truncated__ &quot;PAST MEDICAL HISTORY:, He has difficulty climbing stairs, difficulty with airline seats, tying shoes, used to p&quot;| __truncated__ &quot;HISTORY OF PRESENT ILLNESS: , I have seen ABC today.  He is a very pleasant gentleman who is 42 years old, 344 &quot;| __truncated__ &quot;2-D M-MODE: , ,1.  Left atrial enlargement with left atrial diameter of 4.7 cm.,2.  Normal size right and left &quot;| __truncated__ ...</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt;  $ keywords         : chr  &quot;allergy / immunology, allergic rhinitis, allergies, asthma, nasal sprays, rhinitis, nasal, erythematous, allegr&quot;| __truncated__ &quot;bariatrics, laparoscopic gastric bypass, weight loss programs, gastric bypass, atkin&#39;s diet, weight watcher&#39;s, &quot;| __truncated__ &quot;bariatrics, laparoscopic gastric bypass, heart attacks, body weight, pulmonary embolism, potential complication&quot;| __truncated__ &quot;cardiovascular / pulmonary, 2-d m-mode, doppler, aortic valve, atrial enlargement, diastolic function, ejection&quot;| __truncated__ ...</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt;  $ C0009818         : num  0 1 1 0 0</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt;  $ C0020517         : num  1 0 0 0 0</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt;  $ C0277786         : num  1 0 0 0 0</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt;  $ C0554756         : num  0 0 0 1 0</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt;  $ C1705052         : num  0 0 0 1 0</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="co">#&gt;  $ C3864418         : num  1 0 0 0 0</span></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="co">#&gt;  $ C4039248         : num  0 1 1 0 0</span></a>
+<a class="sourceLine" id="cb4-18" title="18"><span class="co">#&gt;  $ C4331911         : num  0 0 0 1 0</span></a></code></pre></div>
 
 </body>
 </html>

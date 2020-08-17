@@ -57,6 +57,8 @@ linker <- NULL
 
 #' Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
 #' concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
+#' This function identifies only those concept unique identifiers with with scispacy has
+#' 99% confidence of being present. Negation is identified using negspacy's NegEx implementation.
 #'
 #' @param text A character string containing medical text that you would like to process.
 #' @return A data frame containing the UMLS concept unique identifiers (cui), entities,
@@ -92,4 +94,33 @@ clinspacy <- function(text) {
 }
 
 
+#' This function binds columns containing concept unique identifiers with which scispacy has
+#' 99% confidence of being present with values containing frequencies. Negated concepts,
+#' as identified by negspacy's NegEx implementation, are ignored and do not count towards
+#' the frequencies.
+#'
+#' @param df A data frame.
+#' @param text A character string containing the name of the column to process.
+#' @return A data frame containing the original data frame as well as additional column names
+#' for each UMLS concept unique identifer found with values containing frequencies.
+#'
+#' @examples
+#' data(mtsamples)
+#' mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
+#' str(mtsamples_with_cuis)
+bind_clinspacy <- function(df, text) {
+  clinspacy_text = text
+  assertthat::assert_that(assertthat::has_name(df, text))
+  assertthat::assert_that(nrow(df) > 0)
+  df_nrow = nrow(df)
+
+  dt = data.table(df)[, .(clinspacy_id = 1:.N, text = get(clinspacy_text))]
+  dt = dt[,clinspacy(.SD[,text]), clinspacy_id][negated == FALSE, .(clinspacy_id, cui, present = 1)]
+  dt = dcast(dt, clinspacy_id ~ cui, value.var = 'present', fun.aggregate = sum)
+  dt2 = data.table(clinspacy_id = 1:df_nrow)
+  dt = merge(dt, dt2, all.y=TRUE)
+  setnafill(dt, fill = 0, cols = 2:ncol(dt))
+  dt[, clinspacy_id := NULL]
+  cbind(df, as.data.frame(dt))
+}
 

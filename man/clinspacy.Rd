@@ -3,7 +3,9 @@
 \name{clinspacy}
 \alias{clinspacy}
 \title{Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
-concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.}
+concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
+This function identifies only those concept unique identifiers with with scispacy has
+99% confidence of being present. Negation is identified using negspacy's NegEx implementation.}
 \usage{
 clinspacy(text)
 }
@@ -17,6 +19,8 @@ lemmatized entities, and NegEx negation status (\code{TRUE} means negated, \code
 \description{
 Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
 concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
+This function identifies only those concept unique identifiers with with scispacy has
+99% confidence of being present. Negation is identified using negspacy's NegEx implementation.
 }
 \examples{
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')

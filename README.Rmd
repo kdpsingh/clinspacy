@@ -36,3 +36,23 @@ library(clinspacy)
 
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 ```
+
+## Using the mtsamples dataset
+
+```{r}
+data(mtsamples)
+
+str(mtsamples[1:5,])
+```
+
+
+## Binding UMLS Concept Unique Identifiers to a Data Frame
+
+This function binds columns containing concept unique identifiers with which scispacy has 99% confidence of being present with values containing frequencies. Negated concepts, as identified by negspacy's NegEx implementation, are ignored and do not count towards the frequencies.
+
+```{r}
+mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
+
+str(mtsamples_with_cuis)
+```
+
