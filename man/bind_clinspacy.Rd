@@ -3,7 +3,7 @@
 \name{bind_clinspacy}
 \alias{bind_clinspacy}
 \title{This function binds columns containing concept unique identifiers with which scispacy has
-99% confidence of being present with values containing frequencies. Negated concepts,
+99 percent confidence of being present with values containing frequencies. Negated concepts,
 as identified by negspacy's NegEx implementation, are ignored and do not count towards
 the frequencies.}
 \usage{
@@ -20,7 +20,7 @@ for each UMLS concept unique identifer found with values containing frequencies.
 }
 \description{
 This function binds columns containing concept unique identifiers with which scispacy has
-99% confidence of being present with values containing frequencies. Negated concepts,
+99 percent confidence of being present with values containing frequencies. Negated concepts,
 as identified by negspacy's NegEx implementation, are ignored and do not count towards
 the frequencies.
 }

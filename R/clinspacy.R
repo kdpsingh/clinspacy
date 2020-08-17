@@ -58,7 +58,7 @@ linker <- NULL
 #' Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
 #' concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
 #' This function identifies only those concept unique identifiers with with scispacy has
-#' 99% confidence of being present. Negation is identified using negspacy's NegEx implementation.
+#' 99 percent confidence of being present. Negation is identified using negspacy's NegEx implementation.
 #'
 #' @param text A character string containing medical text that you would like to process.
 #' @return A data frame containing the UMLS concept unique identifiers (cui), entities,
@@ -95,7 +95,7 @@ clinspacy <- function(text) {
 
 
 #' This function binds columns containing concept unique identifiers with which scispacy has
-#' 99% confidence of being present with values containing frequencies. Negated concepts,
+#' 99 percent confidence of being present with values containing frequencies. Negated concepts,
 #' as identified by negspacy's NegEx implementation, are ignored and do not count towards
 #' the frequencies.
 #'
