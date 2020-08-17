@@ -5,7 +5,7 @@
 \alias{mtsamples}
 \title{Medical transcription samples.}
 \format{
-A data frame with 5000 rows and 6 variables:
+A data frame with 4999 rows and 6 variables:
 \describe{
   \item{note_id}{A unique identifier for each note}
   \item{description}{A description or chief concern}
