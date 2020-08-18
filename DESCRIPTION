@@ -12,7 +12,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     reticulate (>= 1.16),
-    data.table
+    data.table,
+    assertthat
 Config/reticulate:
   list(
     packages = list(
