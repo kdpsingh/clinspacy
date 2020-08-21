@@ -7,10 +7,60 @@ concept mapping, and negation detection using the Python spaCy, scispacy, and ne
 This function identifies only those concept unique identifiers with with scispacy has
 99 percent confidence of being present. Negation is identified using negspacy's NegEx implementation.}
 \usage{
-clinspacy(text)
+clinspacy(
+  text,
+  threshold = 0.99,
+  semantic_types = c("Acquired Abnormality", "Activity", "Age Group",
+    "Amino Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian",
+    "Anatomical Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon",
+    "Bacterium", "Behavior", "Biologic Function", "Biologically Active Substance",
+    "Biomedical Occupation or Discipline", "Biomedical or Dental Material", "Bird",
+    "Body Location or Region", "Body Part, Organ, or Organ Component",
+    "Body Space or Junction", "Body Substance", "Body System", "Carbohydrate Sequence",  
+       "Cell", "Cell Component", "Cell Function", "Cell or Molecular Dysfunction",
+    "Chemical", "Chemical Viewed Functionally", "Chemical Viewed Structurally",
+    "Classification", "Clinical Attribute", "Clinical Drug", "Conceptual Entity",
+    "Congenital Abnormality", "Daily or Recreational Activity", "Diagnostic Procedure",
+    "Disease or Syndrome", "Drug Delivery Device", "Educational Activity",
+    "Element, Ion, or Isotope", "Embryonic Structure", "Entity",
+    "Environmental Effect of Humans", "Enzyme", "Eukaryote",      "Event",
+    "Experimental Model of Disease", "Family Group", "Finding", "Fish", "Food",
+    "Fully Formed Anatomical Structure", "Functional Concept", "Fungus",
+    "Gene or Genome", "Genetic Function", "Geographic Area",
+    "Governmental or Regulatory Activity", "Group", "Group Attribute",
+    "Hazardous or Poisonous Substance", "Health Care Activity",
+    "Health Care Related Organization", "Hormone", "Human",
+    "Human-caused Phenomenon or Process", "Idea or Concept", "Immunologic Factor",
+    "Indicator, Reagent, or Diagnostic Aid",      "Individual Behavior",
+    "Injury or Poisoning", "Inorganic Chemical", "Intellectual Product",
+    "Laboratory or Test Result", "Laboratory Procedure", "Language", "Machine Activity",
+    "Mammal", "Manufactured Object", "Medical Device",
+    "Mental or Behavioral Dysfunction", "Mental Process",
+    "Molecular Biology Research Technique", "Molecular Function", "Molecular Sequence",
+    "Natural Phenomenon or Process", "Neoplastic Process",
+    "Nucleic Acid, Nucleoside, or Nucleotide", "Nucleotide Sequence",
+    "Occupation or Discipline",      "Occupational Activity", "Organ or Tissue Function",
+    "Organic Chemical", "Organism", "Organism Attribute", "Organism Function",
+    "Organization", "Pathologic Function", "Patient or Disabled Group",
+    "Pharmacologic Substance", "Phenomenon or Process", "Physical Object",
+    "Physiologic Function", "Plant", "Population Group",
+    "Professional or Occupational Group", "Professional Society", "Qualitative Concept",
+    "Quantitative Concept", "Receptor", "Regulation or Law", "Reptile",
+    "Research Activity", "Research Device",      "Self-help or Relief Organization",
+    "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance",
+    "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate",
+    "Virus", "Vitamin")
+)
 }
 \arguments{
 \item{text}{A character string containing medical text that you would like to process.}
+
+\item{threshold}{Defaults to 0.99. The confidence threshold value used by clinspacy (can be higher than the
+\code{linker_threshold} from \code{\link{clinspacy_init}}). Note that whereas the
+linker_threshold can only be set once per session, this threshold can be updated during the R session.}
+
+\item{semantic_types}{Character vector containing any combination of the following:
+c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon", "Bacterium", "Behavior", "Biologic Function", "Biologically Active Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental Material", "Bird", "Body Location or Region", "Body Part, Organ, or Organ Component", "Body Space or Junction", "Body Substance", "Body System", "Carbohydrate Sequence", "Cell", "Cell Component", "Cell Function", "Cell or Molecular Dysfunction", "Chemical", "Chemical Viewed Functionally", "Chemical Viewed Structurally", "Classification", "Clinical Attribute", "Clinical Drug", "Conceptual Entity", "Congenital Abnormality", "Daily or Recreational Activity", "Diagnostic Procedure", "Disease or Syndrome", "Drug Delivery Device", "Educational Activity", "Element, Ion, or Isotope", "Embryonic Structure", "Entity", "Environmental Effect of Humans", "E}
 }
 \value{
 A data frame containing the UMLS concept unique identifiers (cui), entities,

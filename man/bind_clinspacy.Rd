@@ -7,12 +7,14 @@
 as identified by negspacy's NegEx implementation, are ignored and do not count towards
 the frequencies.}
 \usage{
-bind_clinspacy(df, text)
+bind_clinspacy(df, text, ...)
 }
 \arguments{
 \item{df}{A data frame.}
 
 \item{text}{A character string containing the name of the column to process.}
+
+\item{...}{Arguments passed down to \code{\link{clinspacy}}}
 }
 \value{
 A data frame containing the original data frame as well as additional column names

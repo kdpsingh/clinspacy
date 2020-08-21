@@ -4,8 +4,11 @@
 #'
 #' Acknowledgements
 #'
-#' This data was scraped from mtsamples.com by Tara Boyle and is made available
-#' under a CC0: Public Domain license.
+#' This data was scraped from \href{https://mtsamples.com}{https://mtsamples.com} by Tara Boyle.
+#'
+#' License
+#' This data is made available under a
+#' \href{https://creativecommons.org/share-your-work/public-domain/cc0/}{CC0: Public Domain license}.
 #'
 #' @format A data frame with 4999 rows and 6 variables:
 #' \describe{

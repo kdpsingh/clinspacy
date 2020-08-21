@@ -29,12 +29,18 @@ You can install the GitHub version of clinspacy with:
 remotes::install_github('ML4LHS/clinspacy', INSTALL_opts = '--no-multiarch')
 ```
 
-## Example
+## Examples
 
 ```{r}
 library(clinspacy)
 
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+
+clinspacy('This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.',
+          semantic_types = 'Disease or Syndrome')
+
+clinspacy('This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.',
+          semantic_types = 'Pharmacologic Substance')
 ```
 
 ## Using the mtsamples dataset
@@ -42,7 +48,7 @@ clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 ```{r}
 data(mtsamples)
 
-str(mtsamples[1:5,])
+mtsamples[1:5,]
 ```
 
 
@@ -51,8 +57,30 @@ str(mtsamples[1:5,])
 This function binds columns containing concept unique identifiers with which scispacy has 99% confidence of being present with values containing frequencies. Negated concepts, as identified by negspacy's NegEx implementation, are ignored and do not count towards the frequencies.
 
 ```{r}
-mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
+bind_clinspacy(mtsamples[1:5, 1:2],
+               text = 'description')
 
-str(mtsamples_with_cuis)
+bind_clinspacy(mtsamples[1:5, 1:2],
+               text = 'description',
+               semantic_types = 'Diagnostic Procedure')
 ```
 
+## Binding Concept Embeddings to a Data Frame
+
+```{r}
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          num_embeddings = 5)
+
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          num_embeddings = 5,
+                          semantic_types = 'Diagnostic Procedure')
+```
+
+# UMLS CUI definitions
+
+```{r}
+data(cui2vec_definitions)
+head(cui2vec_definitions)
+```
