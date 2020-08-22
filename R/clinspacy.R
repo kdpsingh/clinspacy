@@ -18,7 +18,7 @@ linker <- NULL
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage('Welcome to clinspacy.')
   packageStartupMessage('By default, this package will install and use miniconda and create a "clinspacy" conda environment.')
-  packageStartupMessage('If you want to override this behavior, use clinspacy_init(miniconda = FALSE) and specify an alternative environment using use_python() or use_conda().')
+  packageStartupMessage('If you want to override this behavior, use clinspacy_init(miniconda = FALSE) and specify an alternative environment using reticulate::use_python() or reticulate::use_conda().')
 }
 
 
@@ -50,12 +50,6 @@ clinspacy_init <- function(miniconda = TRUE, linker_threshold = 0.99, ...) {
     download.file('https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_embeddings.rda',
     file.path(system.file('data', package='clinspacy', mustWork = TRUE), 'cui2vec_embeddings.rda'))
   })
-
-
-  piggyback::pb_download('cui2vec_embeddings.rda',
-                         repo='ML4LHS/clinspacy',
-                         dest = system.file('data', package='clinspacy'),
-                         overwrite = FALSE)
 
   if (miniconda) {
     message('Checking if miniconda is installed...')
