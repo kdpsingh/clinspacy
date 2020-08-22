@@ -42,6 +42,21 @@ clinspacy_init <- function(miniconda = TRUE, linker_threshold = 0.99, ...) {
 
   message('Initializing clinspacy using clinspacy_init()...')
 
+  message('Checking if the cui2vec_embeddings.rda dataset has been downloaded...')
+
+  tryCatch({
+    system.file('data', 'cui2vec_embeddings.rda', package='clinspacy', mustWork = TRUE)
+  }, error = function (e) {
+    download.file('https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_embeddings.rda',
+    file.path(system.file('data', package='clinspacy', mustWork = TRUE), 'cui2vec_embeddings.rda'))
+  })
+
+
+  piggyback::pb_download('cui2vec_embeddings.rda',
+                         repo='ML4LHS/clinspacy',
+                         dest = system.file('data', package='clinspacy'),
+                         overwrite = FALSE)
+
   if (miniconda) {
     message('Checking if miniconda is installed...')
     tryCatch(reticulate::install_miniconda(),

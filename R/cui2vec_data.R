@@ -4,6 +4,10 @@
 #' Andrew Beam's \href{https://github.com/beamandrew/cui2vec}{cui2vec R package}. There are
 #' 500 embeddings included for each concept.
 #'
+#' This dataset is not viewable until it has been downloaded, which will occur
+#' the very first time you run \code{clinspacy_init()} after installing this
+#' package.
+#'
 #' Citation
 #'
 #' Beam, A.L., Kompa, B., Schmaltz, A., Fried, I., Griffin, W, Palmer, N.P., Shi, X.,
