@@ -4,12 +4,14 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-spacy <- NULL
-scispacy <- NULL
-negspacy <- NULL
-nlp <- NULL
-negex <- NULL
-linker <- NULL
+# spacy <- NULL
+# scispacy <- NULL
+# negspacy <- NULL
+# nlp <- NULL
+# negex <- NULL
+# linker <- NULL
+
+pkg_env = new.env(parent = emptyenv())
 
 .onLoad <- function(libname, pkgname) {
   # reticulate::configure_environment(force = TRUE)
@@ -90,23 +92,23 @@ clinspacy_init <- function(miniconda = TRUE, linker_threshold = 0.99, ...) {
   }
 
   message('Importing spacy...')
-  spacy <<- reticulate::import('spacy', delay_load = TRUE)
+  pkg_env$spacy <- reticulate::import('spacy', delay_load = TRUE)
   message('Importing scispacy...')
-  scispacy <<-  reticulate::import('scispacy', delay_load = TRUE)
+  pkg_env$scispacy <-  reticulate::import('scispacy', delay_load = TRUE)
   message('Importing negspacy...')
-  negspacy <<- reticulate::import('negspacy', delay_load = TRUE)
+  pkg_env$negspacy <- reticulate::import('negspacy', delay_load = TRUE)
 
   message('Loading the en_core_sci_lg language model...')
-  nlp <<- spacy$load("en_core_sci_lg")
+  pkg_env$nlp <- pkg_env$spacy$load("en_core_sci_lg")
   message('Loading NegEx...')
-  negex <<- negspacy$negation$Negex(nlp)
+  pkg_env$negex <- pkg_env$negspacy$negation$Negex(pkg_env$nlp)
   message('Loading the UMLS entity linker... (this may take a while)')
-  linker <<- scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
+  pkg_env$linker <- pkg_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
                                            name="umls",
                                            threshold = linker_threshold, ...)
   message('Adding the UMLS entity linker and NegEx to the spacy pipeline...')
-  nlp$add_pipe(linker)
-  nlp$add_pipe(negex)
+  pkg_env$nlp$add_pipe(pkg_env$linker)
+  pkg_env$nlp$add_pipe(pkg_env$negex)
 }
 
 #' Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
@@ -254,13 +256,13 @@ clinspacy <- function(text, threshold = 0.99,
                                          "Virus",
                                          "Vitamin")) {
 
-  if (is.null(nlp)) {
+  if (is.null(pkg_env$nlp)) {
     clinspacy_init()
   }
 
   assertthat::assert_that(threshold >= 0.70 & threshold <= 0.99)
 
-  parsed_text = nlp(text)
+  parsed_text = pkg_env$nlp(text)
   entity_nums = length(parsed_text$ents)
 
   return_df = data.frame(cui = character(0),
