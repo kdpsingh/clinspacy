@@ -619,26 +619,28 @@ body {
 <a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt;        cui      entity       lemma             semantic_type                      definition negated</span></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; 1 C0030705     patient     patient Patient or Disabled Group                        Patients   FALSE</span></a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; 2 C1550655     patient     patient            Body Substance         Specimen Type - Patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 3 C1578483     patient     patient           Idea or Concept         Report source - Patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 4 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient   FALSE</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 5 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 3 C1578481     patient     patient           Idea or Concept      Mail Claim Party - Patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; 4 C1578483     patient     patient           Idea or Concept         Report source - Patient   FALSE</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 5 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient   FALSE</span></a>
 <a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 6 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes   FALSE</span></a>
 <a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 7 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus   FALSE</span></a>
 <a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 8 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3   FALSE</span></a>
 <a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 9 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease    TRUE</span></a>
 <a class="sourceLine" id="cb2-14" title="14"></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="kw">clinspacy</span>(<span class="st">&#39;This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.&#39;</span>,</a>
-<a class="sourceLine" id="cb2-16" title="16">          <span class="dt">semantic_types =</span> <span class="st">&#39;Disease or Syndrome&#39;</span>)</a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt;        cui   entity   lemma       semantic_type        definition negated</span></a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; 1 C0011847 diabetes diabete Disease or Syndrome          Diabetes   FALSE</span></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 2 C0011849 diabetes diabete Disease or Syndrome Diabetes Mellitus   FALSE</span></a>
-<a class="sourceLine" id="cb2-20" title="20"></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="kw">clinspacy</span>(<span class="st">&#39;This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.&#39;</span>,</a>
-<a class="sourceLine" id="cb2-22" title="22">          <span class="dt">semantic_types =</span> <span class="st">&#39;Pharmacologic Substance&#39;</span>)</a>
-<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt;        cui     entity      lemma           semantic_type definition negated</span></a>
-<a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt; 1 C0028978 omeprazole omeprazole Pharmacologic Substance Omeprazole   FALSE</span></a>
-<a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt; 2 C0876139   Protonix   Protonix Pharmacologic Substance   Protonix   FALSE</span></a>
-<a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt; 3 C0065374 lisinopril lisinopril Pharmacologic Substance Lisinopril   FALSE</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-15" title="15"><span class="kw">clinspacy</span>(<span class="st">&#39;This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.&#39;</span>,</a>
+<a class="sourceLine" id="cb2-16" title="16">          <span class="dt">semantic_types =</span> <span class="st">&#39;Pharmacologic Substance&#39;</span>)</a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt;        cui     entity      lemma           semantic_type definition negated</span></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; 1 C0028978 omeprazole omeprazole Pharmacologic Substance Omeprazole   FALSE</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 2 C0004057    aspirin    aspirin Pharmacologic Substance    Aspirin   FALSE</span></a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; 3 C0065374 lisinopril lisinopril Pharmacologic Substance Lisinopril   FALSE</span></a>
+<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt; 4 C0001927  albuterol  albuterol Pharmacologic Substance  Albuterol    TRUE</span></a>
+<a class="sourceLine" id="cb2-22" title="22"></a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="kw">clinspacy</span>(<span class="st">&#39;This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.&#39;</span>,</a>
+<a class="sourceLine" id="cb2-24" title="24">          <span class="dt">semantic_types =</span> <span class="st">&#39;Disease or Syndrome&#39;</span>)</a>
+<a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt;        cui   entity    lemma       semantic_type        definition negated</span></a>
+<a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt; 1 C0011847 diabetes diabetes Disease or Syndrome          Diabetes   FALSE</span></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="co">#&gt; 2 C0011849 diabetes diabetes Disease or Syndrome Diabetes Mellitus   FALSE</span></a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="co">#&gt; 3 C0004096   asthma   asthma Disease or Syndrome            Asthma    TRUE</span></a></code></pre></div>
 <h2 id="using-the-mtsamples-dataset">Using the mtsamples dataset</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">data</span>(mtsamples)</a>
 <a class="sourceLine" id="cb3-2" title="2"></a>

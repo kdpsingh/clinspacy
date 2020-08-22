@@ -25,7 +25,7 @@
 #'   \item{cui}{A Unified Medical Language System (UMLS) Concept Unique Identifier (CUI)}
 #'   \item{emb_001}{Concept embedding vector #1}
 #'   \item{emb_002}{Concept embedding vector #2}
-#'   \item{...}{...}
+#'   \item{...}{and so on...}
 #'   \item{emb_500}{Concept embedding vector #500}
 #' }
 #' @source \url{https://figshare.com/s/00d69861786cd0156d81}

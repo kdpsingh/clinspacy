@@ -36,11 +36,11 @@ library(clinspacy)
 
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 
-clinspacy('This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.',
-          semantic_types = 'Disease or Syndrome')
-
-clinspacy('This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.',
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
           semantic_types = 'Pharmacologic Substance')
+
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
+          semantic_types = 'Disease or Syndrome')
 ```
 
 ## Using the mtsamples dataset

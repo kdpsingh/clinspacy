@@ -31,26 +31,28 @@ clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #>        cui      entity       lemma             semantic_type                      definition negated
 #> 1 C0030705     patient     patient Patient or Disabled Group                        Patients   FALSE
 #> 2 C1550655     patient     patient            Body Substance         Specimen Type - Patient   FALSE
-#> 3 C1578483     patient     patient           Idea or Concept         Report source - Patient   FALSE
-#> 4 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient   FALSE
-#> 5 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient   FALSE
+#> 3 C1578481     patient     patient           Idea or Concept      Mail Claim Party - Patient   FALSE
+#> 4 C1578483     patient     patient           Idea or Concept         Report source - Patient   FALSE
+#> 5 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient   FALSE
 #> 6 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes   FALSE
 #> 7 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus   FALSE
 #> 8 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3   FALSE
 #> 9 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease    TRUE
 
-clinspacy('This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.',
-          semantic_types = 'Disease or Syndrome')
-#>        cui   entity   lemma       semantic_type        definition negated
-#> 1 C0011847 diabetes diabete Disease or Syndrome          Diabetes   FALSE
-#> 2 C0011849 diabetes diabete Disease or Syndrome Diabetes Mellitus   FALSE
-
-clinspacy('This patient is taking omeprazole, Protonix, and lisinopril 10 mg. He has diabetes.',
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
           semantic_types = 'Pharmacologic Substance')
 #>        cui     entity      lemma           semantic_type definition negated
 #> 1 C0028978 omeprazole omeprazole Pharmacologic Substance Omeprazole   FALSE
-#> 2 C0876139   Protonix   Protonix Pharmacologic Substance   Protonix   FALSE
+#> 2 C0004057    aspirin    aspirin Pharmacologic Substance    Aspirin   FALSE
 #> 3 C0065374 lisinopril lisinopril Pharmacologic Substance Lisinopril   FALSE
+#> 4 C0001927  albuterol  albuterol Pharmacologic Substance  Albuterol    TRUE
+
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
+          semantic_types = 'Disease or Syndrome')
+#>        cui   entity    lemma       semantic_type        definition negated
+#> 1 C0011847 diabetes diabetes Disease or Syndrome          Diabetes   FALSE
+#> 2 C0011849 diabetes diabetes Disease or Syndrome Diabetes Mellitus   FALSE
+#> 3 C0004096   asthma   asthma Disease or Syndrome            Asthma    TRUE
 ```
 
 ## Using the mtsamples dataset

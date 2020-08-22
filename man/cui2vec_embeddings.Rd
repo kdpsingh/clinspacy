@@ -10,7 +10,7 @@ A data frame with 109053 rows and 501 variables:
   \item{cui}{A Unified Medical Language System (UMLS) Concept Unique Identifier (CUI)}
   \item{emb_001}{Concept embedding vector #1}
   \item{emb_002}{Concept embedding vector #2}
-  \item{...}{...}
+  \item{...}{and so on...}
   \item{emb_500}{Concept embedding vector #500}
 }
 }
@@ -26,6 +26,10 @@ Andrew Beam's \href{https://github.com/beamandrew/cui2vec}{cui2vec R package}. T
 500 embeddings included for each concept.
 }
 \details{
+This dataset is not viewable until it has been downloaded, which will occur
+the very first time you run \code{clinspacy_init()} after installing this
+package.
+
 Citation
 
 Beam, A.L., Kompa, B., Schmaltz, A., Fried, I., Griffin, W, Palmer, N.P., Shi, X.,
