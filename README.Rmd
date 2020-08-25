@@ -29,19 +29,32 @@ You can install the GitHub version of clinspacy with:
 remotes::install_github('ML4LHS/clinspacy', INSTALL_opts = '--no-multiarch')
 ```
 
-## Examples
+## How to load clinspacy
 
 ```{r}
 library(clinspacy)
+```
 
+
+## Initiating clinspacy
+
+Initiating clinspacy is optional. If you do not initiate the package using `clinspacy_init()`, it will be automatically initiated without the UMLS linker. The UMLS linker takes up ~12 GB of RAM, so if you would like to use the linker, you can initiate clinspacy with the linker. The linker can still be added on later by reinitiating with the `use_linker` argument set to `TRUE`.
+
+```{r}
+clinspacy_init() # This is optional! The default functionality is to initiatie clinspacy without the UMLS linker
+```
+
+
+## Named entity recognition (without the UMLS linker)
+
+```{r}
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 
-clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
-          semantic_types = 'Pharmacologic Substance')
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
 
-clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
-          semantic_types = 'Disease or Syndrome')
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
 ```
+
 
 ## Using the mtsamples dataset
 
@@ -51,10 +64,53 @@ data(mtsamples)
 mtsamples[1:5,]
 ```
 
+## Binding named entities to a data frame (without the UMLS linker)
 
-## Binding UMLS Concept Unique Identifiers to a Data Frame
+Negated concepts, as identified by negspacy's NegEx implementation, are ignored and do not count towards the frequencies.
+
+```{r}
+bind_clinspacy(mtsamples[1:5, 1:2],
+               text = 'description')
+```
+
+## Binding entity embeddings to a data frame (without the UMLS linker)
+
+With the UMLS linker disabled, entity embeddings can be extracted from the scispacy Python package. Up to 200-dimensional embeddings can be returned.
+
+```{r}
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          type = 'scispacy',
+                          num_embeddings = 5)
+```
+
+## Adding the UMLS linker
+
+If you would like the UMLS linker to be enabled by default, then there is no need for 
+
+```{r}
+clinspacy_init(use_linker = TRUE)
+```
+
+## Named entity recognition (with the UMLS linker)
+
+By turning on the UMLS linker, you can restrict the results by semantic type.
+
+```{r}
+clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
+          semantic_types = 'Pharmacologic Substance')
+
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
+          semantic_types = 'Disease or Syndrome')
+```
+
+## Binding UMLS concept unique identifiers to a data frame (with the UMLS linker)
 
 This function binds columns containing concept unique identifiers with which scispacy has 99% confidence of being present with values containing frequencies. Negated concepts, as identified by negspacy's NegEx implementation, are ignored and do not count towards the frequencies.
+
+Note that by turning on the UMLS linker, you can restrict the results by semantic type.
 
 ```{r}
 bind_clinspacy(mtsamples[1:5, 1:2],
@@ -65,7 +121,11 @@ bind_clinspacy(mtsamples[1:5, 1:2],
                semantic_types = 'Diagnostic Procedure')
 ```
 
-## Binding Concept Embeddings to a Data Frame
+## Binding concept embeddings to a data frame (with the UMLS linker)
+
+The default embeddings are from the cui2vec R package. Up to 500-dimensional embeddings can be returned.
+
+Note that by turning on the UMLS linker, you can restrict the results by semantic type.
 
 ```{r}
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],

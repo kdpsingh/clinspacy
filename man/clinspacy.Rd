@@ -49,7 +49,8 @@ clinspacy(
     "Research Activity", "Research Device",      "Self-help or Relief Organization",
     "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance",
     "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate",
-    "Virus", "Vitamin")
+    "Virus", "Vitamin"),
+  return_scispacy_embeddings = FALSE
 )
 }
 \arguments{
@@ -61,6 +62,9 @@ linker_threshold can only be set once per session, this threshold can be updated
 
 \item{semantic_types}{Character vector containing any combination of the following:
 c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon", "Bacterium", "Behavior", "Biologic Function", "Biologically Active Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental Material", "Bird", "Body Location or Region", "Body Part, Organ, or Organ Component", "Body Space or Junction", "Body Substance", "Body System", "Carbohydrate Sequence", "Cell", "Cell Component", "Cell Function", "Cell or Molecular Dysfunction", "Chemical", "Chemical Viewed Functionally", "Chemical Viewed Structurally", "Classification", "Clinical Attribute", "Clinical Drug", "Conceptual Entity", "Congenital Abnormality", "Daily or Recreational Activity", "Diagnostic Procedure", "Disease or Syndrome", "Drug Delivery Device", "Educational Activity", "Element, Ion, or Isotope", "Embryonic Structure", "Entity", "Environmental Effect of Humans", "E}
+
+\item{return_scispacy_embeddings}{Defaults to \code{FALSE}. This is primarily intended for
+use by the \code{\link{bind_clinspacy_embeddings}} function to obtain scispacy embeddings.}
 }
 \value{
 A data frame containing the UMLS concept unique identifiers (cui), entities,

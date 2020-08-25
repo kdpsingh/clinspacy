@@ -22,37 +22,64 @@ with:
 remotes::install_github('ML4LHS/clinspacy', INSTALL_opts = '--no-multiarch')
 ```
 
-## Examples
+## How to load clinspacy
 
 ``` r
 library(clinspacy)
+```
 
+## Initiating clinspacy
+
+Initiating clinspacy is optional. If you do not initiate the package
+using `clinspacy_init()`, it will be automatically initiated without the
+UMLS linker. The UMLS linker takes up \~12 GB of RAM, so if you would
+like to use the linker, you can initiate clinspacy with the linker. The
+linker can still be added on later by reinitiating with the `use_linker`
+argument set to
+`TRUE`.
+
+``` r
+clinspacy_init() # This is optional! The default functionality is to initiatie clinspacy without the UMLS linker
+#> Initializing clinspacy using clinspacy_init()...
+#> Checking if the cui2vec_embeddings.rda dataset has been downloaded...
+#> Checking if miniconda is installed...
+#> Importing spacy...
+#> Importing scispacy...
+#> Importing negspacy...
+#> Loading the en_core_sci_lg language model...
+#> Loading NegEx...
+#> Adding NegEx to the spacy pipeline...
+```
+
+## Named entity recognition (without the UMLS linker)
+
+``` r
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
-#>        cui      entity       lemma             semantic_type                      definition negated
-#> 1 C0030705     patient     patient Patient or Disabled Group                        Patients   FALSE
-#> 2 C1550655     patient     patient            Body Substance         Specimen Type - Patient   FALSE
-#> 3 C1578481     patient     patient           Idea or Concept      Mail Claim Party - Patient   FALSE
-#> 4 C1578483     patient     patient           Idea or Concept         Report source - Patient   FALSE
-#> 5 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient   FALSE
-#> 6 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes   FALSE
-#> 7 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus   FALSE
-#> 8 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3   FALSE
-#> 9 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease    TRUE
+#>        entity       lemma negated
+#> 1     patient     patient   FALSE
+#> 2    diabetes    diabetes   FALSE
+#> 3 CKD stage 3 ckd stage 3   FALSE
+#> 4         HTN         htn    TRUE
 
-clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
-          semantic_types = 'Pharmacologic Substance')
-#>        cui     entity      lemma           semantic_type definition negated
-#> 1 C0028978 omeprazole omeprazole Pharmacologic Substance Omeprazole   FALSE
-#> 2 C0004057    aspirin    aspirin Pharmacologic Substance    Aspirin   FALSE
-#> 3 C0065374 lisinopril lisinopril Pharmacologic Substance Lisinopril   FALSE
-#> 4 C0001927  albuterol  albuterol Pharmacologic Substance  Albuterol    TRUE
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
+#>       entity      lemma negated
+#> 1    patient    patient   FALSE
+#> 2   diabetes   diabetes   FALSE
+#> 3 omeprazole omeprazole   FALSE
+#> 4    aspirin    aspirin   FALSE
+#> 5 lisinopril lisinopril   FALSE
+#> 6  albuterol  albuterol    TRUE
+#> 7     asthma     asthma    TRUE
 
-clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
-          semantic_types = 'Disease or Syndrome')
-#>        cui   entity    lemma       semantic_type        definition negated
-#> 1 C0011847 diabetes diabetes Disease or Syndrome          Diabetes   FALSE
-#> 2 C0011849 diabetes diabetes Disease or Syndrome Diabetes Mellitus   FALSE
-#> 3 C0004096   asthma   asthma Disease or Syndrome            Asthma    TRUE
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
+#>       entity      lemma negated
+#> 1    patient    patient   FALSE
+#> 2   diabetes   diabetes   FALSE
+#> 3 omeprazole omeprazole   FALSE
+#> 4    aspirin    aspirin   FALSE
+#> 5 lisinopril lisinopril   FALSE
+#> 6  albuterol  albuterol    TRUE
+#> 7     asthma     asthma    TRUE
 ```
 
 ## Using the mtsamples dataset
@@ -87,13 +114,109 @@ mtsamples[1:5,]
 #> 5 cardiovascular / pulmonary, 2-d, doppler, echocardiogram, annular, aortic root, aortic valve, atrial, atrium, calcification, cavity, ejection fraction, mitral, obliteration, outflow, regurgitation, relaxation pattern, stenosis, systolic function, tricuspid, valve, ventricular, ventricular cavity, wall motion, pulmonary artery
 ```
 
-## Binding UMLS Concept Unique Identifiers to a Data Frame
+## Binding named entities to a data frame (without the UMLS linker)
+
+Negated concepts, as identified by negspacy’s NegEx implementation, are
+ignored and do not count towards the frequencies.
+
+``` r
+bind_clinspacy(mtsamples[1:5, 1:2],
+               text = 'description')
+#>   note_id                                                      description 2-D 2-D M-Mode Consult
+#> 1       1 A 23-year-old white female presents with complaint of allergies.   0          0       0
+#> 2       2                         Consult for laparoscopic gastric bypass.   0          0       1
+#> 3       3                         Consult for laparoscopic gastric bypass.   0          0       1
+#> 4       4                                             2-D M-Mode. Doppler.   0          1       0
+#> 5       5                                               2-D Echocardiogram   1          0       0
+#>   Doppler Echocardiogram allergies complaint laparoscopic gastric bypass white female
+#> 1       0              0         1         1                           0            1
+#> 2       0              0         0         0                           1            0
+#> 3       0              0         0         0                           1            0
+#> 4       1              0         0         0                           0            0
+#> 5       0              1         0         0                           0            0
+```
+
+## Binding entity embeddings to a data frame (without the UMLS linker)
+
+With the UMLS linker disabled, entity embeddings can be extracted from
+the scispacy Python package. Up to 200-dimensional embeddings can be
+returned.
+
+``` r
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          type = 'scispacy',
+                          num_embeddings = 5)
+#>   note_id                                                      description    emb_001    emb_002
+#> 1       1 A 23-year-old white female presents with complaint of allergies. -0.1959790 0.28813400
+#> 2       2                         Consult for laparoscopic gastric bypass. -0.1115363 0.01725144
+#> 3       3                         Consult for laparoscopic gastric bypass. -0.1115363 0.01725144
+#> 4       4                                             2-D M-Mode. Doppler. -0.3077586 0.25928350
+#> 5       5                                               2-D Echocardiogram  0.0248010 0.32503700
+#>       emb_003     emb_004    emb_005
+#> 1  0.09685702 -0.20641684 -0.1554238
+#> 2 -0.13519235 -0.05496463  0.1488807
+#> 3 -0.13519235 -0.05496463  0.1488807
+#> 4 -0.37220851 -0.06021732  0.0386426
+#> 5 -0.28739650  0.01444300  0.3118135
+```
+
+## Adding the UMLS linker
+
+If you would like the UMLS linker to be enabled by default, then there
+is no need for
+
+``` r
+clinspacy_init(use_linker = TRUE)
+#> Loading the UMLS entity linker... (this may take a while)
+#> Adding the UMLS entity linker to the spacy pipeline...
+#> NULL
+```
+
+## Named entity recognition (with the UMLS linker)
+
+By turning on the UMLS linker, you can restrict the results by semantic
+type.
+
+``` r
+clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+#>        cui      entity       lemma             semantic_type                      definition negated
+#> 1 C0030705     patient     patient Patient or Disabled Group                        Patients   FALSE
+#> 2 C1550655     patient     patient            Body Substance         Specimen Type - Patient   FALSE
+#> 3 C1578485     patient     patient      Intellectual Product Specimen Source Codes - Patient   FALSE
+#> 4 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient   FALSE
+#> 5 C1705908     patient     patient                  Organism              Veterinary Patient   FALSE
+#> 6 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes   FALSE
+#> 7 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus   FALSE
+#> 8 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3   FALSE
+#> 9 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease    TRUE
+
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
+          semantic_types = 'Pharmacologic Substance')
+#>        cui     entity      lemma           semantic_type definition negated
+#> 1 C0028978 omeprazole omeprazole Pharmacologic Substance Omeprazole   FALSE
+#> 2 C0004057    aspirin    aspirin Pharmacologic Substance    Aspirin   FALSE
+#> 3 C0065374 lisinopril lisinopril Pharmacologic Substance Lisinopril   FALSE
+#> 4 C0001927  albuterol  albuterol Pharmacologic Substance  Albuterol    TRUE
+
+clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
+          semantic_types = 'Disease or Syndrome')
+#>        cui   entity    lemma       semantic_type        definition negated
+#> 1 C0011847 diabetes diabetes Disease or Syndrome          Diabetes   FALSE
+#> 2 C0011849 diabetes diabetes Disease or Syndrome Diabetes Mellitus   FALSE
+#> 3 C0004096   asthma   asthma Disease or Syndrome            Asthma    TRUE
+```
+
+## Binding UMLS concept unique identifiers to a data frame (with the UMLS linker)
 
 This function binds columns containing concept unique identifiers with
 which scispacy has 99% confidence of being present with values
 containing frequencies. Negated concepts, as identified by negspacy’s
 NegEx implementation, are ignored and do not count towards the
 frequencies.
+
+Note that by turning on the UMLS linker, you can restrict the results by
+semantic type.
 
 ``` r
 bind_clinspacy(mtsamples[1:5, 1:2],
@@ -122,7 +245,13 @@ bind_clinspacy(mtsamples[1:5, 1:2],
 #> 5       5                                               2-D Echocardiogram        1        0
 ```
 
-## Binding Concept Embeddings to a Data Frame
+## Binding concept embeddings to a data frame (with the UMLS linker)
+
+The default embeddings are from the cui2vec R package. Up to
+500-dimensional embeddings can be returned.
+
+Note that by turning on the UMLS linker, you can restrict the results by
+semantic type.
 
 ``` r
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],

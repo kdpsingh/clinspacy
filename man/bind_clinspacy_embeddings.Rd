@@ -8,12 +8,24 @@ as identified by negspacy's NegEx implementation, are ignored and do not count t
 the embeddings. The concept embeddings are derived from the cui2vec_embeddings dataset
 included with this package.}
 \usage{
-bind_clinspacy_embeddings(df, text, num_embeddings = 500, ...)
+bind_clinspacy_embeddings(
+  df,
+  text,
+  type = "cui2vec",
+  num_embeddings = 500,
+  ...
+)
 }
 \arguments{
 \item{df}{A data frame.}
 
 \item{text}{A character string containing the name of the column to process.}
+
+\item{type}{The type of embeddings to return. One of \code{cui2vec} and \code{scispacy}.
+Whereas \code{cui2vec} embeddings require the UMLS linker to be enabled, the
+\code{scispacy} embeddings do not. If only the \code{scispacy} embeddings are needed, then
+initiating \code{clinspacy} using \code{clinspacy_init(use_linker = FALSE)} will result in
+much lower memory usage.}
 
 \item{num_embeddings}{The number of embeddings to return (must be a number 1 through 500).}
 

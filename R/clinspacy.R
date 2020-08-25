@@ -11,7 +11,7 @@
 # negex <- NULL
 # linker <- NULL
 
-pkg_env = new.env(parent = emptyenv())
+clinspacy_env = new.env(parent = emptyenv())
 
 .onLoad <- function(libname, pkgname) {
   # reticulate::configure_environment(force = TRUE)
@@ -32,17 +32,42 @@ pkg_env = new.env(parent = emptyenv())
 #' and configured with the "clinspacy" conda environment. If you want to override this behavior,
 #' set \code{miniconda} to \code{FALSE} and specify an alternative environment using use_python()
 #' or use_conda().
-#' @param linker_threshold Defaults to 0.99. The confidence threshold value used by the scispacy UMLS entity
+#' @param use_linker Defaults to \code{FALSE}. To turn on the UMLS linker, set this to \code{TRUE}.
+#' @param linker_threshold Defaults to 0.99. This arguemtn is only relevant if \code{use_linker}
+#' is set to \code{TRUE}. It refers to the confidence threshold value used by the scispacy UMLS entity
 #' linker. Note: This can be lower than the \code{threshold} from \code{\link{clinspacy_init}}).
 #' The linker_threshold can only be set once per session.
 #' @param ... Additional settings available from: \href{https://github.com/allenai/scispacy}{https://github.com/allenai/scispacy}.
 
-clinspacy_init <- function(miniconda = TRUE, linker_threshold = 0.99, ...) {
+clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshold = 0.99, ...) {
 
   assertthat::assert_that(assertthat::is.flag(miniconda))
-  assertthat::assert_that(linker_threshold >= 0.70 & linker_threshold <= 0.99)
+  assertthat::assert_that(assertthat::is.flag(use_linker))
+
+  if (use_linker) {
+    assertthat::assert_that(linker_threshold >= 0.70 & linker_threshold <= 0.99)
+  }
+
+  # If clinspacy has already been initialized without a linker and you now want to add a linker
+  if (!is.null(clinspacy_env$nlp)) {
+    if (clinspacy_env$use_linker == FALSE & use_linker == TRUE) {
+      clinspacy_env$use_linker <- use_linker
+      message('Loading the UMLS entity linker... (this may take a while)')
+      clinspacy_env$linker <- clinspacy_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
+                                                                          name="umls",
+                                                                          threshold = linker_threshold, ...)
+      message('Adding the UMLS entity linker to the spacy pipeline...')
+      clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
+      return()
+    }
+    stop('Clinspacy has already been initialized. To re-initialize clinspacy, you must restart your R session.')
+  }
+
+  # If clinspacy has not been initialized previously
 
   message('Initializing clinspacy using clinspacy_init()...')
+
+  clinspacy_env$use_linker <- use_linker
 
   message('Checking if the cui2vec_embeddings.rda dataset has been downloaded...')
 
@@ -92,23 +117,28 @@ clinspacy_init <- function(miniconda = TRUE, linker_threshold = 0.99, ...) {
   }
 
   message('Importing spacy...')
-  pkg_env$spacy <- reticulate::import('spacy', delay_load = TRUE)
+  clinspacy_env$spacy <- reticulate::import('spacy', delay_load = TRUE)
   message('Importing scispacy...')
-  pkg_env$scispacy <-  reticulate::import('scispacy', delay_load = TRUE)
+  clinspacy_env$scispacy <-  reticulate::import('scispacy', delay_load = TRUE)
   message('Importing negspacy...')
-  pkg_env$negspacy <- reticulate::import('negspacy', delay_load = TRUE)
+  clinspacy_env$negspacy <- reticulate::import('negspacy', delay_load = TRUE)
 
   message('Loading the en_core_sci_lg language model...')
-  pkg_env$nlp <- pkg_env$spacy$load("en_core_sci_lg")
+  clinspacy_env$nlp <- clinspacy_env$spacy$load("en_core_sci_lg")
   message('Loading NegEx...')
-  pkg_env$negex <- pkg_env$negspacy$negation$Negex(pkg_env$nlp)
-  message('Loading the UMLS entity linker... (this may take a while)')
-  pkg_env$linker <- pkg_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
+  clinspacy_env$negex <- clinspacy_env$negspacy$negation$Negex(clinspacy_env$nlp)
+
+  if (use_linker) {
+    message('Loading the UMLS entity linker... (this may take a while)')
+    clinspacy_env$linker <- clinspacy_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
                                            name="umls",
                                            threshold = linker_threshold, ...)
-  message('Adding the UMLS entity linker and NegEx to the spacy pipeline...')
-  pkg_env$nlp$add_pipe(pkg_env$linker)
-  pkg_env$nlp$add_pipe(pkg_env$negex)
+    message('Adding the UMLS entity linker to the spacy pipeline...')
+    clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
+  }
+
+  message('Adding NegEx to the spacy pipeline...')
+  clinspacy_env$nlp$add_pipe(clinspacy_env$negex)
 }
 
 #' Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
@@ -122,6 +152,8 @@ clinspacy_init <- function(miniconda = TRUE, linker_threshold = 0.99, ...) {
 #' linker_threshold can only be set once per session, this threshold can be updated during the R session.
 #' @param semantic_types Character vector containing any combination of the following:
 #' c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon", "Bacterium", "Behavior", "Biologic Function", "Biologically Active Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental Material", "Bird", "Body Location or Region", "Body Part, Organ, or Organ Component", "Body Space or Junction", "Body Substance", "Body System", "Carbohydrate Sequence", "Cell", "Cell Component", "Cell Function", "Cell or Molecular Dysfunction", "Chemical", "Chemical Viewed Functionally", "Chemical Viewed Structurally", "Classification", "Clinical Attribute", "Clinical Drug", "Conceptual Entity", "Congenital Abnormality", "Daily or Recreational Activity", "Diagnostic Procedure", "Disease or Syndrome", "Drug Delivery Device", "Educational Activity", "Element, Ion, or Isotope", "Embryonic Structure", "Entity", "Environmental Effect of Humans", "Enzyme", "Eukaryote", "Event", "Experimental Model of Disease", "Family Group", "Finding", "Fish", "Food", "Fully Formed Anatomical Structure", "Functional Concept", "Fungus", "Gene or Genome", "Genetic Function", "Geographic Area", "Governmental or Regulatory Activity", "Group", "Group Attribute", "Hazardous or Poisonous Substance", "Health Care Activity", "Health Care Related Organization", "Hormone", "Human", "Human-caused Phenomenon or Process", "Idea or Concept", "Immunologic Factor", "Indicator, Reagent, or Diagnostic Aid", "Individual Behavior", "Injury or Poisoning", "Inorganic Chemical", "Intellectual Product", "Laboratory or Test Result", "Laboratory Procedure", "Language", "Machine Activity", "Mammal", "Manufactured Object", "Medical Device", "Mental or Behavioral Dysfunction", "Mental Process", "Molecular Biology Research Technique", "Molecular Function", "Molecular Sequence", "Natural Phenomenon or Process", "Neoplastic Process", "Nucleic Acid, Nucleoside, or Nucleotide", "Nucleotide Sequence", "Occupation or Discipline", "Occupational Activity", "Organ or Tissue Function", "Organic Chemical", "Organism", "Organism Attribute", "Organism Function", "Organization", "Pathologic Function", "Patient or Disabled Group", "Pharmacologic Substance", "Phenomenon or Process", "Physical Object", "Physiologic Function", "Plant", "Population Group", "Professional or Occupational Group", "Professional Society", "Qualitative Concept", "Quantitative Concept", "Receptor", "Regulation or Law", "Reptile", "Research Activity", "Research Device", "Self-help or Relief Organization", "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance", "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate", "Virus", "Vitamin")
+#' @param return_scispacy_embeddings Defaults to \code{FALSE}. This is primarily intended for
+#' use by the \code{\link{bind_clinspacy_embeddings}} function to obtain scispacy embeddings.
 #' @return A data frame containing the UMLS concept unique identifiers (cui), entities,
 #' lemmatized entities, and NegEx negation status (\code{TRUE} means negated, \code{FALSE} means *not* negated).
 #'
@@ -254,46 +286,77 @@ clinspacy <- function(text, threshold = 0.99,
                                          "Tissue",
                                          "Vertebrate",
                                          "Virus",
-                                         "Vitamin")) {
+                                         "Vitamin"),
+                      return_scispacy_embeddings = FALSE) {
 
-  if (is.null(pkg_env$nlp)) {
+  if (is.null(clinspacy_env$nlp)) {
     clinspacy_init()
   }
 
-  assertthat::assert_that(threshold >= 0.70 & threshold <= 0.99)
+  if (clinspacy_env$use_linker) {
+    assertthat::assert_that(threshold >= 0.70 & threshold <= 0.99)
+  }
 
-  parsed_text = pkg_env$nlp(text)
+  parsed_text = clinspacy_env$nlp(text)
   entity_nums = length(parsed_text$ents)
 
-  return_df = data.frame(cui = character(0),
-                         entity = character(0),
-                         lemma = character(0),
-                         negated = logical(0),
-                         semantic_type = character(0),
-                         definition = character(0),
-                         stringsAsFactors = FALSE)
+  if (clinspacy_env$use_linker) {
+    return_df = data.frame(cui = character(0),
+                           entity = character(0),
+                           lemma = character(0),
+                           negated = logical(0),
+                           semantic_type = character(0),
+                           definition = character(0),
+                           stringsAsFactors = FALSE)
+  } else {
+    return_df = data.frame(entity = character(0),
+                           lemma = character(0),
+                           negated = logical(0),
+                           stringsAsFactors = FALSE)
+  }
+
 
   return_df_list = list()
 
   for (entity_num in seq_len(entity_nums)) {
-    if (is.null(unlist(parsed_text$ents[[entity_num]]$`_`$kb_ents))) next
 
-    temp_cuis = parsed_text$ents[[entity_num]]$`_`$kb_ents
-    temp_cuis = unlist(temp_cuis)
-    temp_df = data.frame(cui = temp_cuis[seq(1, length(temp_cuis), by = 2)],
-                         confidence = temp_cuis[seq(2, length(temp_cuis), by = 2)],
-                         stringsAsFactors = FALSE)
+    if (clinspacy_env$use_linker) {
+      if (is.null(unlist(parsed_text$ents[[entity_num]]$`_`$kb_ents))) next
+    } else {
+      if (!parsed_text$ents[[entity_num]]$has_vector) next
+    }
 
-    temp_df$entity = parsed_text$ents[[entity_num]]$text
+
+    if (clinspacy_env$use_linker) {
+      temp_cuis = parsed_text$ents[[entity_num]]$`_`$kb_ents
+      temp_cuis = unlist(temp_cuis)
+      temp_df = data.frame(cui = temp_cuis[seq(1, length(temp_cuis), by = 2)],
+                           confidence = temp_cuis[seq(2, length(temp_cuis), by = 2)],
+                           stringsAsFactors = FALSE)
+      temp_df$entity = parsed_text$ents[[entity_num]]$text
+    } else {
+      temp_df = data.frame(entity = parsed_text$ents[[entity_num]]$text,
+                           stringsAsFactors = FALSE)
+    }
+
     temp_df$lemma = parsed_text$ents[[entity_num]]$lemma_
-    temp_df = merge(temp_df, cui2vec_definitions, all.x = TRUE) # adds semantic_type and definition
+
+    if (clinspacy_env$use_linker) {
+      temp_df = merge(temp_df, cui2vec_definitions, all.x = TRUE) # adds semantic_type and definition
+    }
 
     temp_df$negated = parsed_text$ents[[entity_num]]$`_`$negex
 
-    temp_df = temp_df[temp_df$confidence > threshold, ]
-    temp_df$confidence = NULL
+    if (clinspacy_env$use_linker) {
+      temp_df = temp_df[temp_df$confidence > threshold, ]
+      temp_df$confidence = NULL
+      temp_df = temp_df[temp_df$semantic_type %in% semantic_types, ]
+    }
 
-    temp_df = temp_df[temp_df$semantic_type %in% semantic_types, ]
+    if (return_scispacy_embeddings) {
+      temp_df = cbind(temp_df, matrix(parsed_text$ents[[entity_num]]$vector, nrow = 1))
+      names(temp_df)[(ncol(temp_df)-200+1):ncol(temp_df)] = paste0('emb_', sprintf('%03d', 1:200))
+    }
 
     return_df_list[[entity_num]] = temp_df
   }
@@ -331,8 +394,15 @@ bind_clinspacy <- function(df, text, ...) {
   df_nrow = nrow(df)
 
   dt = data.table(df)[, .(clinspacy_id = 1:.N, text = get(clinspacy_text))]
-  dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][negated == FALSE, .(clinspacy_id, cui, present = 1)]
-  dt = dcast(dt, clinspacy_id ~ cui, value.var = 'present', fun.aggregate = sum)
+
+  if (clinspacy_env$use_linker) {
+    dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][negated == FALSE, .(clinspacy_id, cui, present = 1)]
+    dt = dcast(dt, clinspacy_id ~ cui, value.var = 'present', fun.aggregate = sum)
+  } else {
+    dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][negated == FALSE, .(clinspacy_id, entity, present = 1)]
+    dt = dcast(dt, clinspacy_id ~ entity, value.var = 'present', fun.aggregate = sum)
+  }
+
   dt2 = data.table(clinspacy_id = 1:df_nrow)
   dt = merge(dt, dt2, all.y=TRUE)
   setnafill(dt, fill = 0, cols = 2:ncol(dt))
@@ -363,6 +433,11 @@ bind_clinspacy <- function(df, text, ...) {
 #'
 #' @param df A data frame.
 #' @param text A character string containing the name of the column to process.
+#' @param type The type of embeddings to return. One of \code{cui2vec} and \code{scispacy}.
+#' Whereas \code{cui2vec} embeddings require the UMLS linker to be enabled, the
+#' \code{scispacy} embeddings do not. If only the \code{scispacy} embeddings are needed, then
+#' initiating \code{clinspacy} using \code{clinspacy_init(use_linker = FALSE)} will result in
+#' much lower memory usage.
 #' @param num_embeddings The number of embeddings to return (must be a number 1 through 500).
 #' @param ... Arguments passed down to \code{\link{clinspacy}}
 #' @return A data frame containing the original data frame as well as additional column names
@@ -373,27 +448,53 @@ bind_clinspacy <- function(df, text, ...) {
 #' mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
 #' str(mtsamples_with_cuis)
 bind_clinspacy_embeddings <- function(df, text,
+                                      type = 'cui2vec',
                                       num_embeddings = 500, ...) {
+  assertthat::assert_that(type %in% c('cui2vec', 'scispacy'))
+  if (type == 'cui2vec') {
+    if (!is.null(clinspacy_env$use_linker)) {
+      if(clinspacy_env$use_linker == FALSE) {
+        stop('You must initiate clinspacy with use_linker = TRUE to use cui2vec embeddings.')
+      }
+    }
+    assertthat::assert_that(num_embeddings >= 1 & num_embeddings <= 500)
+  } else if (type == 'scispacy') {
+    assertthat::assert_that(num_embeddings >= 1 & num_embeddings <= 200)
+  }
 
-  assertthat::assert_that(num_embeddings >= 1 & num_embeddings <= 500)
-
-  clinspacy_text = text
   assertthat::assert_that(assertthat::has_name(df, text))
   assertthat::assert_that(nrow(df) > 0)
-  df_nrow = nrow(df)
 
+  clinspacy_text = text
+  df_nrow = nrow(df)
   dt = data.table(df)[, .(clinspacy_id = 1:.N, text = get(clinspacy_text))]
-  dt = dt[, clinspacy(.SD[,text], ...), clinspacy_id]
-  dt = dt[negated == FALSE]
-  dt[, n := .N, by = .(clinspacy_id, cui)]
-  dt = merge(dt, cui2vec_embeddings) # inner join on cui
-  dt = dt[, .(clinspacy_id, cui, n, n*.SD),.SDcols = paste0('emb_',sprintf('%03d', 1:500))]
-  dt[, n := sum(n), by = clinspacy_id]
-  dt = dt[, lapply(.SD, function (x) sum(x)/n), by = clinspacy_id, .SDcols = paste0('emb_',sprintf('%03d', 1:500))]
-  dt = unique(dt)
-  dt2 = data.table(clinspacy_id = 1:df_nrow)
-  dt = merge(dt, dt2, all.y=TRUE)
-  dt[, clinspacy_id := NULL]
-  dt = dt[, 1:num_embeddings]
-  cbind(df, as.data.frame(dt))
+
+  if (type == 'cui2vec') {
+    dt = dt[, clinspacy(.SD[,text], return_scispacy_embeddings = FALSE, ...), clinspacy_id]
+    dt = dt[negated == FALSE]
+    dt[, n := .N, by = .(clinspacy_id, cui)]
+
+    # inner join on cui for only those number of embeddings that are needed
+    dt = merge(dt, cui2vec_embeddings[, 1:(num_embeddings + 1)])
+    dt = dt[, .(clinspacy_id, cui, n, n*.SD),
+            .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
+    dt[, n := sum(n), by = clinspacy_id]
+    dt = dt[, lapply(.SD, function (x) sum(x)/n), by = clinspacy_id,
+            .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
+    dt = unique(dt)
+    dt2 = data.table(clinspacy_id = 1:df_nrow)
+    dt = merge(dt, dt2, all.y=TRUE)
+    dt[, clinspacy_id := NULL]
+    return(cbind(df, as.data.frame(dt)))
+  } else if (type == 'scispacy') {
+    dt = dt[, clinspacy(.SD[,text], return_scispacy_embeddings = TRUE, ...), by = clinspacy_id]
+    dt = dt[negated == FALSE]
+    dt = dt[, .(clinspacy_id, entity, .SD),
+            .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
+    names(dt)[(ncol(dt)-num_embeddings+1):ncol(dt)] = paste0('emb_', sprintf('%03d', 1:num_embeddings))
+    dt = dt[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = clinspacy_id,
+                     .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
+    dt[, clinspacy_id := NULL]
+    return(cbind(df, as.data.frame(dt)))
+  }
 }

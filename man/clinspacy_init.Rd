@@ -6,7 +6,12 @@
 the parameters used by scispacy at initiation. If you do not run this function, it will be
 run with default parameters the first time that any of the package functions are run.}
 \usage{
-clinspacy_init(miniconda = TRUE, linker_threshold = 0.99, ...)
+clinspacy_init(
+  miniconda = TRUE,
+  use_linker = FALSE,
+  linker_threshold = 0.99,
+  ...
+)
 }
 \arguments{
 \item{miniconda}{Defaults to TRUE, which results in miniconda being installed (~400 MB)
@@ -14,7 +19,10 @@ and configured with the "clinspacy" conda environment. If you want to override t
 set \code{miniconda} to \code{FALSE} and specify an alternative environment using use_python()
 or use_conda().}
 
-\item{linker_threshold}{Defaults to 0.99. The confidence threshold value used by the scispacy UMLS entity
+\item{use_linker}{Defaults to \code{FALSE}. To turn on the UMLS linker, set this to \code{TRUE}.}
+
+\item{linker_threshold}{Defaults to 0.99. This arguemtn is only relevant if \code{use_linker}
+is set to \code{TRUE}. It refers to the confidence threshold value used by the scispacy UMLS entity
 linker. Note: This can be lower than the \code{threshold} from \code{\link{clinspacy_init}}).
 The linker_threshold can only be set once per session.}
 
