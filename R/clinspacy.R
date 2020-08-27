@@ -154,6 +154,7 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #' c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon", "Bacterium", "Behavior", "Biologic Function", "Biologically Active Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental Material", "Bird", "Body Location or Region", "Body Part, Organ, or Organ Component", "Body Space or Junction", "Body Substance", "Body System", "Carbohydrate Sequence", "Cell", "Cell Component", "Cell Function", "Cell or Molecular Dysfunction", "Chemical", "Chemical Viewed Functionally", "Chemical Viewed Structurally", "Classification", "Clinical Attribute", "Clinical Drug", "Conceptual Entity", "Congenital Abnormality", "Daily or Recreational Activity", "Diagnostic Procedure", "Disease or Syndrome", "Drug Delivery Device", "Educational Activity", "Element, Ion, or Isotope", "Embryonic Structure", "Entity", "Environmental Effect of Humans", "Enzyme", "Eukaryote", "Event", "Experimental Model of Disease", "Family Group", "Finding", "Fish", "Food", "Fully Formed Anatomical Structure", "Functional Concept", "Fungus", "Gene or Genome", "Genetic Function", "Geographic Area", "Governmental or Regulatory Activity", "Group", "Group Attribute", "Hazardous or Poisonous Substance", "Health Care Activity", "Health Care Related Organization", "Hormone", "Human", "Human-caused Phenomenon or Process", "Idea or Concept", "Immunologic Factor", "Indicator, Reagent, or Diagnostic Aid", "Individual Behavior", "Injury or Poisoning", "Inorganic Chemical", "Intellectual Product", "Laboratory or Test Result", "Laboratory Procedure", "Language", "Machine Activity", "Mammal", "Manufactured Object", "Medical Device", "Mental or Behavioral Dysfunction", "Mental Process", "Molecular Biology Research Technique", "Molecular Function", "Molecular Sequence", "Natural Phenomenon or Process", "Neoplastic Process", "Nucleic Acid, Nucleoside, or Nucleotide", "Nucleotide Sequence", "Occupation or Discipline", "Occupational Activity", "Organ or Tissue Function", "Organic Chemical", "Organism", "Organism Attribute", "Organism Function", "Organization", "Pathologic Function", "Patient or Disabled Group", "Pharmacologic Substance", "Phenomenon or Process", "Physical Object", "Physiologic Function", "Plant", "Population Group", "Professional or Occupational Group", "Professional Society", "Qualitative Concept", "Quantitative Concept", "Receptor", "Regulation or Law", "Reptile", "Research Activity", "Research Device", "Self-help or Relief Organization", "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance", "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate", "Virus", "Vitamin")
 #' @param return_scispacy_embeddings Defaults to \code{FALSE}. This is primarily intended for
 #' use by the \code{\link{bind_clinspacy_embeddings}} function to obtain scispacy embeddings.
+#' @param verbose Defaults to TRUE.
 #' @return A data frame containing the UMLS concept unique identifiers (cui), entities,
 #' lemmatized entities, and NegEx negation status (\code{TRUE} means negated, \code{FALSE} means *not* negated).
 #'
@@ -287,7 +288,8 @@ clinspacy <- function(text, threshold = 0.99,
                                          "Vertebrate",
                                          "Virus",
                                          "Vitamin"),
-                      return_scispacy_embeddings = FALSE) {
+                      return_scispacy_embeddings = FALSE,
+                      verbose = TRUE) {
 
   if (is.null(clinspacy_env$nlp)) {
     clinspacy_init()
@@ -315,8 +317,19 @@ clinspacy <- function(text, threshold = 0.99,
                            stringsAsFactors = FALSE)
   }
 
+  if (return_scispacy_embeddings == TRUE) {
+    for(emb in paste0('emb_', sprintf('%03d', 1:200))) {
+      return_df[[emb]] = numeric(0)
+    }
+  }
+
 
   return_df_list = list()
+
+  if (verbose) {
+    message(paste('Processing...', text))
+    pb = txtProgressBar(min = 0, max = entity_nums, style = 3)
+  }
 
   for (entity_num in seq_len(entity_nums)) {
 
@@ -359,14 +372,21 @@ clinspacy <- function(text, threshold = 0.99,
     }
 
     return_df_list[[entity_num]] = temp_df
+
+      if (verbose) {
+      setTxtProgressBar(pb, entity_num)
+    }
+  }
+
+  if (verbose) {
+    close(pb)
   }
 
   if (length(return_df_list) > 0) {
     return_df = rbindlist(return_df_list, use.names = TRUE, fill = TRUE)
     setDF(return_df)
     return(return_df)
-  } else
-  {
+  } else {
     return(return_df)
   }
 }
@@ -435,10 +455,10 @@ bind_clinspacy <- function(df, text, ...) {
 #' @param text A character string containing the name of the column to process.
 #' @param type The type of embeddings to return. One of \code{cui2vec} and \code{scispacy}.
 #' Whereas \code{cui2vec} embeddings require the UMLS linker to be enabled, the
-#' \code{scispacy} embeddings do not. If only the \code{scispacy} embeddings are needed, then
-#' initiating \code{clinspacy} using \code{clinspacy_init(use_linker = FALSE)} will result in
-#' much lower memory usage.
-#' @param num_embeddings The number of embeddings to return (must be a number 1 through 500).
+#' \code{scispacy} embeddings do not. Defaults to \code{scispacy}.
+#' @param num_embeddings The number of embeddings to return. This must be a number 1 through
+#' 200 for \code{scispacy} embeddings and 1 through 500 for \code{cui2vec} embeddings. Defaults
+#' to 200.
 #' @param ... Arguments passed down to \code{\link{clinspacy}}
 #' @return A data frame containing the original data frame as well as additional column names
 #' for each UMLS concept unique identifer found with values containing frequencies.
@@ -448,8 +468,8 @@ bind_clinspacy <- function(df, text, ...) {
 #' mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
 #' str(mtsamples_with_cuis)
 bind_clinspacy_embeddings <- function(df, text,
-                                      type = 'cui2vec',
-                                      num_embeddings = 500, ...) {
+                                      type = 'scispacy',
+                                      num_embeddings = 200, ...) {
   assertthat::assert_that(type %in% c('cui2vec', 'scispacy'))
   if (type == 'cui2vec') {
     if (!is.null(clinspacy_env$use_linker)) {
@@ -494,6 +514,8 @@ bind_clinspacy_embeddings <- function(df, text,
     names(dt)[(ncol(dt)-num_embeddings+1):ncol(dt)] = paste0('emb_', sprintf('%03d', 1:num_embeddings))
     dt = dt[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = clinspacy_id,
                      .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
+    dt2 = data.table(clinspacy_id = 1:df_nrow)
+    dt = merge(dt, dt2, all.y=TRUE)
     dt[, clinspacy_id := NULL]
     return(cbind(df, as.data.frame(dt)))
   }

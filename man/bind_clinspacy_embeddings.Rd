@@ -11,8 +11,8 @@ included with this package.}
 bind_clinspacy_embeddings(
   df,
   text,
-  type = "cui2vec",
-  num_embeddings = 500,
+  type = "scispacy",
+  num_embeddings = 200,
   ...
 )
 }
@@ -23,11 +23,11 @@ bind_clinspacy_embeddings(
 
 \item{type}{The type of embeddings to return. One of \code{cui2vec} and \code{scispacy}.
 Whereas \code{cui2vec} embeddings require the UMLS linker to be enabled, the
-\code{scispacy} embeddings do not. If only the \code{scispacy} embeddings are needed, then
-initiating \code{clinspacy} using \code{clinspacy_init(use_linker = FALSE)} will result in
-much lower memory usage.}
+\code{scispacy} embeddings do not. Defaults to \code{scispacy}.}
 
-\item{num_embeddings}{The number of embeddings to return (must be a number 1 through 500).}
+\item{num_embeddings}{The number of embeddings to return. This must be a number 1 through
+200 for \code{scispacy} embeddings and 1 through 500 for \code{cui2vec} embeddings. Defaults
+to 200.}
 
 \item{...}{Arguments passed down to \code{\link{clinspacy}}}
 }

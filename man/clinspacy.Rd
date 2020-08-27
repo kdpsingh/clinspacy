@@ -50,7 +50,8 @@ clinspacy(
     "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance",
     "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate",
     "Virus", "Vitamin"),
-  return_scispacy_embeddings = FALSE
+  return_scispacy_embeddings = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -65,6 +66,8 @@ c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid Sequence", "Amino
 
 \item{return_scispacy_embeddings}{Defaults to \code{FALSE}. This is primarily intended for
 use by the \code{\link{bind_clinspacy_embeddings}} function to obtain scispacy embeddings.}
+
+\item{verbose}{Defaults to TRUE.}
 }
 \value{
 A data frame containing the UMLS concept unique identifiers (cui), entities,
