@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
 The goal of clinspacy is to perform biomedical named entity recognition,
@@ -55,6 +55,8 @@ clinspacy_init() # This is optional! The default functionality is to initiatie c
 
 ``` r
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+#> Processing... This patient has diabetes and CKD stage 3 but no HTN.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================                                                                |  25%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |================================================================                      |  75%  |                                                                                              |======================================================================================| 100%
 #>        entity       lemma negated
 #> 1     patient     patient   FALSE
 #> 2    diabetes    diabetes   FALSE
@@ -62,6 +64,8 @@ clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #> 4         HTN         htn    TRUE
 
 clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
+#> Processing... This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |============                                                                          |  14%  |                                                                                              |=========================                                                             |  29%  |                                                                                              |=====================================                                                 |  43%  |                                                                                              |=================================================                                     |  57%  |                                                                                              |=============================================================                         |  71%  |                                                                                              |==========================================================================            |  86%  |                                                                                              |======================================================================================| 100%
 #>       entity      lemma negated
 #> 1    patient    patient   FALSE
 #> 2   diabetes   diabetes   FALSE
@@ -72,6 +76,8 @@ clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinop
 #> 7     asthma     asthma    TRUE
 
 clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
+#> Processing... This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |============                                                                          |  14%  |                                                                                              |=========================                                                             |  29%  |                                                                                              |=====================================                                                 |  43%  |                                                                                              |=================================================                                     |  57%  |                                                                                              |=============================================================                         |  71%  |                                                                                              |==========================================================================            |  86%  |                                                                                              |======================================================================================| 100%
 #>       entity      lemma negated
 #> 1    patient    patient   FALSE
 #> 2   diabetes   diabetes   FALSE
@@ -88,18 +94,18 @@ clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinop
 data(mtsamples)
 
 mtsamples[1:5,]
-#>   note_id                                                      description          medical_specialty
-#> 1       1 A 23-year-old white female presents with complaint of allergies.       Allergy / Immunology
-#> 2       2                         Consult for laparoscopic gastric bypass.                 Bariatrics
-#> 3       3                         Consult for laparoscopic gastric bypass.                 Bariatrics
-#> 4       4                                             2-D M-Mode. Doppler. Cardiovascular / Pulmonary
-#> 5       5                                               2-D Echocardiogram Cardiovascular / Pulmonary
-#>                               sample_name
-#> 1                       Allergic Rhinitis
-#> 2 Laparoscopic Gastric Bypass Consult - 2
-#> 3 Laparoscopic Gastric Bypass Consult - 1
-#> 4                  2-D Echocardiogram - 1
-#> 5                  2-D Echocardiogram - 2
+#>   note_id                                                      description
+#> 1       1 A 23-year-old white female presents with complaint of allergies.
+#> 2       2                         Consult for laparoscopic gastric bypass.
+#> 3       3                         Consult for laparoscopic gastric bypass.
+#> 4       4                                             2-D M-Mode. Doppler.
+#> 5       5                                               2-D Echocardiogram
+#>            medical_specialty                             sample_name
+#> 1       Allergy / Immunology                       Allergic Rhinitis
+#> 2                 Bariatrics Laparoscopic Gastric Bypass Consult - 2
+#> 3                 Bariatrics Laparoscopic Gastric Bypass Consult - 1
+#> 4 Cardiovascular / Pulmonary                  2-D Echocardiogram - 1
+#> 5 Cardiovascular / Pulmonary                  2-D Echocardiogram - 2
 #>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transcription
 #> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SUBJECTIVE:,  This 23-year-old white female presents with complaint of allergies.  She used to have allergies when she lived in Seattle but she thinks they are worse here.  In the past, she has tried Claritin, and Zyrtec.  Both worked for short time but then seemed to lose effectiveness.  She has used Allegra also.  She used that last summer and she began using it again two weeks ago.  It does not appear to be working very well.  She has used over-the-counter sprays but no prescription nasal sprays.  She does have asthma but doest not require daily medication for this and does not think it is flaring up.,MEDICATIONS: , Her only medication currently is Ortho Tri-Cyclen and the Allegra.,ALLERGIES: , She has no known medicine allergies.,OBJECTIVE:,Vitals:  Weight was 130 pounds and blood pressure 124/78.,HEENT:  Her throat was mildly erythematous without exudate.  Nasal mucosa was erythematous and swollen.  Only clear drainage was seen.  TMs were clear.,Neck:  Supple without adenopathy.,Lungs:  Clear.,ASSESSMENT:,  Allergic rhinitis.,PLAN:,1.  She will try Zyrtec instead of Allegra again.  Another option will be to use loratadine.  She does not think she has prescription coverage so that might be cheaper.,2.  Samples of Nasonex two sprays in each nostril given for three weeks.  A prescription was written as well.
 #> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        PAST MEDICAL HISTORY:, He has difficulty climbing stairs, difficulty with airline seats, tying shoes, used to public seating, and lifting objects off the floor.  He exercises three times a week at home and does cardio.  He has difficulty walking two blocks or five flights of stairs.  Difficulty with snoring.  He has muscle and joint pains including knee pain, back pain, foot and ankle pain, and swelling.  He has gastroesophageal reflux disease.,PAST SURGICAL HISTORY:, Includes reconstructive surgery on his right hand 13 years ago.  ,SOCIAL HISTORY:, He is currently single.  He has about ten drinks a year.  He had smoked significantly up until several months ago.  He now smokes less than three cigarettes a day.,FAMILY HISTORY:, Heart disease in both grandfathers, grandmother with stroke, and a grandmother with diabetes.  Denies obesity and hypertension in other family members.,CURRENT MEDICATIONS:, None.,ALLERGIES:,  He is allergic to Penicillin.,MISCELLANEOUS/EATING HISTORY:, He has been going to support groups for seven months with Lynn Holmberg in Greenwich and he is from Eastchester, New York and he feels that we are the appropriate program.  He had a poor experience with the Greenwich program.  Eating history, he is not an emotional eater.  Does not like sweets.  He likes big portions and carbohydrates.  He likes chicken and not steak.  He currently weighs 312 pounds.  Ideal body weight would be 170 pounds.  He is 142 pounds overweight.  If ,he lost 60% of his excess body weight that would be 84 pounds and he should weigh about 228.,REVIEW OF SYSTEMS: ,Negative for head, neck, heart, lungs, GI, GU, orthopedic, and skin.  Specifically denies chest pain, heart attack, coronary artery disease, congestive heart failure, arrhythmia, atrial fibrillation, pacemaker, high cholesterol, pulmonary embolism, high blood pressure, CVA, venous insufficiency, thrombophlebitis, asthma, shortness of breath, COPD, emphysema, sleep apnea, diabetes, leg and foot swelling, osteoarthritis, rheumatoid arthritis, hiatal hernia, peptic ulcer disease, gallstones, infected gallbladder, pancreatitis, fatty liver, hepatitis, hemorrhoids, rectal bleeding, polyps, incontinence of stool, urinary stress incontinence, or cancer.  Denies cellulitis, pseudotumor cerebri, meningitis, or encephalitis.,PHYSICAL EXAMINATION:, He is alert and oriented x 3.  Cranial nerves II-XII are intact.  Afebrile.  Vital Signs are stable.
@@ -122,18 +128,28 @@ ignored and do not count towards the frequencies.
 ``` r
 bind_clinspacy(mtsamples[1:5, 1:2],
                text = 'description')
-#>   note_id                                                      description 2-D 2-D M-Mode Consult
-#> 1       1 A 23-year-old white female presents with complaint of allergies.   0          0       0
-#> 2       2                         Consult for laparoscopic gastric bypass.   0          0       1
-#> 3       3                         Consult for laparoscopic gastric bypass.   0          0       1
-#> 4       4                                             2-D M-Mode. Doppler.   0          1       0
-#> 5       5                                               2-D Echocardiogram   1          0       0
-#>   Doppler Echocardiogram allergies complaint laparoscopic gastric bypass white female
-#> 1       0              0         1         1                           0            1
-#> 2       0              0         0         0                           1            0
-#> 3       0              0         0         0                           1            0
-#> 4       1              0         0         0                           0            0
-#> 5       0              1         0         0                           0            0
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=============================                                                         |  33%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description 2-D 2-D M-Mode
+#> 1       1 A 23-year-old white female presents with complaint of allergies.   0          0
+#> 2       2                         Consult for laparoscopic gastric bypass.   0          0
+#> 3       3                         Consult for laparoscopic gastric bypass.   0          0
+#> 4       4                                             2-D M-Mode. Doppler.   0          1
+#> 5       5                                               2-D Echocardiogram   1          0
+#>   Consult Doppler Echocardiogram allergies complaint laparoscopic gastric bypass white female
+#> 1       0       0              0         1         1                           0            1
+#> 2       1       0              0         0         0                           1            0
+#> 3       1       0              0         0         0                           1            0
+#> 4       0       1              0         0         0                           0            0
+#> 5       0       0              1         0         0                           0            0
 ```
 
 ## Binding entity embeddings to a data frame (without the UMLS linker)
@@ -145,20 +161,29 @@ returned.
 ``` r
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
                           text = 'description',
-                          type = 'scispacy',
                           num_embeddings = 5)
-#>   note_id                                                      description    emb_001    emb_002
-#> 1       1 A 23-year-old white female presents with complaint of allergies. -0.1959790 0.28813400
-#> 2       2                         Consult for laparoscopic gastric bypass. -0.1115363 0.01725144
-#> 3       3                         Consult for laparoscopic gastric bypass. -0.1115363 0.01725144
-#> 4       4                                             2-D M-Mode. Doppler. -0.3077586 0.25928350
-#> 5       5                                               2-D Echocardiogram  0.0248010 0.32503700
-#>       emb_003     emb_004    emb_005
-#> 1  0.09685702 -0.20641684 -0.1554238
-#> 2 -0.13519235 -0.05496463  0.1488807
-#> 3 -0.13519235 -0.05496463  0.1488807
-#> 4 -0.37220851 -0.06021732  0.0386426
-#> 5 -0.28739650  0.01444300  0.3118135
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=============================                                                         |  33%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description    emb_001
+#> 1       1 A 23-year-old white female presents with complaint of allergies. -0.1959790
+#> 2       2                         Consult for laparoscopic gastric bypass. -0.1115363
+#> 3       3                         Consult for laparoscopic gastric bypass. -0.1115363
+#> 4       4                                             2-D M-Mode. Doppler. -0.3077586
+#> 5       5                                               2-D Echocardiogram  0.0248010
+#>      emb_002     emb_003     emb_004    emb_005
+#> 1 0.28813400  0.09685702 -0.20641684 -0.1554238
+#> 2 0.01725144 -0.13519235 -0.05496463  0.1488807
+#> 3 0.01725144 -0.13519235 -0.05496463  0.1488807
+#> 4 0.25928350 -0.37220851 -0.06021732  0.0386426
+#> 5 0.32503700 -0.28739650  0.01444300  0.3118135
 ```
 
 ## Adding the UMLS linker
@@ -180,19 +205,33 @@ type.
 
 ``` r
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
-#>        cui      entity       lemma             semantic_type                      definition negated
-#> 1 C0030705     patient     patient Patient or Disabled Group                        Patients   FALSE
-#> 2 C1550655     patient     patient            Body Substance         Specimen Type - Patient   FALSE
-#> 3 C1578485     patient     patient      Intellectual Product Specimen Source Codes - Patient   FALSE
-#> 4 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient   FALSE
-#> 5 C1705908     patient     patient                  Organism              Veterinary Patient   FALSE
-#> 6 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes   FALSE
-#> 7 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus   FALSE
-#> 8 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3   FALSE
-#> 9 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease    TRUE
+#> Processing... This patient has diabetes and CKD stage 3 but no HTN.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================                                                                |  25%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |================================================================                      |  75%  |                                                                                              |======================================================================================| 100%
+#>        cui      entity       lemma             semantic_type                      definition
+#> 1 C0030705     patient     patient Patient or Disabled Group                        Patients
+#> 2 C1550655     patient     patient            Body Substance         Specimen Type - Patient
+#> 3 C1578485     patient     patient      Intellectual Product Specimen Source Codes - Patient
+#> 4 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient
+#> 5 C1705908     patient     patient                  Organism              Veterinary Patient
+#> 6 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes
+#> 7 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus
+#> 8 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3
+#> 9 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease
+#>   negated
+#> 1   FALSE
+#> 2   FALSE
+#> 3   FALSE
+#> 4   FALSE
+#> 5   FALSE
+#> 6   FALSE
+#> 7   FALSE
+#> 8   FALSE
+#> 9    TRUE
 
 clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
           semantic_types = 'Pharmacologic Substance')
+#> Processing... This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |============                                                                          |  14%  |                                                                                              |=========================                                                             |  29%  |                                                                                              |=====================================                                                 |  43%  |                                                                                              |=================================================                                     |  57%  |                                                                                              |=============================================================                         |  71%  |                                                                                              |==========================================================================            |  86%  |                                                                                              |======================================================================================| 100%
 #>        cui     entity      lemma           semantic_type definition negated
 #> 1 C0028978 omeprazole omeprazole Pharmacologic Substance Omeprazole   FALSE
 #> 2 C0004057    aspirin    aspirin Pharmacologic Substance    Aspirin   FALSE
@@ -201,6 +240,8 @@ clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinop
 
 clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.',
           semantic_types = 'Disease or Syndrome')
+#> Processing... This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |============                                                                          |  14%  |                                                                                              |=========================                                                             |  29%  |                                                                                              |=====================================                                                 |  43%  |                                                                                              |=================================================                                     |  57%  |                                                                                              |=============================================================                         |  71%  |                                                                                              |==========================================================================            |  86%  |                                                                                              |======================================================================================| 100%
 #>        cui   entity    lemma       semantic_type        definition negated
 #> 1 C0011847 diabetes diabetes Disease or Syndrome          Diabetes   FALSE
 #> 2 C0011849 diabetes diabetes Disease or Syndrome Diabetes Mellitus   FALSE
@@ -221,22 +262,42 @@ semantic type.
 ``` r
 bind_clinspacy(mtsamples[1:5, 1:2],
                text = 'description')
-#>   note_id                                                      description C0009818 C0013516 C0020517
-#> 1       1 A 23-year-old white female presents with complaint of allergies.        0        0        1
-#> 2       2                         Consult for laparoscopic gastric bypass.        1        0        0
-#> 3       3                         Consult for laparoscopic gastric bypass.        1        0        0
-#> 4       4                                             2-D M-Mode. Doppler.        0        0        0
-#> 5       5                                               2-D Echocardiogram        0        1        0
-#>   C0554756 C1705052 C2243117 C3864418 C4039248
-#> 1        0        0        0        1        0
-#> 2        0        0        0        0        1
-#> 3        0        0        0        0        1
-#> 4        1        0        0        0        0
-#> 5        0        1        1        0        0
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description C0009818 C0013516
+#> 1       1 A 23-year-old white female presents with complaint of allergies.        0        0
+#> 2       2                         Consult for laparoscopic gastric bypass.        1        0
+#> 3       3                         Consult for laparoscopic gastric bypass.        1        0
+#> 4       4                                             2-D M-Mode. Doppler.        0        0
+#> 5       5                                               2-D Echocardiogram        0        1
+#>   C0020517 C0554756 C1705052 C2243117 C3864418 C4039248
+#> 1        1        0        0        0        1        0
+#> 2        0        0        0        0        0        1
+#> 3        0        0        0        0        0        1
+#> 4        0        1        0        0        0        0
+#> 5        0        0        1        1        0        0
 
 bind_clinspacy(mtsamples[1:5, 1:2],
                text = 'description',
                semantic_types = 'Diagnostic Procedure')
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
 #>   note_id                                                      description C0013516 C0554756
 #> 1       1 A 23-year-old white female presents with complaint of allergies.        0        0
 #> 2       2                         Consult for laparoscopic gastric bypass.        0        0
@@ -247,45 +308,137 @@ bind_clinspacy(mtsamples[1:5, 1:2],
 
 ## Binding concept embeddings to a data frame (with the UMLS linker)
 
-The default embeddings are from the cui2vec R package. Up to
-500-dimensional embeddings can be returned.
+The default embeddings are from the scispacy R package. If you want to
+use the cui2vec embeddings (only available with the linker enabled), you
+ned to set the `type` arguement to `cui2vec`. Up to 500-dimensional
+embeddings can be returned.
 
 Note that by turning on the UMLS linker, you can restrict the results by
-semantic type.
+semantic type (with either type of embedding).
+
+### Scispacy embeddings (with the UMLS linker)
+
+With the UMLS linker enabled, you can restrict by semantic type when
+obtaining scispacy embeddings.
+
+Note: The mean embeddings may be slightly different than if the linker
+was disabled because entities may be captured twice (as entities may map
+to multiple concepts).
 
 ``` r
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
                           text = 'description',
                           num_embeddings = 5)
-#>   note_id                                                      description     emb_001    emb_002
-#> 1       1 A 23-year-old white female presents with complaint of allergies. -0.02252676 0.00981737
-#> 2       2                         Consult for laparoscopic gastric bypass. -0.06431815 0.02979208
-#> 3       3                         Consult for laparoscopic gastric bypass. -0.06431815 0.02979208
-#> 4       4                                             2-D M-Mode. Doppler. -0.06111055 0.03059523
-#> 5       5                                               2-D Echocardiogram -0.08545282 0.03965676
-#>         emb_003      emb_004     emb_005
-#> 1 -7.112366e-17 -0.015715369  0.00204883
-#> 2 -1.353084e-16 -0.046832239  0.03387485
-#> 3 -1.353084e-16 -0.046832239  0.03387485
-#> 4 -1.340074e-16 -0.032813400 -0.02400309
-#> 5 -4.336809e-17 -0.008077436 -0.04463792
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description    emb_001
+#> 1       1 A 23-year-old white female presents with complaint of allergies. -0.3446915
+#> 2       2                         Consult for laparoscopic gastric bypass. -0.1115363
+#> 3       3                         Consult for laparoscopic gastric bypass. -0.1115363
+#> 4       4                                             2-D M-Mode. Doppler. -0.4044230
+#> 5       5                                               2-D Echocardiogram  0.0408278
+#>      emb_002    emb_003     emb_004    emb_005
+#> 1 0.31240000  0.1075445 -0.33388351 -0.2601905
+#> 2 0.01725144 -0.1351923 -0.05496463  0.1488807
+#> 3 0.01725144 -0.1351923 -0.05496463  0.1488807
+#> 4 0.21798199 -0.4359590 -0.05181420 -0.0757723
+#> 5 0.34547000 -0.3142290  0.08719834  0.2681757
 
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
                           text = 'description',
                           num_embeddings = 5,
                           semantic_types = 'Diagnostic Procedure')
-#>   note_id                                                      description     emb_001    emb_002
-#> 1       1 A 23-year-old white female presents with complaint of allergies.          NA         NA
-#> 2       2                         Consult for laparoscopic gastric bypass.          NA         NA
-#> 3       3                         Consult for laparoscopic gastric bypass.          NA         NA
-#> 4       4                                             2-D M-Mode. Doppler. -0.06111055 0.03059523
-#> 5       5                                               2-D Echocardiogram -0.08545282 0.03965676
-#>         emb_003      emb_004     emb_005
-#> 1            NA           NA          NA
-#> 2            NA           NA          NA
-#> 3            NA           NA          NA
-#> 4 -1.340074e-16 -0.032813400 -0.02400309
-#> 5 -4.336809e-17 -0.008077436 -0.04463792
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description    emb_001  emb_002
+#> 1       1 A 23-year-old white female presents with complaint of allergies.         NA       NA
+#> 2       2                         Consult for laparoscopic gastric bypass.         NA       NA
+#> 3       3                         Consult for laparoscopic gastric bypass.         NA       NA
+#> 4       4                                             2-D M-Mode. Doppler. -0.4044230 0.217982
+#> 5       5                                               2-D Echocardiogram  0.0728814 0.386336
+#>     emb_003    emb_004    emb_005
+#> 1        NA         NA         NA
+#> 2        NA         NA         NA
+#> 3        NA         NA         NA
+#> 4 -0.435959 -0.0518142 -0.0757723
+#> 5 -0.367894  0.2327090  0.1809000
+```
+
+### Cui2vec embeddings (with the UMLS linker)
+
+These are only available with the UMLS linker enabled.
+
+``` r
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          type = 'cui2vec',
+                          num_embeddings = 5)
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description     emb_001
+#> 1       1 A 23-year-old white female presents with complaint of allergies. -0.02252676
+#> 2       2                         Consult for laparoscopic gastric bypass. -0.06431815
+#> 3       3                         Consult for laparoscopic gastric bypass. -0.06431815
+#> 4       4                                             2-D M-Mode. Doppler. -0.06111055
+#> 5       5                                               2-D Echocardiogram -0.08545282
+#>      emb_002       emb_003      emb_004     emb_005
+#> 1 0.00981737 -7.112366e-17 -0.015715369  0.00204883
+#> 2 0.02979208 -1.353084e-16 -0.046832239  0.03387485
+#> 3 0.02979208 -1.353084e-16 -0.046832239  0.03387485
+#> 4 0.03059523 -1.340074e-16 -0.032813400 -0.02400309
+#> 5 0.03965676 -4.336809e-17 -0.008077436 -0.04463792
+
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          type = 'cui2vec',
+                          num_embeddings = 5,
+                          semantic_types = 'Diagnostic Procedure')
+#> Processing... A 23-year-old white female presents with complaint of allergies.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |=========================================================                             |  67%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... Consult for laparoscopic gastric bypass.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D M-Mode. Doppler.
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |======================================================================================| 100%
+#> Processing... 2-D Echocardiogram
+#>   |                                                                                              |                                                                                      |   0%  |                                                                                              |===========================================                                           |  50%  |                                                                                              |======================================================================================| 100%
+#>   note_id                                                      description     emb_001
+#> 1       1 A 23-year-old white female presents with complaint of allergies.          NA
+#> 2       2                         Consult for laparoscopic gastric bypass.          NA
+#> 3       3                         Consult for laparoscopic gastric bypass.          NA
+#> 4       4                                             2-D M-Mode. Doppler. -0.06111055
+#> 5       5                                               2-D Echocardiogram -0.08545282
+#>      emb_002       emb_003      emb_004     emb_005
+#> 1         NA            NA           NA          NA
+#> 2         NA            NA           NA          NA
+#> 3         NA            NA           NA          NA
+#> 4 0.03059523 -1.340074e-16 -0.032813400 -0.02400309
+#> 5 0.03965676 -4.336809e-17 -0.008077436 -0.04463792
 ```
 
 # UMLS CUI definitions

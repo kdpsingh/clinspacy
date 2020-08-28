@@ -306,9 +306,9 @@ clinspacy <- function(text, threshold = 0.99,
     return_df = data.frame(cui = character(0),
                            entity = character(0),
                            lemma = character(0),
-                           negated = logical(0),
                            semantic_type = character(0),
                            definition = character(0),
+                           negated = logical(0),
                            stringsAsFactors = FALSE)
   } else {
     return_df = data.frame(entity = character(0),
@@ -326,7 +326,7 @@ clinspacy <- function(text, threshold = 0.99,
 
   return_df_list = list()
 
-  if (verbose) {
+  if (verbose & entity_nums > 0) {
     message(paste('Processing...', text))
     pb = txtProgressBar(min = 0, max = entity_nums, style = 3)
   }
@@ -367,8 +367,12 @@ clinspacy <- function(text, threshold = 0.99,
     }
 
     if (return_scispacy_embeddings) {
-      temp_df = cbind(temp_df, matrix(parsed_text$ents[[entity_num]]$vector, nrow = 1))
-      names(temp_df)[(ncol(temp_df)-200+1):ncol(temp_df)] = paste0('emb_', sprintf('%03d', 1:200))
+      if (nrow(temp_df) > 0) {
+        temp_df = cbind(temp_df, matrix(parsed_text$ents[[entity_num]]$vector, nrow = 1))
+        names(temp_df)[(ncol(temp_df)-200+1):ncol(temp_df)] = paste0('emb_', sprintf('%03d', 1:200))
+      } else {
+        temp_df = return_df
+      }
     }
 
     return_df_list[[entity_num]] = temp_df
@@ -378,7 +382,7 @@ clinspacy <- function(text, threshold = 0.99,
     }
   }
 
-  if (verbose) {
+  if (verbose & entity_nums > 0) {
     close(pb)
   }
 
@@ -507,10 +511,10 @@ bind_clinspacy_embeddings <- function(df, text,
     # inner join on cui for only those number of embeddings that are needed
     dt = merge(dt, cui2vec_embeddings[, 1:(num_embeddings + 1)])
     dt = dt[, .(clinspacy_id, cui, n, n*.SD),
-            .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
+           .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
     dt[, n := sum(n), by = clinspacy_id]
     dt = dt[, lapply(.SD, function (x) sum(x)/n), by = clinspacy_id,
-            .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
+           .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
     dt = unique(dt)
     dt2 = data.table(clinspacy_id = 1:df_nrow)
     dt = merge(dt, dt2, all.y=TRUE)

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # clinspacy
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
 The goal of clinspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
@@ -80,7 +80,6 @@ With the UMLS linker disabled, entity embeddings can be extracted from the scisp
 ```{r}
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
                           text = 'description',
-                          type = 'scispacy',
                           num_embeddings = 5)
 ```
 
@@ -123,9 +122,16 @@ bind_clinspacy(mtsamples[1:5, 1:2],
 
 ## Binding concept embeddings to a data frame (with the UMLS linker)
 
-The default embeddings are from the cui2vec R package. Up to 500-dimensional embeddings can be returned.
+The default embeddings are from the scispacy R package. If you want to use the cui2vec embeddings (only available with the linker enabled), you ned to set the `type` arguement to `cui2vec`. Up to 500-dimensional embeddings can be returned.
 
-Note that by turning on the UMLS linker, you can restrict the results by semantic type.
+Note that by turning on the UMLS linker, you can restrict the results by semantic type (with either type of embedding).
+
+### Scispacy embeddings (with the UMLS linker)
+
+With the UMLS linker enabled, you can restrict by semantic type when obtaining scispacy embeddings.
+
+Note: The mean embeddings may be slightly different than if the linker was disabled because entities may be captured twice (as entities may map to multiple concepts).
+
 
 ```{r}
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
@@ -134,6 +140,24 @@ bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
 
 bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
                           text = 'description',
+                          num_embeddings = 5,
+                          semantic_types = 'Diagnostic Procedure')
+```
+
+
+### Cui2vec embeddings (with the UMLS linker)
+
+These are only available with the UMLS linker enabled.
+
+```{r}
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          type = 'cui2vec',
+                          num_embeddings = 5)
+
+bind_clinspacy_embeddings(mtsamples[1:5, 1:2],
+                          text = 'description',
+                          type = 'cui2vec',
                           num_embeddings = 5,
                           semantic_types = 'Diagnostic Procedure')
 ```
