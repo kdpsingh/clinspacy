@@ -408,6 +408,11 @@ clinspacy <- function(text, threshold = 0.99,
 #' mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
 #' str(mtsamples_with_cuis)
 bind_clinspacy <- function(df, text, ...) {
+
+  if (is.null(clinspacy_env$nlp)) {
+    clinspacy_init()
+  }
+
   clinspacy_text = text
   assertthat::assert_that(assertthat::has_name(df, text))
   assertthat::assert_that(nrow(df) > 0)
@@ -470,6 +475,11 @@ bind_clinspacy <- function(df, text, ...) {
 bind_clinspacy_embeddings <- function(df, text,
                                       type = 'scispacy',
                                       num_embeddings = 200, ...) {
+
+  if (is.null(clinspacy_env$nlp)) {
+    clinspacy_init()
+  }
+
   assertthat::assert_that(type %in% c('cui2vec', 'scispacy'))
   if (type == 'cui2vec') {
     if (!is.null(clinspacy_env$use_linker)) {
