@@ -38,7 +38,7 @@ clinspacy_env = new.env(parent = emptyenv())
 #' linker. Note: This can be lower than the \code{threshold} from \code{\link{clinspacy_init}}).
 #' The linker_threshold can only be set once per session.
 #' @param ... Additional settings available from: \href{https://github.com/allenai/scispacy}{https://github.com/allenai/scispacy}.
-
+#' @export
 clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshold = 0.99, ...) {
 
   assertthat::assert_that(assertthat::is.flag(miniconda))
@@ -51,16 +51,25 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
   # If clinspacy has already been initialized without a linker and you now want to add a linker
   if (!is.null(clinspacy_env$nlp)) {
     if (clinspacy_env$use_linker == FALSE & use_linker == TRUE) {
+      if(is.null(clinspacy_env$linker)) {
+        message('Loading the UMLS entity linker... (this may take a while)')
+        clinspacy_env$linker <- clinspacy_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
+                                                                            name="umls",
+                                                                            threshold = linker_threshold, ...)
+      }
       clinspacy_env$use_linker <- use_linker
-      message('Loading the UMLS entity linker... (this may take a while)')
-      clinspacy_env$linker <- clinspacy_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
-                                                                          name="umls",
-                                                                          threshold = linker_threshold, ...)
       message('Adding the UMLS entity linker to the spacy pipeline...')
       clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
       return()
+    } else if (clinspacy_env$use_linker == TRUE & use_linker == FALSE) {
+      clinspacy_env$use_linker <- use_linker
+      message('Removing the UMLS entity linker from the spacy pipeline...')
+      clinspacy_env$nlp$remove_pipe('EntityLinker')
+      return()
+    } else {
+      message('Clinspacy has already been initialized. Set the use_linker argument to turn the linker on or off.')
+      return()
     }
-    stop('Clinspacy has already been initialized. To re-initialize clinspacy, you must restart your R session.')
   }
 
   # If clinspacy has not been initialized previously
@@ -75,7 +84,7 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
     system.file('data', 'cui2vec_embeddings.rda', package='clinspacy', mustWork = TRUE)
   }, error = function (e) {
     download.file('https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_embeddings.rda',
-    file.path(system.file('data', package='clinspacy', mustWork = TRUE), 'cui2vec_embeddings.rda'))
+                  file.path(system.file('data', package='clinspacy', mustWork = TRUE), 'cui2vec_embeddings.rda'))
   })
 
   if (miniconda) {
@@ -131,8 +140,8 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
   if (use_linker) {
     message('Loading the UMLS entity linker... (this may take a while)')
     clinspacy_env$linker <- clinspacy_env$scispacy$linking$EntityLinker(resolve_abbreviations=TRUE,
-                                           name="umls",
-                                           threshold = linker_threshold, ...)
+                                                                        name="umls",
+                                                                        threshold = linker_threshold, ...)
     message('Adding the UMLS entity linker to the spacy pipeline...')
     clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
   }
@@ -160,6 +169,7 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #'
 #' @examples
 #' clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
+#' @export
 clinspacy <- function(text, threshold = 0.99,
                       semantic_types = c("Acquired Abnormality",
                                          "Activity",
@@ -377,7 +387,7 @@ clinspacy <- function(text, threshold = 0.99,
 
     return_df_list[[entity_num]] = temp_df
 
-      if (verbose) {
+    if (verbose) {
       setTxtProgressBar(pb, entity_num)
     }
   }
@@ -411,6 +421,7 @@ clinspacy <- function(text, threshold = 0.99,
 #' data(mtsamples)
 #' mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
 #' str(mtsamples_with_cuis)
+#' @export
 bind_clinspacy <- function(df, text, ...) {
 
   if (is.null(clinspacy_env$nlp)) {
@@ -476,6 +487,7 @@ bind_clinspacy <- function(df, text, ...) {
 #' data(mtsamples)
 #' mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
 #' str(mtsamples_with_cuis)
+#' @export
 bind_clinspacy_embeddings <- function(df, text,
                                       type = 'scispacy',
                                       num_embeddings = 200, ...) {
@@ -511,10 +523,10 @@ bind_clinspacy_embeddings <- function(df, text,
     # inner join on cui for only those number of embeddings that are needed
     dt = merge(dt, cui2vec_embeddings[, 1:(num_embeddings + 1)])
     dt = dt[, .(clinspacy_id, cui, n, n*.SD),
-           .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
+            .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
     dt[, n := sum(n), by = clinspacy_id]
     dt = dt[, lapply(.SD, function (x) sum(x)/n), by = clinspacy_id,
-           .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
+            .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
     dt = unique(dt)
     dt2 = data.table(clinspacy_id = 1:df_nrow)
     dt = merge(dt, dt2, all.y=TRUE)
@@ -527,7 +539,7 @@ bind_clinspacy_embeddings <- function(df, text,
             .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
     names(dt)[(ncol(dt)-num_embeddings+1):ncol(dt)] = paste0('emb_', sprintf('%03d', 1:num_embeddings))
     dt = dt[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = clinspacy_id,
-                     .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
+            .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
     dt2 = data.table(clinspacy_id = 1:df_nrow)
     dt = merge(dt, dt2, all.y=TRUE)
     dt[, clinspacy_id := NULL]
