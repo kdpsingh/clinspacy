@@ -1,0 +1,124 @@
+---
+title: "Using Embeddings for Machine Learning on Clinical Text"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using Embeddings for Machine Learning on Clinical Text}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(tidyverse)
+mtsamples_embeddings = readr::read_csv('Z:/kdpsingh/mtsamples_description.csv') %>% 
+  mutate(is_cardiology_note = 
+           if_else(medical_specialty == 'Cardiovascular / Pulmonary',
+                   'Yes',
+                   'No')) %>% 
+  select(contains('emb_'), is_cardiology_note) %>% 
+  na.omit()
+```
+
+```{r setup}
+library(tidyverse)
+library(tidymodels)
+library(clinspacy)
+library(runway)
+```
+
+# Load in the mtsamples data frame
+
+```{r}
+data(mtsamples)
+```
+
+# Add clinspacy embeddings to the mtsamples data frame
+
+Here, we are aiming to predict which of the descriptions refer to 'Cardiovascular / Pulmonary' notes so we will convert the outcome into a binary outcome. We will remove all of the predictor variables other than 
+
+```{r eval=FALSE}
+mtsamples_embeddings = 
+  mtsamples %>% 
+  bind_clinspacy_embeddings('description', verbose = FALSE) %>% 
+  mutate(is_cardiology_note = 
+           if_else(medical_specialty == 'Cardiovascular / Pulmonary',
+                   'Yes',
+                   'No')) %>% 
+  select(contains('emb_'), is_cardiology_note) %>% 
+  na.omit()
+```
+
+# Use tidymodels to fit a logistic regression model
+
+```{r}
+set.seed(1)
+
+logreg_workflow = workflow() %>% 
+  add_model(logistic_reg() %>% set_engine('glm')) %>% 
+  add_recipe((recipe(is_cardiology_note~., data = mtsamples_embeddings)))
+
+logreg_result = 
+  fit_resamples(logreg_workflow,
+                resamples = validation_split(data = mtsamples_embeddings, prop = 2/3),
+                metrics = metric_set(roc_auc, pr_auc),
+                control = control_resamples(save_pred = TRUE))
+
+logreg_result %>% collect_metrics()
+```
+
+# Use tidymodels to fit a random forest model
+
+```{r}
+set.seed(1)
+
+rf_workflow = workflow() %>% 
+  add_model(rand_forest(mode = 'classification', trees = 1000) %>% 
+              set_engine('ranger')) %>% 
+  add_recipe((recipe(is_cardiology_note~., data = mtsamples_embeddings)))
+
+rf_result = 
+  fit_resamples(rf_workflow,
+                resamples = validation_split(data = mtsamples_embeddings, prop = 2/3),
+                metrics = metric_set(roc_auc, pr_auc),
+                control = control_resamples(save_pred = TRUE))
+
+rf_result %>% collect_metrics()
+```
+
+# Aggregate the predictions
+
+```{r}
+combined_predictions = 
+  bind_rows(
+    logreg_result %>% collect_predictions() %>% mutate(model_name = 'Logistic regression'),
+    rf_result %>% collect_predictions() %>% mutate(model_name = 'Random forest')
+  )
+```
+
+# Use runway to compare the two models
+
+## What are the performance characteristics of the model?
+
+```{r fig.width = 8, fig.height = 6}
+combined_predictions %>% 
+  mutate(is_cardiology_note = if_else(is_cardiology_note == 'Yes', 1, 0)) %>% 
+  threshperf_plot_multi(outcome = 'is_cardiology_note',
+                        prediction = '.pred_Yes',
+                        model = 'model_name')
+```
+
+## How well-calibrated is it?
+
+```{r fig.width = 6, fig.height = 6}
+combined_predictions %>% 
+  mutate(is_cardiology_note = if_else(is_cardiology_note == 'Yes', 1, 0)) %>% 
+  cal_plot_multi(outcome = 'is_cardiology_note',
+                 prediction = '.pred_Yes',
+                 model = 'model_name',
+                 n_bins = 5)
+```
+

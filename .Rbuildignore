@@ -3,3 +3,4 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.github$
+^\data\cui2vec_embeddings.rda$
