@@ -4,3 +4,6 @@
 ^README\.Rmd$
 ^\.github$
 ^\data\cui2vec_embeddings.rda$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
