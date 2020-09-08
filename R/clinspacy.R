@@ -83,14 +83,14 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
   tryCatch({
     system.file('data', 'cui2vec_embeddings.rda', package='clinspacy', mustWork = TRUE)
   }, error = function (e) {
-    download.file('https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_embeddings.rda',
+    utils::download.file('https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_embeddings.rda',
                   file.path(system.file('data', package='clinspacy', mustWork = TRUE), 'cui2vec_embeddings.rda'))
   })
 
   if (miniconda) {
     message('Checking if miniconda is installed...')
     tryCatch(reticulate::install_miniconda(),
-             error = function (e) {NULL})
+             error = function (e) {return()})
 
     # By now, miniconda should be installed. Let's check if the clinspacy environment is configured
     is_clinspacy_env_installed = tryCatch(reticulate::use_miniconda(condaenv = 'clinspacy', required = TRUE),
@@ -106,36 +106,49 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
   }
 
   if (!reticulate::py_module_available('spacy')) {
-    packageStartupMessage('Spacy not found. Installing spacy...')
+    message('Spacy not found. Installing spacy...')
     reticulate::py_install('spacy', pip = TRUE)
   }
 
   if (!reticulate::py_module_available('scispacy')) {
-    packageStartupMessage('Scispacy not found. Installing scispacy...')
+    message('Scispacy not found. Installing scispacy...')
     reticulate::py_install('scispacy', pip = TRUE)
   }
 
-  if (!reticulate::py_module_available('negspacy')) {
-    packageStartupMessage('Negspacy not found. Installing negspacy...')
-    reticulate::py_install('negspacy', pip = TRUE)
-  }
+  # if (!reticulate::py_module_available('negspacy')) {
+  #  message('Negspacy not found. Installing negspacy...')
+  #  reticulate::py_install('negspacy', pip = TRUE)
+  # }
 
   if (!reticulate::py_module_available('en_core_sci_lg')) {
-    packageStartupMessage('en_core_sci_lg language model not found. Installing en_core_sci_lg...')
+    message('en_core_sci_lg language model not found. Installing en_core_sci_lg...')
     reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_lg-0.2.5.tar.gz', pip = TRUE)
+  }
+
+  if (!reticulate::py_module_available('cycontext')) {
+    message('Medspacy not found. Installing medspacy/cycontext...')
+    reticulate::py_install('cycontext', pip = TRUE)
+  }
+
+  if (!reticulate::py_module_available('clinical_sectionizer')) {
+    message('Medspacy not found. Installing medspacy/clinical-sectionizer...')
+    reticulate::py_install('clinical-sectionizer', pip = TRUE)
   }
 
   message('Importing spacy...')
   clinspacy_env$spacy <- reticulate::import('spacy', delay_load = TRUE)
   message('Importing scispacy...')
   clinspacy_env$scispacy <-  reticulate::import('scispacy', delay_load = TRUE)
-  message('Importing negspacy...')
-  clinspacy_env$negspacy <- reticulate::import('negspacy', delay_load = TRUE)
+  message('Importing medspacy modules...')
+  clinspacy_env$cycontext <-  reticulate::import('cycontext', delay_load = TRUE)
+  clinspacy_env$clinical_sectionizer <-  reticulate::import('clinical_sectionizer', delay_load = TRUE)
+  # message('Importing negspacy...')
+  # clinspacy_env$negspacy <- reticulate::import('negspacy', delay_load = TRUE)
 
   message('Loading the en_core_sci_lg language model...')
   clinspacy_env$nlp <- clinspacy_env$spacy$load("en_core_sci_lg")
-  message('Loading NegEx...')
-  clinspacy_env$negex <- clinspacy_env$negspacy$negation$Negex(clinspacy_env$nlp)
+  # message('Loading NegEx...')
+  # clinspacy_env$negex <- clinspacy_env$negspacy$negation$Negex(clinspacy_env$nlp)
 
   if (use_linker) {
     message('Loading the UMLS entity linker... (this may take a while)')
@@ -146,8 +159,14 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
     clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
   }
 
-  message('Adding NegEx to the spacy pipeline...')
-  clinspacy_env$nlp$add_pipe(clinspacy_env$negex)
+  # message('Adding NegEx to the spacy pipeline...')
+  # clinspacy_env$nlp$add_pipe(clinspacy_env$negex)
+
+  clinspacy_env$context <- clinspacy_env$cycontext$ConTextComponent(clinspacy_env$nlp)
+  clinspacy_env$nlp$add_pipe(clinspacy_env$context)
+
+  clinspacy_env$sectionizer <- clinspacy_env$clinical_sectionizer$Sectionizer(clinspacy_env$nlp)
+  clinspacy_env$nlp$add_pipe(clinspacy_env$sectionizer)
 }
 
 #' Performs biomedical named entity recognition, Unified Medical Language System (UMLS)
@@ -165,7 +184,8 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #' use by the \code{\link{bind_clinspacy_embeddings}} function to obtain scispacy embeddings.
 #' @param verbose Defaults to TRUE.
 #' @return A data frame containing the UMLS concept unique identifiers (cui), entities,
-#' lemmatized entities, and NegEx negation status (\code{TRUE} means negated, \code{FALSE} means *not* negated).
+#' lemmatized entities, CyContext negation status (\code{TRUE} means negated, \code{FALSE}
+#' means *not* negated), other CyContext contexts, and section title from the Sectionizer.
 #'
 #' @examples
 #' clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
@@ -318,12 +338,22 @@ clinspacy <- function(text, threshold = 0.99,
                            lemma = character(0),
                            semantic_type = character(0),
                            definition = character(0),
-                           negated = logical(0),
+                           is_family = logical(0),
+                           is_historical = logical(0),
+                           is_hypothetical = logical(0),
+                           is_negated = logical(0),
+                           is_uncertain = logical(0),
+                           section_title = character(0),
                            stringsAsFactors = FALSE)
   } else {
     return_df = data.frame(entity = character(0),
                            lemma = character(0),
-                           negated = logical(0),
+                           is_family = logical(0),
+                           is_historical = logical(0),
+                           is_hypothetical = logical(0),
+                           is_negated = logical(0),
+                           is_uncertain = logical(0),
+                           section_title = character(0),
                            stringsAsFactors = FALSE)
   }
 
@@ -368,7 +398,15 @@ clinspacy <- function(text, threshold = 0.99,
       temp_df = merge(temp_df, cui2vec_definitions, all.x = TRUE) # adds semantic_type and definition
     }
 
-    temp_df$negated = parsed_text$ents[[entity_num]]$`_`$negex
+    temp_df$is_family = parsed_text$ents[[entity_num]]$`_`$is_family
+    temp_df$is_historical = parsed_text$ents[[entity_num]]$`_`$is_historical
+    temp_df$is_hypothetical = parsed_text$ents[[entity_num]]$`_`$is_hypothetical
+    temp_df$is_negated = parsed_text$ents[[entity_num]]$`_`$is_negated
+    temp_df$is_uncertain = parsed_text$ents[[entity_num]]$`_`$is_uncertain
+    temp_df$section_title =
+      ifelse(!is.null(parsed_text$ents[[entity_num]]$`_`$section_title),
+         parsed_text$ents[[entity_num]]$`_`$section_title,
+         NA_character_)
 
     if (clinspacy_env$use_linker) {
       temp_df = temp_df[temp_df$confidence > threshold, ]
@@ -436,10 +474,10 @@ bind_clinspacy <- function(df, text, ...) {
   dt = data.table(df)[, .(clinspacy_id = 1:.N, text = get(clinspacy_text))]
 
   if (clinspacy_env$use_linker) {
-    dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][negated == FALSE, .(clinspacy_id, cui, present = 1)]
+    dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][is_negated == FALSE, .(clinspacy_id, cui, present = 1)]
     dt = dcast(dt, clinspacy_id ~ cui, value.var = 'present', fun.aggregate = sum)
   } else {
-    dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][negated == FALSE, .(clinspacy_id, entity, present = 1)]
+    dt = dt[,clinspacy(.SD[,text], ...), clinspacy_id][is_negated == FALSE, .(clinspacy_id, entity, present = 1)]
     dt = dcast(dt, clinspacy_id ~ entity, value.var = 'present', fun.aggregate = sum)
   }
 
@@ -517,7 +555,7 @@ bind_clinspacy_embeddings <- function(df, text,
 
   if (type == 'cui2vec') {
     dt = dt[, clinspacy(.SD[,text], return_scispacy_embeddings = FALSE, ...), clinspacy_id]
-    dt = dt[negated == FALSE]
+    dt = dt[is_negated == FALSE]
     dt[, n := .N, by = .(clinspacy_id, cui)]
 
     # inner join on cui for only those number of embeddings that are needed
@@ -534,7 +572,7 @@ bind_clinspacy_embeddings <- function(df, text,
     return(cbind(df, as.data.frame(dt)))
   } else if (type == 'scispacy') {
     dt = dt[, clinspacy(.SD[,text], return_scispacy_embeddings = TRUE, ...), by = clinspacy_id]
-    dt = dt[negated == FALSE]
+    dt = dt[is_negated == FALSE]
     dt = dt[, .(clinspacy_id, entity, .SD),
             .SDcols = paste0('emb_', sprintf('%03d', 1:num_embeddings))]
     names(dt)[(ncol(dt)-num_embeddings+1):ncol(dt)] = paste0('emb_', sprintf('%03d', 1:num_embeddings))

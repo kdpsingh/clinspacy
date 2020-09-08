@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-The goal of clinspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and negspacy packages.
+The goal of clinspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and medspacy packages.
 
 ## Installation
 
@@ -50,9 +50,7 @@ clinspacy_init() # This is optional! The default functionality is to initiatie c
 ```{r}
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 
-clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
-
-clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved.')
+clinspacy('HISTORY: He presents with chest pain. PMH: HTN. MEDICATIONS: This patient with diabetes is taking omeprazole, aspirin, and lisinopril 10 mg but is not taking albuterol anymore as his asthma has resolved. ALLERGIES: penicillin.')
 ```
 
 
@@ -66,7 +64,7 @@ mtsamples[1:5,]
 
 ## Binding named entities to a data frame (without the UMLS linker)
 
-Negated concepts, as identified by negspacy's NegEx implementation, are ignored and do not count towards the frequencies.
+Negated concepts, as identified by the medspacy cycontext flag, are ignored and do not count towards the frequencies.
 
 ```{r}
 bind_clinspacy(mtsamples[1:5, 1:2],
@@ -107,7 +105,7 @@ clinspacy('This patient with diabetes is taking omeprazole, aspirin, and lisinop
 
 ## Binding UMLS concept unique identifiers to a data frame (with the UMLS linker)
 
-This function binds columns containing concept unique identifiers with which scispacy has 99% confidence of being present with values containing frequencies. Negated concepts, as identified by negspacy's NegEx implementation, are ignored and do not count towards the frequencies.
+This function binds columns containing concept unique identifiers with which scispacy has 99% confidence of being present with values containing frequencies. Negated concepts, as identified by the medspacy cycontext is_negated flag, are ignored and do not count towards the frequencies.
 
 Note that by turning on the UMLS linker, you can restrict the results by semantic type.
 
