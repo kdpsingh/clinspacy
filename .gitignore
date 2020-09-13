@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-data/cui2vec_embeddings.rda
+data
 inst/doc

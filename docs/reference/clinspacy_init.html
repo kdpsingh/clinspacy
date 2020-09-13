@@ -6,9 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run. — clinspacy_init • clinspacy</title>
+<title>Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run. — clinspacy_init • clinspacy</title>
 
 
 <!-- jquery -->
@@ -41,12 +42,14 @@ run with default parameters the first time that any of the package functions are
 
 
 
-<meta property="og:title" content="Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run. — clinspacy_init" />
-<meta property="og:description" content="Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run." />
+<meta property="og:title" content="Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run. — clinspacy_init" />
+<meta property="og:description" content="Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run." />
 
 
 
@@ -126,17 +129,19 @@ run with default parameters the first time that any of the package functions are
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run.</h1>
+    <h1>Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run.</h1>
     <small class="dont-index">Source: <a href='https://github.com/ML4LHS/clinspacy/blob/master/R/clinspacy.R'><code>R/clinspacy.R</code></a></small>
     <div class="hidden name"><code>clinspacy_init.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run.</p>
+    <p>Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run.</p>
     </div>
 
     <pre class="usage"><span class='fu'>clinspacy_init</span>(
@@ -151,25 +156,28 @@ run with default parameters the first time that any of the package functions are
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>miniconda</th>
-      <td><p>Defaults to TRUE, which results in miniconda being installed (~400 MB)
-and configured with the "clinspacy" conda environment. If you want to override this behavior,
-set <code>miniconda</code> to <code>FALSE</code> and specify an alternative environment using use_python()
-or use_conda().</p></td>
+      <td><p>Defaults to TRUE, which results in miniconda being installed
+(~400 MB) and configured with the "clinspacy" conda environment. If you
+want to override this behavior, set <code>miniconda</code> to <code>FALSE</code> and
+specify an alternative environment using use_python() or use_conda().</p></td>
     </tr>
     <tr>
       <th>use_linker</th>
-      <td><p>Defaults to <code>FALSE</code>. To turn on the UMLS linker, set this to <code>TRUE</code>.</p></td>
+      <td><p>Defaults to <code>FALSE</code>. To turn on the UMLS linker, set
+this to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>linker_threshold</th>
-      <td><p>Defaults to 0.99. This arguemtn is only relevant if <code>use_linker</code>
-is set to <code>TRUE</code>. It refers to the confidence threshold value used by the scispacy UMLS entity
-linker. Note: This can be lower than the <code>threshold</code> from <code>clinspacy_init</code>).
-The linker_threshold can only be set once per session.</p></td>
+      <td><p>Defaults to 0.99. This arguemtn is only relevant if
+<code>use_linker</code> is set to <code>TRUE</code>. It refers to the confidence
+threshold value used by the scispacy UMLS entity linker. Note: This can be
+lower than the <code>threshold</code> from <code>clinspacy_init</code>). The
+linker_threshold can only be set once per session.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional settings available from: <a href='https://github.com/allenai/scispacy'>https://github.com/allenai/scispacy</a>.</p></td>
+      <td><p>Additional settings available from:
+<a href='https://github.com/allenai/scispacy'>https://github.com/allenai/scispacy</a>.</p></td>
     </tr>
     </table>
 

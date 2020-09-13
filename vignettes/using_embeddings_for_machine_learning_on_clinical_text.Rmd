@@ -33,7 +33,7 @@ library(runway)
 # Load in the mtsamples data frame
 
 ```{r}
-data(mtsamples)
+mtsamples = dataset_mtsamples()
 ```
 
 # Add clinspacy embeddings to the mtsamples data frame
@@ -43,7 +43,10 @@ Here, we are aiming to predict which of the descriptions refer to 'Cardiovascula
 ```{r eval=FALSE}
 mtsamples_embeddings = 
   mtsamples %>% 
-  bind_clinspacy_embeddings('description', verbose = FALSE) %>% 
+  clinspacy(df_col = 'description', 
+            return_scispacy_embeddings = TRUE,
+            verbose = FALSE) %>% 
+  bind_clinspacy_embeddings(mtsamples) %>% 
   mutate(is_cardiology_note = 
            if_else(medical_specialty == 'Cardiovascular / Pulmonary',
                    'Yes',

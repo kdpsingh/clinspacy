@@ -2,9 +2,10 @@
 % Please edit documentation in R/clinspacy.R
 \name{clinspacy_init}
 \alias{clinspacy_init}
-\title{Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run.}
+\title{Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run.}
 \usage{
 clinspacy_init(
   miniconda = TRUE,
@@ -14,22 +15,26 @@ clinspacy_init(
 )
 }
 \arguments{
-\item{miniconda}{Defaults to TRUE, which results in miniconda being installed (~400 MB)
-and configured with the "clinspacy" conda environment. If you want to override this behavior,
-set \code{miniconda} to \code{FALSE} and specify an alternative environment using use_python()
-or use_conda().}
+\item{miniconda}{Defaults to TRUE, which results in miniconda being installed
+(~400 MB) and configured with the "clinspacy" conda environment. If you
+want to override this behavior, set \code{miniconda} to \code{FALSE} and
+specify an alternative environment using use_python() or use_conda().}
 
-\item{use_linker}{Defaults to \code{FALSE}. To turn on the UMLS linker, set this to \code{TRUE}.}
+\item{use_linker}{Defaults to \code{FALSE}. To turn on the UMLS linker, set
+this to \code{TRUE}.}
 
-\item{linker_threshold}{Defaults to 0.99. This arguemtn is only relevant if \code{use_linker}
-is set to \code{TRUE}. It refers to the confidence threshold value used by the scispacy UMLS entity
-linker. Note: This can be lower than the \code{threshold} from \code{\link{clinspacy_init}}).
-The linker_threshold can only be set once per session.}
+\item{linker_threshold}{Defaults to 0.99. This arguemtn is only relevant if
+\code{use_linker} is set to \code{TRUE}. It refers to the confidence
+threshold value used by the scispacy UMLS entity linker. Note: This can be
+lower than the \code{threshold} from \code{\link{clinspacy_init}}). The
+linker_threshold can only be set once per session.}
 
-\item{...}{Additional settings available from: \href{https://github.com/allenai/scispacy}{https://github.com/allenai/scispacy}.}
+\item{...}{Additional settings available from:
+\href{https://github.com/allenai/scispacy}{https://github.com/allenai/scispacy}.}
 }
 \description{
-Initializes clinspacy. This function is optional to run but gives you more control over
-the parameters used by scispacy at initiation. If you do not run this function, it will be
-run with default parameters the first time that any of the package functions are run.
+Initializes clinspacy. This function is optional to run but gives you more
+control over the parameters used by scispacy at initiation. If you do not run
+this function, it will be run with default parameters the first time that any
+of the package functions are run.
 }

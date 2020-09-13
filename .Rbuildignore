@@ -3,7 +3,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.github$
-^\data\cui2vec_embeddings.rda$
+^data$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$

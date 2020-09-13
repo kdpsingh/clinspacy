@@ -2,38 +2,47 @@
 % Please edit documentation in R/clinspacy.R
 \name{bind_clinspacy_embeddings}
 \alias{bind_clinspacy_embeddings}
-\title{This function binds columns containing concept embeddings for concepts with which scispacy has
-99 percent confidence of being present with values containing frequencies. Negated concepts,
-as identified by negspacy's NegEx implementation, are ignored and do not count towards
-the embeddings. The concept embeddings are derived from the cui2vec_embeddings dataset
-included with this package.}
+\title{This function binds columns containing entity or concept embeddings to a data
+frame. The entity embeddings are derived from the scispacy package, and the
+concept embeddings are derived from the
+\code{\link{dataset_cui2vec_embeddings}} dataset included with this package.}
 \usage{
 bind_clinspacy_embeddings(
+  clinspacy_output,
   df,
-  text,
   type = "scispacy",
-  num_embeddings = 200,
-  ...
+  df_id = NULL,
+  subset = "is_negated == FALSE"
 )
 }
 \arguments{
-\item{df}{A data frame.}
+\item{df}{The data.frame to which you would like to bind the output of
+\code{\link{clinspacy}}.}
 
-\item{text}{A character string containing the name of the column to process.}
+\item{type}{The type of embeddings to return. One of \code{scispacy} and
+\code{cui2vec}. Whereas \code{cui2vec} embeddings require the UMLS linker
+to be enabled, the \code{scispacy} embeddings do not. Defaults to
+\code{scispacy}.}
 
-\item{type}{The type of embeddings to return. One of \code{cui2vec} and \code{scispacy}.
-Whereas \code{cui2vec} embeddings require the UMLS linker to be enabled, the
-\code{scispacy} embeddings do not. Defaults to \code{scispacy}.}
+\item{df_id}{The name of the \code{id} column in the data frame with which
+the \code{id} column in \code{clinspacy_output} will be joined. If you
+supplied a \code{df_id} in \code{\link{clinspacy}}, then you must also
+supply it here. If you did not supply it in \code{\link{clinspacy}}, then
+it will default to the row number (similar behavior to in
+\code{\link{clinspacy}}).}
 
-\item{num_embeddings}{The number of embeddings to return. This must be a number 1 through
-200 for \code{scispacy} embeddings and 1 through 500 for \code{cui2vec} embeddings. Defaults
-to 200.}
-
-\item{...}{Arguments passed down to \code{\link{clinspacy}}}
+\item{subset}{Logical criteria represented as a string by which the
+\code{clinspacy_output} will be subsetted prior to building the output data
+frame. Defaults to \code{"is_negated == FALSE"}, which removes negated
+concepts prior to generating the output. Any column in
+\code{clinspacy_output} may be referenced here. To avoid any subsetting,
+set this to \code{NULL}.}
 }
 \value{
-A data frame containing the original data frame as well as additional column names
-for each UMLS concept unique identifer found with values containing frequencies.
+A data frame containing the original data frame as well as the
+  concept embeddings. For scispacy embeddings, this returns 200 columns of
+  embeddings. For cui2vec embeddings, this returns 500 columns of embedings.
+  The resulting data frame can be used to train a machine learning model.
 }
 \description{
 The embeddings are derived from Andrew Beam's
@@ -42,18 +51,21 @@ The embeddings are derived from Andrew Beam's
 \details{
 Citation
 
-Beam, A.L., Kompa, B., Schmaltz, A., Fried, I., Griffin, W, Palmer, N.P., Shi, X.,
-Cai, T., and Kohane, I.S.,, 2019. Clinical Concept Embeddings Learned from Massive
-Sources of Multimodal Medical Data. arXiv preprint arXiv:1804.01486.
+Beam, A.L., Kompa, B., Schmaltz, A., Fried, I., Griffin, W, Palmer, N.P.,
+Shi, X., Cai, T., and Kohane, I.S.,, 2019. Clinical Concept Embeddings
+Learned from Massive Sources of Multimodal Medical Data. arXiv preprint
+arXiv:1804.01486.
 
 License
 
-This data is made available under a
-\href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0 license}. The only change
-made to the original dataset is the renaming of columns.
+The cui2vec data is made available under a
+\href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0 license}. The
+only change made to the original dataset is the renaming of columns.
 }
 \examples{
-data(mtsamples)
-mtsamples_with_cuis = bind_clinspacy(mtsamples[1:5,], text = 'description')
-str(mtsamples_with_cuis)
+mtsamples <- dataset_mtsamples()
+mtsamples[1:5,] \%>\%
+  clinspacy(df_col = 'description', return_scispacy_embeddings = TRUE) \%>\%
+  bind_clinspacy_embeddings(mtsamples[1:5,])
+
 }
