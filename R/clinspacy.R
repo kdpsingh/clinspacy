@@ -373,121 +373,27 @@ clinspacy_single <- function(text, threshold = 0.99,
     assertthat::assert_that(threshold >= 0.70 & threshold <= 0.99)
   }
 
-    parsed_text = clinspacy_env$nlp(text)
-    entity_nums = length(parsed_text$ents)
+  parsed_text = clinspacy_env$nlp(text)
+
+  temp_df <- as.data.frame(do.call(rbind,
+                                   lapply(parsed_text$ents,
+                                          function(x) {
+                                            spacyent_to_df(x, threshold, return_scispacy_embeddings)})))
 
   if (clinspacy_env$use_linker) {
-    return_df = data.frame(cui = character(0),
-                           entity = character(0),
-                           lemma = character(0),
-                           semantic_type = character(0),
-                           definition = character(0),
-                           is_family = logical(0),
-                           is_historical = logical(0),
-                           is_hypothetical = logical(0),
-                           is_negated = logical(0),
-                           is_uncertain = logical(0),
-                           section_title = character(0),
-                           stringsAsFactors = FALSE)
-  } else {
-    return_df = data.frame(entity = character(0),
-                           lemma = character(0),
-                           is_family = logical(0),
-                           is_historical = logical(0),
-                           is_hypothetical = logical(0),
-                           is_negated = logical(0),
-                           is_uncertain = logical(0),
-                           section_title = character(0),
-                           stringsAsFactors = FALSE)
+    if (is.null(clinspacy_env$cui2vec_definitions)) {
+      clinspacy_env$cui2vec_definitions <- clinspacy::dataset_cui2vec_definitions()
+    }
+    temp_df <- merge(clinspacy_env$cui2vec_definitions, temp_df, all.y = TRUE) # adds semantic_type and definition
+    temp_df <- temp_df[temp_df$semantic_type %in% semantic_types, ]
   }
 
-  if (return_scispacy_embeddings == TRUE) {
-    for(emb in paste0('emb_', sprintf('%03d', 1:200))) {
-      return_df[[emb]] = numeric(0)
-    }
-  }
+  temp_df[is_family == is_family &
+            is_historical == is_historical &
+            is_hypothetical == is_hypothetical &
+            is_negated == is_negated &
+            is_uncertain == is_uncertain,]
 
-
-  return_df_list = list()
-
-  if (verbose & entity_nums > 0) {
-    message(paste('Processing...', text))
-    pb = txtProgressBar(min = 0, max = entity_nums, style = 3)
-  }
-
-  for (entity_num in seq_len(entity_nums)) {
-
-    if (clinspacy_env$use_linker) {
-      if (is.null(unlist(parsed_text$ents[[entity_num]]$`_`$kb_ents))) next
-    } else {
-      if (!parsed_text$ents[[entity_num]]$has_vector) next
-    }
-
-
-    if (clinspacy_env$use_linker) {
-      temp_cuis = parsed_text$ents[[entity_num]]$`_`$kb_ents
-      temp_cuis = unlist(temp_cuis)
-      temp_df = data.frame(cui = temp_cuis[seq(1, length(temp_cuis), by = 2)],
-                           confidence = temp_cuis[seq(2, length(temp_cuis), by = 2)],
-                           stringsAsFactors = FALSE)
-      temp_df$entity = parsed_text$ents[[entity_num]]$text
-    } else {
-      temp_df = data.frame(entity = parsed_text$ents[[entity_num]]$text,
-                           stringsAsFactors = FALSE)
-    }
-
-    temp_df$lemma = parsed_text$ents[[entity_num]]$lemma_
-
-    if (clinspacy_env$use_linker) {
-      if (is.null(clinspacy_env$cui2vec_definitions)) {
-        clinspacy_env$cui2vec_definitions <- dataset_cui2vec_definitions()
-      }
-      temp_df = merge(temp_df, clinspacy_env$cui2vec_definitions, all.x = TRUE) # adds semantic_type and definition
-    }
-
-    temp_df$is_family = parsed_text$ents[[entity_num]]$`_`$is_family
-    temp_df$is_historical = parsed_text$ents[[entity_num]]$`_`$is_historical
-    temp_df$is_hypothetical = parsed_text$ents[[entity_num]]$`_`$is_hypothetical
-    temp_df$is_negated = parsed_text$ents[[entity_num]]$`_`$is_negated
-    temp_df$is_uncertain = parsed_text$ents[[entity_num]]$`_`$is_uncertain
-    temp_df$section_title =
-      ifelse(!is.null(parsed_text$ents[[entity_num]]$`_`$section_title),
-         parsed_text$ents[[entity_num]]$`_`$section_title,
-         NA_character_)
-
-    if (clinspacy_env$use_linker) {
-      temp_df = temp_df[temp_df$confidence > threshold, ]
-      temp_df$confidence = NULL
-      temp_df = temp_df[temp_df$semantic_type %in% semantic_types, ]
-    }
-
-    if (return_scispacy_embeddings) {
-      if (nrow(temp_df) > 0) {
-        temp_df = cbind(temp_df, matrix(parsed_text$ents[[entity_num]]$vector, nrow = 1))
-        names(temp_df)[(ncol(temp_df)-200+1):ncol(temp_df)] = paste0('emb_', sprintf('%03d', 1:200))
-      } else {
-        temp_df = return_df
-      }
-    }
-
-    return_df_list[[entity_num]] = temp_df
-
-    if (verbose) {
-      setTxtProgressBar(pb, entity_num)
-    }
-  }
-
-  if (verbose & entity_nums > 0) {
-    close(pb)
-  }
-
-  if (length(return_df_list) > 0) {
-    return_df = rbindlist(return_df_list, use.names = TRUE, fill = TRUE)
-    setDF(return_df)
-    return(return_df)
-  } else {
-    return(return_df)
-  }
 }
 
 #' This is the primary function for processing both data frames and character
@@ -751,19 +657,27 @@ clinspacy <- function(x,
     stop('x must be a character vector or a data.frame.')
   }
 
+  text_ct = nrow(dt)
+  pb <- txtProgressBar(min = 0, max = text_ct, style = 3)
+
+
   if (is.null(output_file)) {
-    dt = dt[, clinspacy_single(.SD[,text],
-                               threshold = threshold,
-                               semantic_types = semantic_types,
-                               is_family = is_family,
-                               is_historical = is_historical,
-                               is_hypothetical = is_hypothetical,
-                               is_negated = is_negated,
-                               is_uncertain = is_uncertain,
-                               return_scispacy_embeddings = return_scispacy_embeddings,
-                               verbose = verbose),
-            by = id]
+    dt = dt[, {if (verbose == TRUE) setTxtProgressBar(pb, .GRP);
+      clinspacy_single(.SD[,text],
+                       threshold = threshold,
+                       semantic_types = semantic_types,
+                       is_family = is_family,
+                       is_historical = is_historical,
+                       is_hypothetical = is_hypothetical,
+                       is_negated = is_negated,
+                       is_uncertain = is_uncertain,
+                       return_scispacy_embeddings = return_scispacy_embeddings,
+                       verbose = verbose)},
+      by = id]
+
     setDF(dt)
+
+    close(pb)
     return(dt)
   } else {
     if (file.exists(output_file) && overwrite == FALSE) {
@@ -779,7 +693,7 @@ clinspacy <- function(x,
     }
     unlink(output_file)
     dt = dt[, data.table::fwrite(
-      data.table(id = id,
+      data.table(id = id, {if (verbose == TRUE) setTxtProgressBar(pb, .GRP);
                  clinspacy_single(.SD[,text],
                                   threshold = threshold,
                                   semantic_types = semantic_types,
@@ -789,7 +703,7 @@ clinspacy <- function(x,
                                   is_negated = is_negated,
                                   is_uncertain = is_uncertain,
                                   return_scispacy_embeddings = return_scispacy_embeddings,
-                                  verbose = verbose)),
+                                  verbose = verbose)}),
       output_file,
       append = TRUE),
       by = id]
@@ -1048,3 +962,57 @@ bind_clinspacy_embeddings <- function(clinspacy_output, df,
   setDF(output)
   return(output)
 }
+
+
+
+spacyent_to_df <-
+  function(ent,
+           threshold = 0.99,
+           return_scispacy_embeddings = FALSE) {
+
+    df <- data.frame(
+      entity = ent$text,
+      lemma = ent$lemma_,
+      is_family = ent$`_`$is_family,
+      is_historical = ent$`_`$is_historical,
+      is_hypothetical = ent$`_`$is_hypothetical,
+      is_negated = ent$`_`$is_negated,
+      is_uncertain = ent$`_`$is_uncertain,
+      section_title =
+        ifelse(
+          !is.null(ent$`_`$section_title),
+          ent$`_`$section_title,
+          NA_character_
+        )
+    )
+
+    umls_cui <- NULL
+    try(umls_cui <- unlist(ent$`_`$kb_ents), silent = TRUE)
+
+    if (length(umls_cui) > 0) {
+      cuis <- unlist(umls_cui)
+
+      cui_df <- data.frame(
+        entity = ent$text,
+        cui = cuis[seq(1, length(cuis), by = 2)],
+        confidence = cuis[seq(2, length(cuis), by = 2)],
+        stringsAsFactors = FALSE
+      )
+
+      cui_df <- cui_df[cui_df$confidence > threshold,]
+
+      df <- merge(df, cui_df, by = "entity", no.dupes = FALSE)
+
+    } else {
+      df <- cbind(df, data.frame(cui = NA, confidence = NA))
+
+    }
+
+    if (return_scispacy_embeddings) {
+      df = cbind(df, matrix(ent$vector, nrow = 1))
+      names(df)[(ncol(df) - 200 + 1):ncol(df)] =
+        paste0('emb_', sprintf('%03d', 1:200))
+    }
+
+    df
+  }
