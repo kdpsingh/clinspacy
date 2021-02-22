@@ -10,7 +10,7 @@ clinspacy(
   df_col = NULL,
   df_id = NULL,
   threshold = 0.99,
-  semantic_types = c("Acquired Abnormality", "Activity", "Age Group",
+  semantic_types = c(NA, "Acquired Abnormality", "Activity", "Age Group",
     "Amino Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian",
     "Anatomical Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon",
     "Bacterium", "Behavior", "Biologic Function", "Biologically Active Substance",
@@ -79,8 +79,8 @@ only be set once per session, this threshold can be updated during the R
 session.}
 
 \item{semantic_types}{Character vector containing any combination of the
-following: c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid
-Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
+following: c(NA, "Acquired Abnormality", "Activity", "Age Group", "Amino
+Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
 Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon",
 "Bacterium", "Behavior", "Biologic Function", "Biologically Active
 Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental

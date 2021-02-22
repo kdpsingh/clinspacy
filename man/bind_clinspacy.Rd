@@ -29,10 +29,10 @@ would like to pivot. For example: \code{"entity"}, \code{"lemma"},
 \code{use_linker} is set to \code{TRUE}.}
 
 \item{df_id}{The name of the \code{id} column in the data frame with which
-the \code{id} column in \code{clinspacy_output} will be joined. If you
-supplied a \code{df_id} in \code{\link{clinspacy}}, then you must also
-supply it here. If you did not supply it in \code{\link{clinspacy}}, then
-it will default to the row number (similar behavior to in
+the \code{clinspacy_id} column in \code{clinspacy_output} will be joined.
+If you supplied a \code{df_id} in \code{\link{clinspacy}}, then you must
+also supply it here. If you did not supply it in \code{\link{clinspacy}},
+then it will default to the row number (similar behavior to in
 \code{\link{clinspacy}}).}
 
 \item{subset}{Logical criteria represented as a string by which the

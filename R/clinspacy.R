@@ -179,8 +179,8 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #'   only be set once per session, this threshold can be updated during the R
 #'   session.
 #' @param semantic_types Character vector containing any combination of the
-#'   following: c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid
-#'   Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
+#'   following: c(NA, "Acquired Abnormality", "Activity", "Age Group", "Amino
+#'   Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
 #'   Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon",
 #'   "Bacterium", "Behavior", "Biologic Function", "Biologically Active
 #'   Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental
@@ -230,7 +230,8 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #' @examples
 #' clinspacy_single('This patient has diabetes and CKD stage 3 but no HTN.')
 clinspacy_single <- function(text, threshold = 0.99,
-                      semantic_types = c("Acquired Abnormality",
+                      semantic_types = c(NA,
+                                         "Acquired Abnormality",
                                          "Activity",
                                          "Age Group",
                                          "Amino Acid Sequence",
@@ -408,78 +409,67 @@ clinspacy_single <- function(text, threshold = 0.99,
   }
 
 
-  return_df_list = list()
+  return_df_list =
+    lapply(seq_len(entity_nums),
+           function (entity_num) {
 
-  if (verbose & entity_nums > 0) {
-    message(paste('Processing...', text))
-    pb = txtProgressBar(min = 0, max = entity_nums, style = 3)
-  }
-
-  for (entity_num in seq_len(entity_nums)) {
-
-    if (clinspacy_env$use_linker) {
-      if (is.null(unlist(parsed_text$ents[[entity_num]]$`_`$kb_ents))) next
-    } else {
-      if (!parsed_text$ents[[entity_num]]$has_vector) next
-    }
+             if (clinspacy_env$use_linker) {
+               if (is.null(unlist(parsed_text$ents[[entity_num]]$`_`$kb_ents)))
+                 return(return_df)
+             } else {
+               if (!parsed_text$ents[[entity_num]]$has_vector)
+                 return(return_df)
+             }
 
 
-    if (clinspacy_env$use_linker) {
-      temp_cuis = parsed_text$ents[[entity_num]]$`_`$kb_ents
-      temp_cuis = unlist(temp_cuis)
-      temp_df = data.frame(cui = temp_cuis[seq(1, length(temp_cuis), by = 2)],
-                           confidence = temp_cuis[seq(2, length(temp_cuis), by = 2)],
-                           stringsAsFactors = FALSE)
-      temp_df$entity = parsed_text$ents[[entity_num]]$text
-    } else {
-      temp_df = data.frame(entity = parsed_text$ents[[entity_num]]$text,
-                           stringsAsFactors = FALSE)
-    }
+             if (clinspacy_env$use_linker) {
+               temp_cuis = parsed_text$ents[[entity_num]]$`_`$kb_ents
+               temp_cuis = unlist(temp_cuis)
+               temp_df = data.frame(cui = temp_cuis[seq(1, length(temp_cuis), by = 2)],
+                                    confidence = temp_cuis[seq(2, length(temp_cuis), by = 2)],
+                                    stringsAsFactors = FALSE)
+               temp_df$entity = parsed_text$ents[[entity_num]]$text
+             } else {
+               temp_df = data.frame(entity = parsed_text$ents[[entity_num]]$text,
+                                    stringsAsFactors = FALSE)
+             }
 
-    temp_df$lemma = parsed_text$ents[[entity_num]]$lemma_
+             temp_df$lemma = parsed_text$ents[[entity_num]]$lemma_
 
-    if (clinspacy_env$use_linker) {
-      if (is.null(clinspacy_env$cui2vec_definitions)) {
-        clinspacy_env$cui2vec_definitions <- dataset_cui2vec_definitions()
-      }
-      temp_df = merge(temp_df, clinspacy_env$cui2vec_definitions, all.x = TRUE) # adds semantic_type and definition
-    }
+             if (clinspacy_env$use_linker) {
+               if (is.null(clinspacy_env$cui2vec_definitions)) {
+                 clinspacy_env$cui2vec_definitions <- dataset_cui2vec_definitions()
+               }
+               temp_df = merge(temp_df, clinspacy_env$cui2vec_definitions, all.x = TRUE) # adds semantic_type and definition
+             }
 
-    temp_df$is_family = parsed_text$ents[[entity_num]]$`_`$is_family
-    temp_df$is_historical = parsed_text$ents[[entity_num]]$`_`$is_historical
-    temp_df$is_hypothetical = parsed_text$ents[[entity_num]]$`_`$is_hypothetical
-    temp_df$is_negated = parsed_text$ents[[entity_num]]$`_`$is_negated
-    temp_df$is_uncertain = parsed_text$ents[[entity_num]]$`_`$is_uncertain
-    temp_df$section_title =
-      ifelse(!is.null(parsed_text$ents[[entity_num]]$`_`$section_title),
-         parsed_text$ents[[entity_num]]$`_`$section_title,
-         NA_character_)
+             temp_df$is_family = parsed_text$ents[[entity_num]]$`_`$is_family
+             temp_df$is_historical = parsed_text$ents[[entity_num]]$`_`$is_historical
+             temp_df$is_hypothetical = parsed_text$ents[[entity_num]]$`_`$is_hypothetical
+             temp_df$is_negated = parsed_text$ents[[entity_num]]$`_`$is_negated
+             temp_df$is_uncertain = parsed_text$ents[[entity_num]]$`_`$is_uncertain
+             temp_df$section_title =
+               ifelse(!is.null(parsed_text$ents[[entity_num]]$`_`$section_title),
+                      parsed_text$ents[[entity_num]]$`_`$section_title,
+                      NA_character_)
 
-    if (clinspacy_env$use_linker) {
-      temp_df = temp_df[temp_df$confidence > threshold, ]
-      temp_df$confidence = NULL
-      temp_df = temp_df[temp_df$semantic_type %in% semantic_types, ]
-    }
+             if (clinspacy_env$use_linker) {
+               temp_df = temp_df[temp_df$confidence > threshold, ]
+               temp_df$confidence = NULL
+               temp_df = temp_df[temp_df$semantic_type %in% semantic_types, ]
+             }
 
-    if (return_scispacy_embeddings) {
-      if (nrow(temp_df) > 0) {
-        temp_df = cbind(temp_df, matrix(parsed_text$ents[[entity_num]]$vector, nrow = 1))
-        names(temp_df)[(ncol(temp_df)-200+1):ncol(temp_df)] = paste0('emb_', sprintf('%03d', 1:200))
-      } else {
-        temp_df = return_df
-      }
-    }
+             if (return_scispacy_embeddings) {
+               if (nrow(temp_df) > 0) {
+                 temp_df = cbind(temp_df, matrix(parsed_text$ents[[entity_num]]$vector, nrow = 1))
+                 names(temp_df)[(ncol(temp_df)-200+1):ncol(temp_df)] = paste0('emb_', sprintf('%03d', 1:200))
+               } else {
+                 temp_df = return_df
+               }
+             }
 
-    return_df_list[[entity_num]] = temp_df
-
-    if (verbose) {
-      setTxtProgressBar(pb, entity_num)
-    }
-  }
-
-  if (verbose & entity_nums > 0) {
-    close(pb)
-  }
+             temp_df
+           })
 
   if (length(return_df_list) > 0) {
     return_df = rbindlist(return_df_list, use.names = TRUE, fill = TRUE)
@@ -506,8 +496,8 @@ clinspacy_single <- function(text, threshold = 0.99,
 #'   only be set once per session, this threshold can be updated during the R
 #'   session.
 #' @param semantic_types Character vector containing any combination of the
-#'   following: c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid
-#'   Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
+#'   following: c(NA, "Acquired Abnormality", "Activity", "Age Group", "Amino
+#'   Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
 #'   Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon",
 #'   "Bacterium", "Behavior", "Biologic Function", "Biologically Active
 #'   Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental
@@ -589,7 +579,8 @@ clinspacy <- function(x,
                       df_col = NULL,
                       df_id = NULL,
                       threshold = 0.99,
-                      semantic_types = c("Acquired Abnormality",
+                      semantic_types = c(NA,
+                                         "Acquired Abnormality",
                                          "Activity",
                                          "Age Group",
                                          "Amino Acid Sequence",
@@ -731,18 +722,18 @@ clinspacy <- function(x,
   }
 
   if(is.character(x)) {
-    dt = data.table(text = x)[, id := 1:.N][,. (id, text)]
+    dt = data.table(text = x)[, clinspacy_id := 1:.N][,. (clinspacy_id, text)]
   } else if(is.data.frame(x)) {
     if (!is.null(df_col)) {
       if (!is.null(df_id)) {
         if (length(x[[df_id]]) != length(unique(x[[df_id]]))) {
           stop ('If provided, the id column must be unique to each row.')
         }
-        dt = data.table(id = x[[df_id]], text = x[[df_col]])
+        dt = data.table(clinspacy_id = x[[df_id]], text = x[[df_col]])
       } else {
         message(paste0('Since x is a data.frame and no id column was provided, ',
                        'the row number will be used as the id.'))
-        dt = data.table(text = x[[df_col]])[, id := 1:.N][, .(id, text)]
+        dt = data.table(text = x[[df_col]])[, clinspacy_id := 1:.N][, .(clinspacy_id, text)]
       }
     } else {
       stop('If x is a data.frame, you must provide a text column as a string.')
@@ -751,8 +742,21 @@ clinspacy <- function(x,
     stop('x must be a character vector or a data.frame.')
   }
 
+
+  if (nrow(dt) == 0) {
+    stop('You must provide at least one value in `x` for clinspacy() to process.')
+  }
+
+  if (verbose) {
+    pb = txtProgressBar(min = 0, max = nrow(dt), style = 3)
+  }
+
   if (is.null(output_file)) {
-    dt = dt[, clinspacy_single(.SD[,text],
+    dt = dt[, {
+          if (verbose) {
+            setTxtProgressBar(pb, .GRP)
+          }
+          clinspacy_single(.SD[,text],
                                threshold = threshold,
                                semantic_types = semantic_types,
                                is_family = is_family,
@@ -761,8 +765,13 @@ clinspacy <- function(x,
                                is_negated = is_negated,
                                is_uncertain = is_uncertain,
                                return_scispacy_embeddings = return_scispacy_embeddings,
-                               verbose = verbose),
-            by = id]
+                               verbose = verbose)
+
+            },
+            by = clinspacy_id]
+    if (verbose) {
+      close(pb)
+    }
     setDF(dt)
     return(dt)
   } else {
@@ -778,8 +787,11 @@ clinspacy <- function(x,
       }
     }
     unlink(output_file)
-    dt = dt[, data.table::fwrite(
-      data.table(id = id,
+    dt = dt[, {if (verbose) {
+                setTxtProgressBar(pb, .GRP)
+              }
+              data.table::fwrite(
+                data.table(clinspacy_id = clinspacy_id,
                  clinspacy_single(.SD[,text],
                                   threshold = threshold,
                                   semantic_types = semantic_types,
@@ -791,8 +803,13 @@ clinspacy <- function(x,
                                   return_scispacy_embeddings = return_scispacy_embeddings,
                                   verbose = verbose)),
       output_file,
-      append = TRUE),
-      by = id]
+      append = TRUE)
+      },
+      by = clinspacy_id]
+
+    if (verbose) {
+      close(pb)
+    }
 
     return(output_file)
   }
@@ -813,10 +830,10 @@ clinspacy <- function(x,
 #'   \code{use_linker} is set to \code{FALSE} and \code{"cui"} if
 #'   \code{use_linker} is set to \code{TRUE}.
 #' @param df_id The name of the \code{id} column in the data frame with which
-#'   the \code{id} column in \code{clinspacy_output} will be joined. If you
-#'   supplied a \code{df_id} in \code{\link{clinspacy}}, then you must also
-#'   supply it here. If you did not supply it in \code{\link{clinspacy}}, then
-#'   it will default to the row number (similar behavior to in
+#'   the \code{clinspacy_id} column in \code{clinspacy_output} will be joined.
+#'   If you supplied a \code{df_id} in \code{\link{clinspacy}}, then you must
+#'   also supply it here. If you did not supply it in \code{\link{clinspacy}},
+#'   then it will default to the row number (similar behavior to in
 #'   \code{\link{clinspacy}}).
 #' @param subset Logical criteria represented as a string by which the
 #'   \code{clinspacy_output} will be subsetted prior to building the output data
@@ -881,17 +898,18 @@ bind_clinspacy <- function(clinspacy_output, df,
   }
 
   clinspacy_output = dcast(clinspacy_output,
-                           paste0('id~', cs_col),
-                           value.var = 'id',
+                           paste0('clinspacy_id~', cs_col),
+                           value.var = 'clinspacy_id',
                            fun = length)
 
 
   output = merge(df, clinspacy_output, all.x=TRUE,
-                 by.x = df_id, by.y = 'id')
+                 by.x = df_id, by.y = 'clinspacy_id')
 
-  if (df_id == 'clinspacy_id') {
-    output[, clinspacy_id := NULL]
-  }
+  # Will remove if works okay because new default for id column is clinspacy_id
+  # if (df_id == 'clinspacy_id') {
+  #   output[, clinspacy_id := NULL]
+  # }
 
   setDF(output)
   return(output)
@@ -1015,9 +1033,9 @@ bind_clinspacy_embeddings <- function(clinspacy_output, df,
   }
 
   if (type == 'scispacy') {
-    clinspacy_output = clinspacy_output[, .(id, .SD), .SDcols = scispacy_embedding_columns]
+    clinspacy_output = clinspacy_output[, .(clinspacy_id, .SD), .SDcols = scispacy_embedding_columns]
     names(clinspacy_output)[(ncol(clinspacy_output)-200+1):ncol(clinspacy_output)] = scispacy_embedding_columns
-    clinspacy_output = clinspacy_output[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = id,
+    clinspacy_output = clinspacy_output[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = clinspacy_id,
             .SDcols = scispacy_embedding_columns]
   } else if (type == 'cui2vec') {
     clinspacy_output = merge(clinspacy_output,
@@ -1027,16 +1045,16 @@ bind_clinspacy_embeddings <- function(clinspacy_output, df,
     # clinspacy_output[, n := sum(n), by = id]
     # clinspacy_output = clinspacy_output[, lapply(.SD, function (x) sum(x)/n), by = clinspacy_id,
     #         .SDcols = paste0('emb_',sprintf('%03d', 1:num_embeddings))]
-    clinspacy_output = clinspacy_output[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = id,
+    clinspacy_output = clinspacy_output[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = clinspacy_id,
                                         .SDcols = cui2vec_embedding_columns]
   }
 
   output = merge(df, clinspacy_output, all.x=TRUE,
-                 by.x = df_id, by.y = 'id')
+                 by.x = df_id, by.y = 'clinspacy_id')
 
-  if (df_id == 'clinspacy_id') {
-    output[, clinspacy_id := NULL]
-  }
+  # if (df_id == 'clinspacy_id') {
+  #   output[, clinspacy_id := NULL]
+  # }
 
   setDF(output)
   return(output)

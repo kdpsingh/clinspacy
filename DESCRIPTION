@@ -1,7 +1,7 @@
 Package: clinspacy
 Type: Package
 Title: Clinical Natural Language Processing using spaCy, scispacy, and medspacy
-Version: 0.1.0.9001
+Version: 0.2.0.9000
 Author: Karandeep Singh
 Maintainer: Karandeep Singh <kdpsingh@umich.edu>
 Description: Performs biomedical named entity recognition,
@@ -17,7 +17,7 @@ Imports:
     rappdirs,
     utils,
     magrittr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 URL: https://github.com/ML4LHS/clinspacy
 BugReports: https://github.com/ML4LHS/clinspacy/issues
 Depends: 
