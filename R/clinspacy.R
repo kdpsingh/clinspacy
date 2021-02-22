@@ -839,9 +839,6 @@ bind_clinspacy <- function(clinspacy_output, df,
                            cs_col = NULL, df_id = NULL,
                            subset = 'is_negated == FALSE') {
 
-  if (is.null(clinspacy_env$nlp)) {
-    clinspacy_init()
-  }
 
   if (is.null(cs_col)) {
     if (clinspacy_env$use_linker == TRUE) {
@@ -961,10 +958,6 @@ bind_clinspacy_embeddings <- function(clinspacy_output, df,
                                       type = 'scispacy',
                                       df_id = NULL,
                                       subset = 'is_negated == FALSE') {
-
-  if (is.null(clinspacy_env$nlp)) {
-    clinspacy_init()
-  }
 
   assertthat::assert_that(type %in% c('cui2vec', 'scispacy'))
 
