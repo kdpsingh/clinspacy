@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # clinspacy
 
 <!-- badges: start -->
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 The goal of clinspacy is to perform biomedical named entity recognition, Unified Medical Language System (UMLS) concept mapping, and negation detection using the Python spaCy, scispacy, and medspacy packages.

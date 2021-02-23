@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 The goal of clinspacy is to perform biomedical named entity recognition,
@@ -25,6 +25,7 @@ You can install the GitHub version of clinspacy
 ``` r
 library(clinspacy)
 library(magrittr) # For the pipe %>%
+#> Warning: package 'magrittr' was built under R version 3.6.3
 ```
 
 ## Initiating clinspacy
@@ -39,12 +40,8 @@ argument set to
 
 ``` r
 clinspacy_init() # This is optional! The default functionality is to initiatie clinspacy without the UMLS linker
-#> Initializing clinspacy using clinspacy_init()...
-#> Checking if miniconda is installed...
-#> Importing spacy...
-#> Importing scispacy...
-#> Importing medspacy modules...
-#> Loading the en_core_sci_lg language model...
+#> Clinspacy has already been initialized. Set the use_linker argument to turn the linker on or off.
+#> NULL
 ```
 
 ## Named entity recognition (without the UMLS linker)
@@ -450,16 +447,16 @@ idea because you can always subset the results later within
 ``` r
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #>   |                                                                                                                             |                                                                                                                     |   0%  |                                                                                                                             |=====================================================================================================================| 100%
-#>   clinspacy_id      cui      entity       lemma             semantic_type                     definition is_family
-#> 1            1 C0030705     patient     patient Patient or Disabled Group                       Patients     FALSE
-#> 2            1 C1550655     patient     patient            Body Substance        Specimen Type - Patient     FALSE
-#> 3            1 C1578483     patient     patient           Idea or Concept        Report source - Patient     FALSE
-#> 4            1 C1578486     patient     patient      Intellectual Product Disabled Person Code - Patient     FALSE
-#> 5            1 C1705908     patient     patient                  Organism             Veterinary Patient     FALSE
-#> 6            1 C0011847    diabetes    diabetes       Disease or Syndrome                       Diabetes     FALSE
-#> 7            1 C0011849    diabetes    diabetes       Disease or Syndrome              Diabetes Mellitus     FALSE
-#> 8            1 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome Chronic kidney disease stage 3     FALSE
-#> 9            1 C0020538         HTN         htn       Disease or Syndrome           Hypertensive disease     FALSE
+#>   clinspacy_id      cui      entity       lemma             semantic_type                      definition is_family
+#> 1            1 C0030705     patient     patient Patient or Disabled Group                        Patients     FALSE
+#> 2            1 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient     FALSE
+#> 3            1 C1578485     patient     patient      Intellectual Product Specimen Source Codes - Patient     FALSE
+#> 4            1 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient     FALSE
+#> 5            1 C1705908     patient     patient                  Organism              Veterinary Patient     FALSE
+#> 6            1 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes     FALSE
+#> 7            1 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus     FALSE
+#> 8            1 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3     FALSE
+#> 9            1 C0020538         HTN         htn       Disease or Syndrome            Hypertensive disease     FALSE
 #>   is_historical is_hypothetical is_negated is_uncertain section_title
 #> 1         FALSE           FALSE      FALSE        FALSE          <NA>
 #> 2         FALSE           FALSE      FALSE        FALSE          <NA>
