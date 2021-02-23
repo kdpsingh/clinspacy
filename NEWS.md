@@ -9,3 +9,6 @@
 
 # clinspacy 0.2.0 (2021-02-22)
 * Changed lifecycle badge to stable
+
+# clinspacy 1.0.0 (2021-02-23)
+* Bumped version number to 1.0.0 since it's ready for CRAN submission
