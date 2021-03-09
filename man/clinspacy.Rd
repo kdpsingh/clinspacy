@@ -144,6 +144,7 @@ This is the primary function for processing both data frames and character
 vectors in the \code{clinspacy} package.
 }
 \examples{
+\dontrun {
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 
 clinspacy(c('This pt has CKD and HTN', 'Pt only has CKD but no HTN'))
@@ -160,5 +161,6 @@ clinspacy(c('This pt has CKD and HTN', 'Has CKD but no HTN'),
   output_file = file.path(rappdirs::user_data_dir('clinspacy'),
                           'output.csv'),
   overwrite = TRUE)
+}
 
 }

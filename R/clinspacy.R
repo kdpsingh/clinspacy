@@ -228,7 +228,11 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #'   section title from the Sectionizer.
 #'
 #' @examples
+#' \dontrun {
 #' clinspacy_single('This patient has diabetes and CKD stage 3 but no HTN.')
+#' }
+#'
+#' @noRd
 clinspacy_single <- function(text, threshold = 0.99,
                       semantic_types = c(NA,
                                          "Acquired Abnormality",
@@ -552,6 +556,7 @@ clinspacy_single <- function(text, threshold = 0.99,
 #'   will be returned.
 #'
 #' @examples
+#' \dontrun {
 #' clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #'
 #' clinspacy(c('This pt has CKD and HTN', 'Pt only has CKD but no HTN'))
@@ -568,6 +573,7 @@ clinspacy_single <- function(text, threshold = 0.99,
 #'   output_file = file.path(rappdirs::user_data_dir('clinspacy'),
 #'                           'output.csv'),
 #'   overwrite = TRUE)
+#' }
 #'
 #' @export
 clinspacy <- function(x,
@@ -951,10 +957,12 @@ bind_clinspacy <- function(clinspacy_output, df,
 #'   The resulting data frame can be used to train a machine learning model.
 #'
 #' @examples
+#' \dontrun {
 #' mtsamples <- dataset_mtsamples()
 #' mtsamples[1:5,] %>%
 #'   clinspacy(df_col = 'description', return_scispacy_embeddings = TRUE) %>%
 #'   bind_clinspacy_embeddings(mtsamples[1:5,])
+#' }
 #'
 #' @export
 bind_clinspacy_embeddings <- function(clinspacy_output, df,

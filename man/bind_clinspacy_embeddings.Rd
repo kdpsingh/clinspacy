@@ -70,9 +70,11 @@ The cui2vec data is made available under a
 only change made to the original dataset is the renaming of columns.
 }
 \examples{
+\dontrun {
 mtsamples <- dataset_mtsamples()
 mtsamples[1:5,] \%>\%
   clinspacy(df_col = 'description', return_scispacy_embeddings = TRUE) \%>\%
   bind_clinspacy_embeddings(mtsamples[1:5,])
+}
 
 }
