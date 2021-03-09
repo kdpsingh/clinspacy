@@ -840,6 +840,7 @@ bind_clinspacy <- function(clinspacy_output, df,
                            cs_col = NULL, df_id = NULL,
                            subset = 'is_negated == FALSE') {
 
+  clinspacy_id = NULL
 
   if (is.null(cs_col)) {
     if (clinspacy_env$use_linker == TRUE) {
@@ -960,6 +961,8 @@ bind_clinspacy_embeddings <- function(clinspacy_output, df,
                                       type = 'scispacy',
                                       df_id = NULL,
                                       subset = 'is_negated == FALSE') {
+
+  clinspacy_id = NULL
 
   assertthat::assert_that(type %in% c('cui2vec', 'scispacy'))
 
