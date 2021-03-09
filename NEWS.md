@@ -12,3 +12,6 @@
 
 # clinspacy 1.0.0 (2021-02-23)
 * Bumped version number to 1.0.0 since it's ready for CRAN submission
+
+# clinspacy 1.0.1 (2021-03-08)
+* Bug fix: removed unnecessary arguments and some clean up in prep for CRAN submission

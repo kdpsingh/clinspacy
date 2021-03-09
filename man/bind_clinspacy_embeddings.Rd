@@ -16,6 +16,13 @@ bind_clinspacy_embeddings(
 )
 }
 \arguments{
+\item{clinspacy_output}{A data.frame or file name containing the output from
+\code{\link{clinspacy}}. In order for scispacy embeddings to be available
+to \code{\link{bind_clinspacy_embeddings}}, you must set
+\code{return_scispacy_embeddings} to \code{TRUE} when running
+\code{\link{clinspacy}} so that the embeddings are included within
+\code{clinspacy_output}.}
+
 \item{df}{The data.frame to which you would like to bind the output of
 \code{\link{clinspacy}}.}
 

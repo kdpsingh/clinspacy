@@ -51,11 +51,6 @@ clinspacy_single(
     "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance",
     "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate",
     "Virus", "Vitamin"),
-  is_family = c(TRUE, FALSE),
-  is_historical = c(TRUE, FALSE),
-  is_hypothetical = c(TRUE, FALSE),
-  is_negated = c(TRUE, FALSE),
-  is_uncertain = c(TRUE, FALSE),
   return_scispacy_embeddings = FALSE,
   verbose = TRUE
 )

@@ -358,11 +358,6 @@ clinspacy_single <- function(text, threshold = 0.99,
                                          "Vertebrate",
                                          "Virus",
                                          "Vitamin"),
-                      is_family = c(TRUE, FALSE),
-                      is_historical = c(TRUE, FALSE),
-                      is_hypothetical = c(TRUE, FALSE),
-                      is_negated = c(TRUE, FALSE),
-                      is_uncertain = c(TRUE, FALSE),
                       return_scispacy_embeddings = FALSE,
                       verbose = TRUE) {
 
@@ -538,7 +533,7 @@ clinspacy_single <- function(text, threshold = 0.99,
 #' @param return_scispacy_embeddings Defaults to \code{FALSE}. This is primarily
 #'   intended for use by the \code{\link{bind_clinspacy_embeddings}} function to
 #'   obtain scispacy embeddings. In order for scispacy embeddings to be
-#'   available to \code\link{bind_clinspacy_embeddings}}, you must set this to
+#'   available to \code{\link{bind_clinspacy_embeddings}}, you must set this to
 #'   \code{TRUE}.
 #' @param verbose Defaults to \code{TRUE}.
 #' @param output_file Defaults to \code{NULL}. This is an optional argument that
@@ -550,7 +545,7 @@ clinspacy_single <- function(text, threshold = 0.99,
 #'
 #' @return If \code{output_file} is \code{NULL} (the default), then this
 #'   function returns a data frame containing the UMLS concept unique
-#'   identifiers (cui), entities, lemmatized entities, cycontext negation status
+#'   identifiers (cui), entities, lemmatized entities, CyContext negation status
 #'   (\code{TRUE} means negated, \code{FALSE} means *not* negated), other
 #'   CyContext contexts, and section title from the clinical sectionizer. If
 #'   \code{output_file} points to a file name, then the name of the created file
@@ -707,15 +702,13 @@ clinspacy <- function(x,
                                          "Vertebrate",
                                          "Virus",
                                          "Vitamin"),
-                      is_family = c(TRUE, FALSE),
-                      is_historical = c(TRUE, FALSE),
-                      is_hypothetical = c(TRUE, FALSE),
-                      is_negated = c(TRUE, FALSE),
-                      is_uncertain = c(TRUE, FALSE),
                       return_scispacy_embeddings = FALSE,
                       verbose = TRUE,
                       output_file = NULL,
                       overwrite = FALSE) {
+
+  text = NULL
+  clinspacy_id = NULL
 
   if (is.null(clinspacy_env$nlp)) {
     clinspacy_init()
@@ -733,7 +726,7 @@ clinspacy <- function(x,
       } else {
         message(paste0('Since x is a data.frame and no id column was provided, ',
                        'the row number will be used as the id.'))
-        dt = data.table(text = x[[df_col]])[, clinspacy_id := 1:.N][, .(clinspacy_id, text)]
+        dt = data.table(text = x[[df_col]])[, clinspacy_id := 1:.N][, list(clinspacy_id, text)]
       }
     } else {
       stop('If x is a data.frame, you must provide a text column as a string.')
@@ -748,22 +741,17 @@ clinspacy <- function(x,
   }
 
   if (verbose) {
-    pb = txtProgressBar(min = 0, max = nrow(dt), style = 3)
+    pb = utils::txtProgressBar(min = 0, max = nrow(dt), style = 3)
   }
 
   if (is.null(output_file)) {
     dt = dt[, {
           if (verbose) {
-            setTxtProgressBar(pb, .GRP)
+            utils::setTxtProgressBar(pb, .GRP)
           }
           clinspacy_single(.SD[,text],
                                threshold = threshold,
                                semantic_types = semantic_types,
-                               is_family = is_family,
-                               is_historical = is_historical,
-                               is_hypothetical = is_hypothetical,
-                               is_negated = is_negated,
-                               is_uncertain = is_uncertain,
                                return_scispacy_embeddings = return_scispacy_embeddings,
                                verbose = verbose)
 
@@ -795,11 +783,6 @@ clinspacy <- function(x,
                  clinspacy_single(.SD[,text],
                                   threshold = threshold,
                                   semantic_types = semantic_types,
-                                  is_family = is_family,
-                                  is_historical = is_historical,
-                                  is_hypothetical = is_hypothetical,
-                                  is_negated = is_negated,
-                                  is_uncertain = is_uncertain,
                                   return_scispacy_embeddings = return_scispacy_embeddings,
                                   verbose = verbose)),
       output_file,
@@ -846,11 +829,12 @@ clinspacy <- function(x,
 #'   values containing frequencies.
 #'
 #' @examples
+#' \dontrun {
 #' mtsamples <- dataset_mtsamples()
 #' mtsamples[1:5,] %>%
 #'   clinspacy(df_col = 'description') %>%
 #'   bind_clinspacy(mtsamples[1:5,])
-#'
+#' }
 #' @export
 bind_clinspacy <- function(clinspacy_output, df,
                            cs_col = NULL, df_id = NULL,
@@ -900,7 +884,7 @@ bind_clinspacy <- function(clinspacy_output, df,
   clinspacy_output = dcast(clinspacy_output,
                            paste0('clinspacy_id~', cs_col),
                            value.var = 'clinspacy_id',
-                           fun = length)
+                           fun.aggregate = length)
 
 
   output = merge(df, clinspacy_output, all.x=TRUE,
@@ -938,7 +922,7 @@ bind_clinspacy <- function(clinspacy_output, df,
 #'
 #' @param clinspacy_output A data.frame or file name containing the output from
 #'   \code{\link{clinspacy}}. In order for scispacy embeddings to be available
-#'   to \code\link{bind_clinspacy_embeddings}}, you must set
+#'   to \code{\link{bind_clinspacy_embeddings}}, you must set
 #'   \code{return_scispacy_embeddings} to \code{TRUE} when running
 #'   \code{\link{clinspacy}} so that the embeddings are included within
 #'   \code{clinspacy_output}.
@@ -1033,7 +1017,7 @@ bind_clinspacy_embeddings <- function(clinspacy_output, df,
   }
 
   if (type == 'scispacy') {
-    clinspacy_output = clinspacy_output[, .(clinspacy_id, .SD), .SDcols = scispacy_embedding_columns]
+    clinspacy_output = clinspacy_output[, list(clinspacy_id, .SD), .SDcols = scispacy_embedding_columns]
     names(clinspacy_output)[(ncol(clinspacy_output)-200+1):ncol(clinspacy_output)] = scispacy_embedding_columns
     clinspacy_output = clinspacy_output[, lapply(.SD, function (x) mean(x, na.rm=TRUE)), by = clinspacy_id,
             .SDcols = scispacy_embedding_columns]

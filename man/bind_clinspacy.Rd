@@ -54,9 +54,10 @@ resulting data frame can be used to train a machine learning model or for
 additional feature selection.
 }
 \examples{
+\dontrun {
 mtsamples <- dataset_mtsamples()
 mtsamples[1:5,] \%>\%
   clinspacy(df_col = 'description') \%>\%
   bind_clinspacy(mtsamples[1:5,])
-
+}
 }

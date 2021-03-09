@@ -50,11 +50,6 @@ clinspacy(
     "Sign or Symptom", "Social Behavior", "Spatial Concept", "Substance",
     "Temporal Concept", "Therapeutic or Preventive Procedure", "Tissue", "Vertebrate",
     "Virus", "Vitamin"),
-  is_family = c(TRUE, FALSE),
-  is_historical = c(TRUE, FALSE),
-  is_hypothetical = c(TRUE, FALSE),
-  is_negated = c(TRUE, FALSE),
-  is_uncertain = c(TRUE, FALSE),
   return_scispacy_embeddings = FALSE,
   verbose = TRUE,
   output_file = NULL,
@@ -119,6 +114,12 @@ Relief Organization", "Sign or Symptom", "Social Behavior", "Spatial
 Concept", "Substance", "Temporal Concept", "Therapeutic or Preventive
 Procedure", "Tissue", "Vertebrate", "Virus", "Vitamin")}
 
+\item{return_scispacy_embeddings}{Defaults to \code{FALSE}. This is primarily
+intended for use by the \code{\link{bind_clinspacy_embeddings}} function to
+obtain scispacy embeddings. In order for scispacy embeddings to be
+available to \code{\link{bind_clinspacy_embeddings}}, you must set this to
+\code{TRUE}.}
+
 \item{verbose}{Defaults to \code{TRUE}.}
 
 \item{output_file}{Defaults to \code{NULL}. This is an optional argument that
@@ -132,7 +133,7 @@ prompted to confirm whether you would like to overwrite the file. If set to
 \value{
 If \code{output_file} is \code{NULL} (the default), then this
   function returns a data frame containing the UMLS concept unique
-  identifiers (cui), entities, lemmatized entities, cycontext negation status
+  identifiers (cui), entities, lemmatized entities, CyContext negation status
   (\code{TRUE} means negated, \code{FALSE} means *not* negated), other
   CyContext contexts, and section title from the clinical sectionizer. If
   \code{output_file} points to a file name, then the name of the created file

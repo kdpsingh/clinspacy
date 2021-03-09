@@ -2,8 +2,10 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.html$
 ^\.github$
 ^data$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^vignettes$

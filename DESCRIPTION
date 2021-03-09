@@ -1,12 +1,12 @@
 Package: clinspacy
 Type: Package
-Title: Clinical Natural Language Processing using spaCy, scispacy, and medspacy
-Version: 1.0.0
+Title: Clinical Natural Language Processing using spaCy, Scispacy, and Medspacy
+Version: 1.0.1
 Author: Karandeep Singh
 Maintainer: Karandeep Singh <kdpsingh@umich.edu>
 Description: Performs biomedical named entity recognition,
     Unified Medical Language System (UMLS) concept mapping, and negation
-    detection using the Python spaCy, scispacy, and medspacy packages.
+    detection using the Python spaCy, scispaCy, and medspaCy packages.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -25,4 +25,3 @@ Depends:
 Suggests: 
     knitr,
     rmarkdown
-VignetteBuilder: knitr
