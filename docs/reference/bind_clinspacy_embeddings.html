@@ -9,7 +9,7 @@
 <title>This function binds columns containing entity or concept embeddings to a data
 frame. The entity embeddings are derived from the scispacy package, and the
 concept embeddings are derived from the
-<code><a href='dataset_cui2vec_embeddings.html'>dataset_cui2vec_embeddings</a></code> dataset included with this package. — bind_clinspacy_embeddings • clinspacy</title>
+dataset_cui2vec_embeddings dataset included with this package. — bind_clinspacy_embeddings • clinspacy</title>
 
 
 <!-- jquery -->
@@ -45,7 +45,7 @@ concept embeddings are derived from the
 <meta property="og:title" content="This function binds columns containing entity or concept embeddings to a data
 frame. The entity embeddings are derived from the scispacy package, and the
 concept embeddings are derived from the
-<code><a href='dataset_cui2vec_embeddings.html'>dataset_cui2vec_embeddings</a></code> dataset included with this package. — bind_clinspacy_embeddings" />
+dataset_cui2vec_embeddings dataset included with this package. — bind_clinspacy_embeddings" />
 <meta property="og:description" content="The embeddings are derived from Andrew Beam's
 cui2vec R package." />
 
@@ -79,7 +79,7 @@ cui2vec R package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">clinspacy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -105,6 +105,9 @@ cui2vec R package." />
       <a href="../articles/using_embeddings_for_machine_learning_on_clinical_text.html">Using Embeddings for Machine Learning on Clinical Text</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -140,17 +143,26 @@ concept embeddings are derived from the
 <a href='https://github.com/beamandrew/cui2vec'>cui2vec R package</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bind_clinspacy_embeddings</span>(
-  <span class='no'>clinspacy_output</span>,
-  <span class='no'>df</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"scispacy"</span>,
-  <span class='kw'>df_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>subset</span> <span class='kw'>=</span> <span class='st'>"is_negated == FALSE"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>bind_clinspacy_embeddings</span><span class='op'>(</span>
+  <span class='va'>clinspacy_output</span>,
+  <span class='va'>df</span>,
+  type <span class='op'>=</span> <span class='st'>"scispacy"</span>,
+  df_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  subset <span class='op'>=</span> <span class='st'>"is_negated == FALSE"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>clinspacy_output</th>
+      <td><p>A data.frame or file name containing the output from
+<code><a href='clinspacy.html'>clinspacy</a></code>. In order for scispacy embeddings to be available
+to <code>bind_clinspacy_embeddings</code>, you must set
+<code>return_scispacy_embeddings</code> to <code>TRUE</code> when running
+<code><a href='clinspacy.html'>clinspacy</a></code> so that the embeddings are included within
+<code>clinspacy_output</code>.</p></td>
+    </tr>
     <tr>
       <th>df</th>
       <td><p>The data.frame to which you would like to bind the output of
@@ -202,200 +214,13 @@ arXiv:1804.01486.</p>
 only change made to the original dataset is the renaming of columns.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mtsamples</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dataset_mtsamples.html'>dataset_mtsamples</a></span>()
-<span class='no'>mtsamples</span>[<span class='fl'>1</span>:<span class='fl'>5</span>,] <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='clinspacy.html'>clinspacy</a></span>(<span class='kw'>df_col</span> <span class='kw'>=</span> <span class='st'>'description'</span>, <span class='kw'>return_scispacy_embeddings</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>bind_clinspacy_embeddings</span>(<span class='no'>mtsamples</span>[<span class='fl'>1</span>:<span class='fl'>5</span>,])</div><div class='output co'>#&gt; <span class='message'>Since x is a data.frame and no id column was provided, the row number will be used as the id.</span></div><div class='output co'>#&gt; <span class='message'>Processing... A 23-year-old white female presents with complaint of allergies.</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... Consult for laparoscopic gastric bypass.</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... Consult for laparoscopic gastric bypass.</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... 2-D M-Mode. Doppler.</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... 2-D Echocardiogram</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;   note_id                                                      description
-#&gt; 1       1 A 23-year-old white female presents with complaint of allergies.
-#&gt; 2       2                         Consult for laparoscopic gastric bypass.
-#&gt; 3       3                         Consult for laparoscopic gastric bypass.
-#&gt; 4       4                                             2-D M-Mode. Doppler.
-#&gt;            medical_specialty                             sample_name
-#&gt; 1       Allergy / Immunology                       Allergic Rhinitis
-#&gt; 2                 Bariatrics Laparoscopic Gastric Bypass Consult - 2
-#&gt; 3                 Bariatrics Laparoscopic Gastric Bypass Consult - 1
-#&gt; 4 Cardiovascular / Pulmonary                  2-D Echocardiogram - 1
-#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            transcription
-#&gt; 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    SUBJECTIVE:,  This 23-year-old white female presents with complaint of allergies.  She used to have allergies when she lived in Seattle but she thinks they are worse here.  In the past, she has tried Claritin, and Zyrtec.  Both worked for short time but then seemed to lose effectiveness.  She has used Allegra also.  She used that last summer and she began using it again two weeks ago.  It does not appear to be working very well.  She has used over-the-counter sprays but no prescription nasal sprays.  She does have asthma but doest not require daily medication for this and does not think it is flaring up.,MEDICATIONS: , Her only medication currently is Ortho Tri-Cyclen and the Allegra.,ALLERGIES: , She has no known medicine allergies.,OBJECTIVE:,Vitals:  Weight was 130 pounds and blood pressure 124/78.,HEENT:  Her throat was mildly erythematous without exudate.  Nasal mucosa was erythematous and swollen.  Only clear drainage was seen.  TMs were clear.,Neck:  Supple without adenopathy.,Lungs:  Clear.,ASSESSMENT:,  Allergic rhinitis.,PLAN:,1.  She will try Zyrtec instead of Allegra again.  Another option will be to use loratadine.  She does not think she has prescription coverage so that might be cheaper.,2.  Samples of Nasonex two sprays in each nostril given for three weeks.  A prescription was written as well.
-#&gt; 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        PAST MEDICAL HISTORY:, He has difficulty climbing stairs, difficulty with airline seats, tying shoes, used to public seating, and lifting objects off the floor.  He exercises three times a week at home and does cardio.  He has difficulty walking two blocks or five flights of stairs.  Difficulty with snoring.  He has muscle and joint pains including knee pain, back pain, foot and ankle pain, and swelling.  He has gastroesophageal reflux disease.,PAST SURGICAL HISTORY:, Includes reconstructive surgery on his right hand 13 years ago.  ,SOCIAL HISTORY:, He is currently single.  He has about ten drinks a year.  He had smoked significantly up until several months ago.  He now smokes less than three cigarettes a day.,FAMILY HISTORY:, Heart disease in both grandfathers, grandmother with stroke, and a grandmother with diabetes.  Denies obesity and hypertension in other family members.,CURRENT MEDICATIONS:, None.,ALLERGIES:,  He is allergic to Penicillin.,MISCELLANEOUS/EATING HISTORY:, He has been going to support groups for seven months with Lynn Holmberg in Greenwich and he is from Eastchester, New York and he feels that we are the appropriate program.  He had a poor experience with the Greenwich program.  Eating history, he is not an emotional eater.  Does not like sweets.  He likes big portions and carbohydrates.  He likes chicken and not steak.  He currently weighs 312 pounds.  Ideal body weight would be 170 pounds.  He is 142 pounds overweight.  If ,he lost 60% of his excess body weight that would be 84 pounds and he should weigh about 228.,REVIEW OF SYSTEMS: ,Negative for head, neck, heart, lungs, GI, GU, orthopedic, and skin.  Specifically denies chest pain, heart attack, coronary artery disease, congestive heart failure, arrhythmia, atrial fibrillation, pacemaker, high cholesterol, pulmonary embolism, high blood pressure, CVA, venous insufficiency, thrombophlebitis, asthma, shortness of breath, COPD, emphysema, sleep apnea, diabetes, leg and foot swelling, osteoarthritis, rheumatoid arthritis, hiatal hernia, peptic ulcer disease, gallstones, infected gallbladder, pancreatitis, fatty liver, hepatitis, hemorrhoids, rectal bleeding, polyps, incontinence of stool, urinary stress incontinence, or cancer.  Denies cellulitis, pseudotumor cerebri, meningitis, or encephalitis.,PHYSICAL EXAMINATION:, He is alert and oriented x 3.  Cranial nerves II-XII are intact.  Afebrile.  Vital Signs are stable.
-#&gt; 3 HISTORY OF PRESENT ILLNESS: , I have seen ABC today.  He is a very pleasant gentleman who is 42 years old, 344 pounds.  He is 5'9".  He has a BMI of 51.  He has been overweight for ten years since the age of 33, at his highest he was 358 pounds, at his lowest 260.  He is pursuing surgical attempts of weight loss to feel good, get healthy, and begin to exercise again.  He wants to be able to exercise and play volleyball.  Physically, he is sluggish.  He gets tired quickly.  He does not go out often.  When he loses weight he always regains it and he gains back more than he lost.  His biggest weight loss is 25 pounds and it was three months before he gained it back.  He did six months of not drinking alcohol and not taking in many calories.  He has been on multiple commercial weight loss programs including Slim Fast for one month one year ago and Atkin's Diet for one month two years ago.,PAST MEDICAL HISTORY: , He has difficulty climbing stairs, difficulty with airline seats, tying shoes, used to public seating, difficulty walking, high cholesterol, and high blood pressure.  He has asthma and difficulty walking two blocks or going eight to ten steps.  He has sleep apnea and snoring.  He is a diabetic, on medication.  He has joint pain, knee pain, back pain, foot and ankle pain, leg and foot swelling.  He has hemorrhoids.,PAST SURGICAL HISTORY: , Includes orthopedic or knee surgery.,SOCIAL HISTORY: , He is currently single.  He drinks alcohol ten to twelve drinks a week, but does not drink five days a week and then will binge drink.  He smokes one and a half pack a day for 15 years, but he has recently stopped smoking for the past two weeks.,FAMILY HISTORY: , Obesity, heart disease, and diabetes.  Family history is negative for hypertension and stroke.,CURRENT MEDICATIONS:,  Include Diovan, Crestor, and Tricor.,MISCELLANEOUS/EATING HISTORY:  ,He says a couple of friends of his have had heart attacks and have had died.  He used to drink everyday, but stopped two years ago.  He now only drinks on weekends.  He is on his second week of Chantix, which is a medication to come off smoking completely.  Eating, he eats bad food.  He is single.  He eats things like bacon, eggs, and cheese, cheeseburgers, fast food, eats four times a day, seven in the morning, at noon, 9 p.m., and 2 a.m.  He currently weighs 344 pounds and 5'9".  His ideal body weight is 160 pounds.  He is 184 pounds overweight.  If he lost 70% of his excess body weight that would be 129 pounds and that would get him down to 215.,REVIEW OF SYSTEMS: , Negative for head, neck, heart, lungs, GI, GU, orthopedic, or skin.  He also is positive for gout.  He denies chest pain, heart attack, coronary artery disease, congestive heart failure, arrhythmia, atrial fibrillation, pacemaker, pulmonary embolism, or CVA.  He denies venous insufficiency or thrombophlebitis.  Denies shortness of breath, COPD, or emphysema.  Denies thyroid problems, hip pain, osteoarthritis, rheumatoid arthritis, GERD, hiatal hernia, peptic ulcer disease, gallstones, infected gallbladder, pancreatitis, fatty liver, hepatitis, rectal bleeding, polyps, incontinence of stool, urinary stress incontinence, or cancer.  He denies cellulitis, pseudotumor cerebri, meningitis, or encephalitis.,PHYSICAL EXAMINATION:  ,He is alert and oriented x 3.  Cranial nerves II-XII are intact.  Neck is soft and supple.  Lungs:  He has positive wheezing bilaterally.  Heart is regular rhythm and rate.  His abdomen is soft.  Extremities:  He has 1+ pitting edema.,IMPRESSION/PLAN:,  I have explained to him the risks and potential complications of laparoscopic gastric bypass in detail and these include bleeding, infection, deep venous thrombosis, pulmonary embolism, leakage from the gastrojejuno-anastomosis, jejunojejuno-anastomosis, and possible bowel obstruction among other potential complications.  He understands.  He wants to proceed with workup and evaluation for laparoscopic Roux-en-Y gastric bypass.  He will need to get a letter of approval from Dr. XYZ.  He will need to see a nutritionist and mental health worker.  He will need an upper endoscopy by either Dr. XYZ.  He will need to go to Dr. XYZ as he previously had a sleep study.  We will need another sleep study.  He will need H. pylori testing, thyroid function tests, LFTs, glycosylated hemoglobin, and fasting blood sugar.  After this is performed, we will submit him for insurance approval.
-#&gt; 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        2-D M-MODE: , ,1.  Left atrial enlargement with left atrial diameter of 4.7 cm.,2.  Normal size right and left ventricle.,3.  Normal LV systolic function with left ventricular ejection fraction of 51%.,4.  Normal LV diastolic function.,5.  No pericardial effusion.,6.  Normal morphology of aortic valve, mitral valve, tricuspid valve, and pulmonary valve.,7.  PA systolic pressure is 36 mmHg.,DOPPLER: , ,1.  Mild mitral and tricuspid regurgitation.,2.  Trace aortic and pulmonary regurgitation.
-#&gt;                                                                                                                                                                                                                                                         keywords
-#&gt; 1                                                                                                                            allergy / immunology, allergic rhinitis, allergies, asthma, nasal sprays, rhinitis, nasal, erythematous, allegra, sprays, allergic,
-#&gt; 2                       bariatrics, laparoscopic gastric bypass, weight loss programs, gastric bypass, atkin's diet, weight watcher's, body weight, laparoscopic gastric, weight loss, pounds, months, weight, laparoscopic, band, loss, diets, overweight, lost
-#&gt; 3                    bariatrics, laparoscopic gastric bypass, heart attacks, body weight, pulmonary embolism, potential complications, sleep study, weight loss, gastric bypass, anastomosis, loss, sleep, laparoscopic, gastric, bypass, heart, pounds, weight,
-#&gt; 4 cardiovascular / pulmonary, 2-d m-mode, doppler, aortic valve, atrial enlargement, diastolic function, ejection fraction, mitral, mitral valve, pericardial effusion, pulmonary valve, regurgitation, systolic function, tricuspid, tricuspid valve, normal lv
-#&gt;      emb_001    emb_002     emb_003     emb_004    emb_005     emb_006
-#&gt; 1 -0.1959790 0.28813400  0.09685702 -0.20641684 -0.1554238 -0.01624470
-#&gt; 2 -0.1115363 0.01725144 -0.13519235 -0.05496463  0.1488807 -0.19577999
-#&gt; 3 -0.1115363 0.01725144 -0.13519235 -0.05496463  0.1488807 -0.19577999
-#&gt; 4 -0.3077586 0.25928350 -0.37220851 -0.06021732  0.0386426 -0.07756314
-#&gt;        emb_007     emb_008    emb_009    emb_010    emb_011     emb_012
-#&gt; 1  0.027011001  0.05331314 -0.1006668  0.3682853  0.0581439 -0.29079599
-#&gt; 2  0.052658666 -0.10433200 -0.0763495  0.1199215 -0.1860092  0.05465447
-#&gt; 3  0.052658666 -0.10433200 -0.0763495  0.1199215 -0.1860092  0.05465447
-#&gt; 4 -0.002676249  0.22511028  0.3279995 -0.2274373 -0.1656060 -0.30020200
-#&gt;     emb_013    emb_014     emb_015     emb_016    emb_017    emb_018    emb_019
-#&gt; 1 0.1611375 -0.1118952 -0.03922822  0.06888010 -0.1862742 -0.1454458 0.04115367
-#&gt; 2 0.1267057 -0.2041533  0.01984984 -0.01107489  0.1080266  0.1128684 0.23062316
-#&gt; 3 0.1267057 -0.2041533  0.01984984 -0.01107489  0.1080266  0.1128684 0.23062316
-#&gt; 4 0.5237787 -0.1472114 -0.02312062 -0.11272645 -0.3415540 -0.2255931 0.02385290
-#&gt;        emb_020    emb_021    emb_022     emb_023     emb_024     emb_025
-#&gt; 1  0.049065500 0.39795328 0.05879098  0.05246135 -0.19981400 -0.03346085
-#&gt; 2 -0.005933613 0.06126638 0.05048515  0.12351524 -0.02489970 -0.26744565
-#&gt; 3 -0.005933613 0.06126638 0.05048515  0.12351524 -0.02489970 -0.26744565
-#&gt; 4  0.074861225 0.12910485 0.02176433 -0.21616454  0.08218845  0.33230226
-#&gt;     emb_026     emb_027     emb_028     emb_029     emb_030     emb_031
-#&gt; 1 0.1395520  0.01792375 -0.06969561 -0.04942485  0.06613978  0.08035761
-#&gt; 2 0.3418240 -0.12783451  0.38420413 -0.20168215 -0.06550949  0.26997083
-#&gt; 3 0.3418240 -0.12783451  0.38420413 -0.20168215 -0.06550949  0.26997083
-#&gt; 4 0.2420833  0.08455360  0.22111987 -0.57962301  0.32054099 -0.26178523
-#&gt;       emb_032     emb_033     emb_034     emb_035     emb_036     emb_037
-#&gt; 1 -0.12418544 -0.11839510  0.04266573 -0.04319873  0.06394462  0.02425202
-#&gt; 2 -0.07201438  0.13039007 -0.13608095  0.10342984  0.03349850 -0.06359592
-#&gt; 3 -0.07201438  0.13039007 -0.13608095  0.10342984  0.03349850 -0.06359592
-#&gt; 4 -0.46501200  0.05091595 -0.22430425 -0.07319695 -0.19518739 -0.21279503
-#&gt;      emb_038    emb_039      emb_040     emb_041     emb_042      emb_043
-#&gt; 1 -0.2158322 -0.1064802  0.005398401  0.01459978 -0.03936125 -0.216860471
-#&gt; 2 -0.2497478 -0.1312915 -0.068015995  0.12897950  0.20849532 -0.001854315
-#&gt; 3 -0.2497478 -0.1312915 -0.068015995  0.12897950  0.20849532 -0.001854315
-#&gt; 4 -0.1980325 -0.3900315  0.214830723 -0.03985715  0.32672650 -0.067201529
-#&gt;      emb_044     emb_045     emb_046     emb_047     emb_048     emb_049
-#&gt; 1 0.01146569 -0.01707370 -0.08789315 -0.48977432  0.11840488 -0.24063642
-#&gt; 2 0.02034700  0.04105476 -0.26218344  0.05762917 -0.08367021 -0.01368977
-#&gt; 3 0.02034700  0.04105476 -0.26218344  0.05762917 -0.08367021 -0.01368977
-#&gt; 4 0.43131340 -0.10445137 -0.36873272  0.39958726  0.03923560  0.06519943
-#&gt;       emb_050   emb_051       emb_052     emb_053    emb_054     emb_055
-#&gt; 1 -0.23959090 0.1258371 -0.0001312072 -0.15632193  0.2063196 -0.02019964
-#&gt; 2  0.02369371 0.1266086 -0.1197809521  0.04324770 -0.2046735 -0.21317951
-#&gt; 3  0.02369371 0.1266086 -0.1197809521  0.04324770 -0.2046735 -0.21317951
-#&gt; 4 -0.12042060 0.1947917  0.5587487221  0.02909975 -0.1112386 -0.29085600
-#&gt;        emb_056     emb_057      emb_058     emb_059    emb_060     emb_061
-#&gt; 1 -0.002069766 -0.14390510 -0.112056380 -0.12671516 -0.3076788  0.01722672
-#&gt; 2  0.029707700 -0.04107177 -0.003977332  0.03327019  0.1377243  0.18907296
-#&gt; 3  0.029707700 -0.04107177 -0.003977332  0.03327019  0.1377243  0.18907296
-#&gt; 4  0.051582206  0.03322158 -0.090760550 -0.01738100  0.4675597 -0.29520441
-#&gt;       emb_062     emb_063      emb_064     emb_065    emb_066     emb_067
-#&gt; 1 -0.04037631  0.14633203  0.072336150  0.04734538  0.2444712 0.005439494
-#&gt; 2 -0.26335296  0.01884718 -0.009265006 -0.16859459 -0.2767420 0.048937336
-#&gt; 3 -0.26335296  0.01884718 -0.009265006 -0.16859459 -0.2767420 0.048937336
-#&gt; 4  0.62886798 -0.14435785  0.002738898 -0.03027805 -0.4466182 0.080596073
-#&gt;       emb_068   emb_069     emb_070     emb_071     emb_072    emb_073
-#&gt; 1  0.07232769 0.1972760 0.007281476 -0.03698583 -0.07433472 -0.0170116
-#&gt; 2 -0.35522249 0.1164578 0.345116988 -0.03482347 -0.09575927 -0.1530600
-#&gt; 3 -0.35522249 0.1164578 0.345116988 -0.03482347 -0.09575927 -0.1530600
-#&gt; 4  0.29857932 0.2307856 0.032678135 -0.02464749 -0.05315572  0.2278580
-#&gt;       emb_074    emb_075    emb_076    emb_077     emb_078    emb_079
-#&gt; 1  0.15559705 -0.0142159 0.03095377 0.14973202 -0.07275485 -0.1265165
-#&gt; 2 -0.08885341  0.1138750 0.24408367 0.01405296 -0.00684475 -0.1356777
-#&gt; 3 -0.08885341  0.1138750 0.24408367 0.01405296 -0.00684475 -0.1356777
-#&gt; 4  0.05121428  0.3368990 0.12042545 0.05976460  0.20906300 -0.3898960
-#&gt;      emb_080    emb_081     emb_082    emb_083     emb_084    emb_085
-#&gt; 1  0.0756736 -0.1064746 -0.04138183  0.1262948 -0.07008250 -0.0581785
-#&gt; 2 -0.1306460  0.2395754 -0.24276201  0.1975068 -0.03769429 -0.2019527
-#&gt; 3 -0.1306460  0.2395754 -0.24276201  0.1975068 -0.03769429 -0.2019527
-#&gt; 4 -0.2403080 -0.2094990 -0.43718034 -0.2580445 -0.36398449 -0.1863167
-#&gt;       emb_086    emb_087     emb_088     emb_089     emb_090    emb_091
-#&gt; 1 -0.08323197 -0.1252120  0.10060352 -0.01839051 -0.24945817  0.2108233
-#&gt; 2  0.09356334 -0.2311737  0.01929579 -0.18456985  0.16967812 -0.3636869
-#&gt; 3  0.09356334 -0.2311737  0.01929579 -0.18456985  0.16967812 -0.3636869
-#&gt; 4 -0.38763523  0.1124806 -0.25680842 -0.21670937 -0.02249805  0.2278338
-#&gt;      emb_092     emb_093     emb_094      emb_095     emb_096    emb_097
-#&gt; 1  0.2314818 -0.07174893  0.03378552  0.002213914  0.22163883 0.30331765
-#&gt; 2 -0.1134262  0.07241845  0.29899751  0.111884147 -0.04911397 0.05792167
-#&gt; 3 -0.1134262  0.07241845  0.29899751  0.111884147 -0.04911397 0.05792167
-#&gt; 4 -0.1409704  0.17529125 -0.05521812 -0.186143875  0.54336450 0.13775243
-#&gt;        emb_098     emb_099     emb_100     emb_101     emb_102    emb_103
-#&gt; 1  0.009472401 -0.14205784  0.12607630 -0.19062089 -0.08417289 -0.0868922
-#&gt; 2 -0.125230156 -0.27682150 -0.03230023  0.09556636 -0.01811487  0.2020687
-#&gt; 3 -0.125230156 -0.27682150 -0.03230023  0.09556636 -0.01811487  0.2020687
-#&gt; 4 -0.269951746  0.01101355  0.12618919  0.24217032  0.19674813  0.1094553
-#&gt;       emb_104       emb_105   emb_106     emb_107    emb_108     emb_109
-#&gt; 1  0.08520973  0.1095840322 0.0911104 -0.11639215 -0.1988509 -0.02318672
-#&gt; 2 -0.28405397 -0.2379808277 0.0503400  0.07255385 -0.3391048  0.29906577
-#&gt; 3 -0.28405397 -0.2379808277 0.0503400  0.07255385 -0.3391048  0.29906577
-#&gt; 4 -0.02718710 -0.0006717525 0.1023474  0.30398776  0.0299391  0.38101604
-#&gt;       emb_110     emb_111     emb_112    emb_113     emb_114     emb_115
-#&gt; 1 -0.03355397  0.06281934  0.09064088 -0.1812218 -0.08294683  0.09746995
-#&gt; 2 -0.28191616  0.04745353 -0.04532966 -0.1529041  0.04579017  0.02364063
-#&gt; 3 -0.28191616  0.04745353 -0.04532966 -0.1529041  0.04579017  0.02364063
-#&gt; 4 -0.07525725 -0.19109026 -0.09757482 -0.3430861  0.07392349 -0.34514988
-#&gt;       emb_116     emb_117     emb_118     emb_119    emb_120    emb_121
-#&gt; 1  0.16949679 0.001256246 -0.09206300 -0.27094193  0.1914412 0.10522338
-#&gt; 2 -0.31116034 0.160783665 -0.07702465 -0.02175729 -0.1156647 0.01362599
-#&gt; 3 -0.31116034 0.160783665 -0.07702465 -0.02175729 -0.1156647 0.01362599
-#&gt; 4 -0.05409198 0.021575954  0.24660901 -0.25714830 -0.3096262 0.14711675
-#&gt;       emb_122    emb_123     emb_124     emb_125     emb_126     emb_127
-#&gt; 1  0.01736773 -0.1658078 -0.24409867 -0.20621473 -0.35578349  0.19991713
-#&gt; 2 -0.20085029  0.3362202 -0.03874875 -0.02545092  0.21585878 -0.04820869
-#&gt; 3 -0.20085029  0.3362202 -0.03874875 -0.02545092  0.21585878 -0.04820869
-#&gt; 4 -0.09584628 -0.2465328  0.02228437 -0.05287175  0.04758008  0.13082074
-#&gt;      emb_128     emb_129    emb_130     emb_131     emb_132    emb_133
-#&gt; 1 -0.1075110 0.050961102 0.08590268 -0.07344585 -0.11005830  0.2082962
-#&gt; 2  0.1341518 0.084913827 0.21485816 -0.26201880 -0.04661880  0.1594945
-#&gt; 3  0.1341518 0.084913827 0.21485816 -0.26201880 -0.04661880  0.1594945
-#&gt; 4 -0.4366458 0.002557264 0.30628723 -0.24981013 -0.01674807 -0.3169997
-#&gt;       emb_134     emb_135     emb_136    emb_137     emb_138     emb_139
-#&gt; 1 -0.03440777 -0.15951183  0.04417117 -0.1002716 -0.07090355 -0.09013366
-#&gt; 2  0.24577541 -0.04687785  0.02120483 -0.2707188 -0.05038439 -0.21531074
-#&gt; 3  0.24577541 -0.04687785  0.02120483 -0.2707188 -0.05038439 -0.21531074
-#&gt; 4  0.12056302 -0.09506032 -0.01222125 -0.4409042  0.23120450  0.01691840
-#&gt;        emb_140     emb_141     emb_142     emb_143     emb_144    emb_145
-#&gt; 1  0.004567102 -0.04074124 -0.09970398 -0.07412403  0.08118367 0.04151318
-#&gt; 2 -0.214246295  0.12730155  0.04358483 -0.04084410  0.08556246 0.37193301
-#&gt; 3 -0.214246295  0.12730155  0.04358483 -0.04084410  0.08556246 0.37193301
-#&gt; 4  0.127434801  0.19368662  0.02984041 -0.14155845 -0.15326020 0.02936405
-#&gt;       emb_146     emb_147    emb_148    emb_149    emb_150     emb_151
-#&gt; 1  0.01023637 -0.02712608  0.1120797 0.07420963  0.2022959 -0.02539130
-#&gt; 2 -0.23297635  0.16786779 -0.1552295 0.13361997  0.4047717 -0.07385027
-#&gt; 3 -0.23297635  0.16786779 -0.1552295 0.13361997  0.4047717 -0.07385027
-#&gt; 4  0.05187999  0.06006772  0.0758267 0.04905358 -0.0133047  0.25728051
-#&gt;      emb_152     emb_153     emb_154     emb_155    emb_156    emb_157
-#&gt; 1 -0.1542052  0.09878749  0.11210436 0.190853971 -0.2355878  0.1032905
-#&gt; 2  0.2168649  0.08279617  0.02853568 0.007983398 -0.2673024 -0.3518553
-#&gt; 3  0.2168649  0.08279617  0.02853568 0.007983398 -0.2673024 -0.3518553
-#&gt; 4  0.2761333 -0.10433040 -0.02122432 0.066375951 -0.3625118 -0.2547615
-#&gt;       emb_158     emb_159    emb_160     emb_161     emb_162      emb_163
-#&gt; 1 -0.21532827  0.09456767 -0.1445503 -0.33522494  0.15268593 -0.001686232
-#&gt; 2  0.07097678  0.08358909 -0.1986835 -0.29901644 -0.01896982 -0.052200415
-#&gt; 3  0.07097678  0.08358909 -0.1986835 -0.29901644 -0.01896982 -0.052200415
-#&gt; 4  0.13501658 -0.28645951 -0.1917117 -0.01892012 -0.02507000 -0.031375002
-#&gt;      emb_164     emb_165   emb_166     emb_167    emb_168     emb_169
-#&gt; 1  0.2152747 -0.10312133 0.1135696 -0.02624894  0.1098730  0.09047928
-#&gt; 2  0.1262764  0.10607937 0.0321700 -0.25643115 -0.1073976  0.26462262
-#&gt; 3  0.1262764  0.10607937 0.0321700 -0.25643115 -0.1073976  0.26462262
-#&gt; 4 -0.2519416  0.08888888 0.3796148 -0.25476800 -0.1437821 -0.15589955
-#&gt;      emb_170    emb_171     emb_172    emb_173     emb_174     emb_175
-#&gt; 1 0.12684340 -0.0694985 -0.11949543  0.2164041 -0.29396720 -0.16588253
-#&gt; 2 0.03679075 -0.2173935  0.07656907 -0.1012526 -0.02410151 -0.02048860
-#&gt; 3 0.03679075 -0.2173935  0.07656907 -0.1012526 -0.02410151 -0.02048860
-#&gt; 4 0.23368900  0.1311810  0.52442150 -0.0487657  0.25153150  0.02299049
-#&gt;      emb_176    emb_177     emb_178     emb_179     emb_180      emb_181
-#&gt; 1 -0.1348005 -0.1148055 -0.08968537  0.05097483  0.09355133  0.008875800
-#&gt; 2 -0.1179298  0.2362113  0.30876314 -0.22625668  0.07487945  0.008851715
-#&gt; 3 -0.1179298  0.2362113  0.30876314 -0.22625668  0.07487945  0.008851715
-#&gt; 4 -0.1953604 -0.1572996  0.29195935 -0.05653973 -0.12341889 -0.312314242
-#&gt;      emb_182    emb_183     emb_184     emb_185     emb_186    emb_187
-#&gt; 1  0.1106400 -0.1088511 -0.02326688  0.17733055 -0.07351807  0.0222525
-#&gt; 2 -0.1024263 -0.2249113 -0.06455390  0.07631866  0.01623236 -0.1098196
-#&gt; 3 -0.1024263 -0.2249113 -0.06455390  0.07631866  0.01623236 -0.1098196
-#&gt; 4 -0.1885454 -0.2873893 -0.02149600 -0.16462975  0.14877875  0.2350687
-#&gt;       emb_188      emb_189    emb_190     emb_191      emb_192     emb_193
-#&gt; 1 -0.12066887 -0.179350998 0.01909462  0.13228424  0.024832169  0.05002003
-#&gt; 2 -0.04689731 -0.033685058 0.16270872 -0.05825762  0.069446986 -0.05563271
-#&gt; 3 -0.04689731 -0.033685058 0.16270872 -0.05825762  0.069446986 -0.05563271
-#&gt; 4  0.36260483  0.004200405 0.20571376  0.09558415 -0.006550124 -0.30820300
-#&gt;       emb_194     emb_195    emb_196     emb_197     emb_198     emb_199
-#&gt; 1 -0.20531311 -0.00853500  0.0639337  0.29886368  0.01618892 -0.08192083
-#&gt; 2 -0.17479033 -0.13635058  0.1291080 -0.09743453 -0.09941812 -0.05773153
-#&gt; 3 -0.17479033 -0.13635058  0.1291080 -0.09743453 -0.09941812 -0.05773153
-#&gt; 4  0.01686265 -0.05414012 -0.1694009 -0.13313706 -0.15822850  0.14830773
-#&gt;       emb_200
-#&gt; 1 -0.37027851
-#&gt; 2 -0.09702638
-#&gt; 3 -0.09702638
-#&gt; 4 -0.34555282
-#&gt;  [ reached 'max' / getOption("max.print") -- omitted 1 rows ]</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>mtsamples</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset_mtsamples.html'>dataset_mtsamples</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>mtsamples</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,<span class='op'>]</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='clinspacy.html'>clinspacy</a></span><span class='op'>(</span>df_col <span class='op'>=</span> <span class='st'>'description'</span>, return_scispacy_embeddings <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>bind_clinspacy_embeddings</span><span class='op'>(</span><span class='va'>mtsamples</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,<span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -412,7 +237,7 @@ only change made to the original dataset is the renaming of columns.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

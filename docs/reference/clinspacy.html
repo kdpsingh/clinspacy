@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>This is the primary function for processing both data frames and character
-vectors in the <code>clinspacy</code> package. — clinspacy • clinspacy</title>
+vectors in the clinspacy package. — clinspacy • clinspacy</title>
 
 
 <!-- jquery -->
@@ -41,7 +41,7 @@ vectors in the <code>clinspacy</code> package. — clinspacy • clinspacy</titl
 
 
 <meta property="og:title" content="This is the primary function for processing both data frames and character
-vectors in the <code>clinspacy</code> package. — clinspacy" />
+vectors in the clinspacy package. — clinspacy" />
 <meta property="og:description" content="This is the primary function for processing both data frames and character
 vectors in the clinspacy package." />
 
@@ -75,7 +75,7 @@ vectors in the clinspacy package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">clinspacy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@ vectors in the clinspacy package." />
       <a href="../articles/using_embeddings_for_machine_learning_on_clinical_text.html">Using Embeddings for Machine Learning on Clinical Text</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -134,18 +137,18 @@ vectors in the <code>clinspacy</code> package.</h1>
 vectors in the <code>clinspacy</code> package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>clinspacy</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>df_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>df_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>0.99</span>,
-  <span class='kw'>semantic_types</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Acquired Abnormality"</span>, <span class='st'>"Activity"</span>, <span class='st'>"Age Group"</span>,
+    <pre class="usage"><span class='fu'>clinspacy</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  df_col <span class='op'>=</span> <span class='cn'>NULL</span>,
+  df_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  threshold <span class='op'>=</span> <span class='fl'>0.99</span>,
+  semantic_types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='st'>"Acquired Abnormality"</span>, <span class='st'>"Activity"</span>, <span class='st'>"Age Group"</span>,
     <span class='st'>"Amino Acid Sequence"</span>, <span class='st'>"Amino Acid, Peptide, or Protein"</span>, <span class='st'>"Amphibian"</span>,
     <span class='st'>"Anatomical Abnormality"</span>, <span class='st'>"Anatomical Structure"</span>, <span class='st'>"Animal"</span>, <span class='st'>"Antibiotic"</span>, <span class='st'>"Archaeon"</span>,
     <span class='st'>"Bacterium"</span>, <span class='st'>"Behavior"</span>, <span class='st'>"Biologic Function"</span>, <span class='st'>"Biologically Active Substance"</span>,
     <span class='st'>"Biomedical Occupation or Discipline"</span>, <span class='st'>"Biomedical or Dental Material"</span>, <span class='st'>"Bird"</span>,
     <span class='st'>"Body Location or Region"</span>, <span class='st'>"Body Part, Organ, or Organ Component"</span>,
-    <span class='st'>"Body Space or Junction"</span>, <span class='st'>"Body Substance"</span>, <span class='st'>"Body System"</span>, <span class='st'>"Carbohydrate Sequence"</span>,
+    <span class='st'>"Body Space or Junction"</span>, <span class='st'>"Body Substance"</span>, <span class='st'>"Body System"</span>, <span class='st'>"Carbohydrate Sequence"</span>,  
        <span class='st'>"Cell"</span>, <span class='st'>"Cell Component"</span>, <span class='st'>"Cell Function"</span>, <span class='st'>"Cell or Molecular Dysfunction"</span>,
     <span class='st'>"Chemical"</span>, <span class='st'>"Chemical Viewed Functionally"</span>, <span class='st'>"Chemical Viewed Structurally"</span>,
     <span class='st'>"Classification"</span>, <span class='st'>"Clinical Attribute"</span>, <span class='st'>"Clinical Drug"</span>, <span class='st'>"Conceptual Entity"</span>,
@@ -178,17 +181,12 @@ vectors in the <code>clinspacy</code> package.</p>
     <span class='st'>"Research Activity"</span>, <span class='st'>"Research Device"</span>,      <span class='st'>"Self-help or Relief Organization"</span>,
     <span class='st'>"Sign or Symptom"</span>, <span class='st'>"Social Behavior"</span>, <span class='st'>"Spatial Concept"</span>, <span class='st'>"Substance"</span>,
     <span class='st'>"Temporal Concept"</span>, <span class='st'>"Therapeutic or Preventive Procedure"</span>, <span class='st'>"Tissue"</span>, <span class='st'>"Vertebrate"</span>,
-    <span class='st'>"Virus"</span>, <span class='st'>"Vitamin"</span>),
-  <span class='kw'>is_family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
-  <span class='kw'>is_historical</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
-  <span class='kw'>is_hypothetical</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
-  <span class='kw'>is_negated</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
-  <span class='kw'>is_uncertain</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>),
-  <span class='kw'>return_scispacy_embeddings</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>output_file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <span class='st'>"Virus"</span>, <span class='st'>"Vitamin"</span><span class='op'>)</span>,
+  return_scispacy_embeddings <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  output_file <span class='op'>=</span> <span class='cn'>NULL</span>,
+  overwrite <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,8 +218,8 @@ session.</p></td>
     <tr>
       <th>semantic_types</th>
       <td><p>Character vector containing any combination of the
-following: c("Acquired Abnormality", "Activity", "Age Group", "Amino Acid
-Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
+following: c(NA, "Acquired Abnormality", "Activity", "Age Group", "Amino
+Acid Sequence", "Amino Acid, Peptide, or Protein", "Amphibian", "Anatomical
 Abnormality", "Anatomical Structure", "Animal", "Antibiotic", "Archaeon",
 "Bacterium", "Behavior", "Biologic Function", "Biologically Active
 Substance", "Biomedical Occupation or Discipline", "Biomedical or Dental
@@ -261,6 +259,14 @@ Concept", "Substance", "Temporal Concept", "Therapeutic or Preventive
 Procedure", "Tissue", "Vertebrate", "Virus", "Vitamin")</p></td>
     </tr>
     <tr>
+      <th>return_scispacy_embeddings</th>
+      <td><p>Defaults to <code>FALSE</code>. This is primarily
+intended for use by the <code><a href='bind_clinspacy_embeddings.html'>bind_clinspacy_embeddings</a></code> function to
+obtain scispacy embeddings. In order for scispacy embeddings to be
+available to <code><a href='bind_clinspacy_embeddings.html'>bind_clinspacy_embeddings</a></code>, you must set this to
+<code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
       <th>verbose</th>
       <td><p>Defaults to <code>TRUE</code>.</p></td>
     </tr>
@@ -282,53 +288,32 @@ prompted to confirm whether you would like to overwrite the file. If set to
 
     <p>If <code>output_file</code> is <code>NULL</code> (the default), then this
   function returns a data frame containing the UMLS concept unique
-  identifiers (cui), entities, lemmatized entities, cycontext negation status
+  identifiers (cui), entities, lemmatized entities, CyContext negation status
   (<code>TRUE</code> means negated, <code>FALSE</code> means *not* negated), other
   CyContext contexts, and section title from the clinical sectionizer. If
   <code>output_file</code> points to a file name, then the name of the created file
   will be returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>clinspacy</span>(<span class='st'>'This patient has diabetes and CKD stage 3 but no HTN.'</span>)</div><div class='output co'>#&gt; <span class='message'>Initializing clinspacy using clinspacy_init()...</span></div><div class='output co'>#&gt; <span class='message'>Checking if miniconda is installed...</span></div><div class='output co'>#&gt; <span class='message'>Importing spacy...</span></div><div class='output co'>#&gt; <span class='message'>Importing scispacy...</span></div><div class='output co'>#&gt; <span class='message'>Importing medspacy modules...</span></div><div class='output co'>#&gt; <span class='message'>Loading the en_core_sci_lg language model...</span></div><div class='output co'>#&gt; <span class='message'>Processing... This patient has diabetes and CKD stage 3 but no HTN.</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;   id      entity       lemma is_family is_historical is_hypothetical is_negated
-#&gt; 1  1     patient     patient     FALSE         FALSE           FALSE      FALSE
-#&gt; 2  1    diabetes    diabetes     FALSE         FALSE           FALSE      FALSE
-#&gt; 3  1 CKD stage 3 ckd stage 3     FALSE         FALSE           FALSE      FALSE
-#&gt; 4  1         HTN         htn     FALSE         FALSE           FALSE       TRUE
-#&gt;   is_uncertain section_title
-#&gt; 1        FALSE          &lt;NA&gt;
-#&gt; 2        FALSE          &lt;NA&gt;
-#&gt; 3        FALSE          &lt;NA&gt;
-#&gt; 4        FALSE          &lt;NA&gt;</div><div class='input'>
-<span class='fu'>clinspacy</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'This pt has CKD and HTN'</span>, <span class='st'>'Pt only has CKD but no HTN'</span>))</div><div class='output co'>#&gt; <span class='message'>Processing... This pt has CKD and HTN</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... Pt only has CKD but no HTN</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;   id entity lemma is_family is_historical is_hypothetical is_negated
-#&gt; 1  1    CKD   ckd     FALSE         FALSE           FALSE      FALSE
-#&gt; 2  1    HTN   htn     FALSE         FALSE           FALSE      FALSE
-#&gt; 3  2     Pt    pt     FALSE         FALSE           FALSE      FALSE
-#&gt; 4  2    CKD   ckd     FALSE         FALSE           FALSE      FALSE
-#&gt; 5  2    HTN   htn     FALSE         FALSE           FALSE       TRUE
-#&gt;   is_uncertain section_title
-#&gt; 1        FALSE          &lt;NA&gt;
-#&gt; 2        FALSE          &lt;NA&gt;
-#&gt; 3        FALSE          &lt;NA&gt;
-#&gt; 4        FALSE          &lt;NA&gt;
-#&gt; 5        FALSE          &lt;NA&gt;</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>text</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'This pt has CKD and HTN'</span>, <span class='st'>'Diabetes is present'</span>),
-           <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>clinspacy</span>(<span class='kw'>df_col</span> <span class='kw'>=</span> <span class='st'>'text'</span>)</div><div class='output co'>#&gt; <span class='message'>Since x is a data.frame and no id column was provided, the row number will be used as the id.</span></div><div class='output co'>#&gt; <span class='message'>Processing... This pt has CKD and HTN</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... Diabetes is present</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;   id   entity    lemma is_family is_historical is_hypothetical is_negated
-#&gt; 1  1      CKD      ckd     FALSE         FALSE           FALSE      FALSE
-#&gt; 2  1      HTN      htn     FALSE         FALSE           FALSE      FALSE
-#&gt; 3  2 Diabetes Diabetes     FALSE         FALSE           FALSE      FALSE
-#&gt;   is_uncertain section_title
-#&gt; 1        FALSE          &lt;NA&gt;
-#&gt; 2        FALSE          &lt;NA&gt;
-#&gt; 3        FALSE          &lt;NA&gt;</div><div class='input'>
-<span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span>(<span class='kw pkg'>rappdirs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rappdirs/man/user_data_dir.html'>user_data_dir</a></span>(<span class='st'>'clinspacy'</span>))) {
-  <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span>(<span class='kw pkg'>rappdirs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rappdirs/man/user_data_dir.html'>user_data_dir</a></span>(<span class='st'>'clinspacy'</span>), <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  }
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>clinspacy</span><span class='op'>(</span><span class='st'>'This patient has diabetes and CKD stage 3 but no HTN.'</span><span class='op'>)</span>
 
-<span class='fu'>clinspacy</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'This pt has CKD and HTN'</span>, <span class='st'>'Has CKD but no HTN'</span>),
-  <span class='kw'>output_file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='kw pkg'>rappdirs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rappdirs/man/user_data_dir.html'>user_data_dir</a></span>(<span class='st'>'clinspacy'</span>),
-                          <span class='st'>'output.csv'</span>),
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Processing... This pt has CKD and HTN</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Processing... Has CKD but no HTN</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; [1] "C:\\Users\\kdpsingh\\AppData\\Local\\clinspacy\\clinspacy/output.csv"</div><div class='input'>
+<span class='fu'>clinspacy</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'This pt has CKD and HTN'</span>, <span class='st'>'Pt only has CKD but no HTN'</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'This pt has CKD and HTN'</span>, <span class='st'>'Diabetes is present'</span><span class='op'>)</span>,
+           stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>clinspacy</span><span class='op'>(</span>df_col <span class='op'>=</span> <span class='st'>'text'</span><span class='op'>)</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='op'>(</span><span class='fu'>rappdirs</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rappdirs/man/user_data_dir.html'>user_data_dir</a></span><span class='op'>(</span><span class='st'>'clinspacy'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='fu'>rappdirs</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rappdirs/man/user_data_dir.html'>user_data_dir</a></span><span class='op'>(</span><span class='st'>'clinspacy'</span><span class='op'>)</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='op'>}</span>
+
+<span class='fu'>clinspacy</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'This pt has CKD and HTN'</span>, <span class='st'>'Has CKD but no HTN'</span><span class='op'>)</span>,
+  output_file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'>rappdirs</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rappdirs/man/user_data_dir.html'>user_data_dir</a></span><span class='op'>(</span><span class='st'>'clinspacy'</span><span class='op'>)</span>,
+                          <span class='st'>'output.csv'</span><span class='op'>)</span>,
+  overwrite <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -345,7 +330,7 @@ prompted to confirm whether you would like to overwrite the file. If set to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
