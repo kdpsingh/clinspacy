@@ -721,7 +721,7 @@ clinspacy <- function(x,
   }
 
   if(is.character(x)) {
-    dt = data.table(text = x)[, clinspacy_id := 1:.N][,. (clinspacy_id, text)]
+    dt = data.table(text = x)[, clinspacy_id := 1:.N][, list(clinspacy_id, text)]
   } else if(is.data.frame(x)) {
     if (!is.null(df_col)) {
       if (!is.null(df_id)) {
@@ -782,7 +782,7 @@ clinspacy <- function(x,
     }
     unlink(output_file)
     dt = dt[, {if (verbose) {
-                setTxtProgressBar(pb, .GRP)
+                utils::setTxtProgressBar(pb, .GRP)
               }
               data.table::fwrite(
                 data.table(clinspacy_id = clinspacy_id,
