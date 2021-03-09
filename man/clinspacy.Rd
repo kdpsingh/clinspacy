@@ -144,7 +144,7 @@ This is the primary function for processing both data frames and character
 vectors in the \code{clinspacy} package.
 }
 \examples{
-\dontrun {
+\dontrun{
 clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 
 clinspacy(c('This pt has CKD and HTN', 'Pt only has CKD but no HTN'))

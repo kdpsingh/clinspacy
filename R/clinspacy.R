@@ -103,12 +103,12 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 
   if (!reticulate::py_module_available('spacy')) {
     message('Spacy not found. Installing spacy...')
-    reticulate::py_install('spacy', pip = TRUE)
+    reticulate::py_install('spacy', envname = 'clinspacy', pip = TRUE)
   }
 
   if (!reticulate::py_module_available('scispacy')) {
     message('Scispacy not found. Installing scispacy...')
-    reticulate::py_install('scispacy', pip = TRUE)
+    reticulate::py_install('scispacy', envname = 'clinspacy', pip = TRUE)
   }
 
   # if (!reticulate::py_module_available('negspacy')) {
@@ -118,17 +118,17 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 
   if (!reticulate::py_module_available('en_core_sci_lg')) {
     message('en_core_sci_lg language model not found. Installing en_core_sci_lg...')
-    reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_lg-0.2.5.tar.gz', pip = TRUE)
+    reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_lg-0.2.5.tar.gz', envname = 'clinspacy', pip = TRUE)
   }
 
   if (!reticulate::py_module_available('cycontext')) {
     message('Medspacy not found. Installing medspacy/cycontext...')
-    reticulate::py_install('cycontext', pip = TRUE)
+    reticulate::py_install('cycontext', envname = 'clinspacy', pip = TRUE)
   }
 
   if (!reticulate::py_module_available('clinical_sectionizer')) {
     message('Medspacy not found. Installing medspacy/clinical-sectionizer...')
-    reticulate::py_install('clinical-sectionizer', pip = TRUE)
+    reticulate::py_install('clinical-sectionizer', envname = 'clinspacy', pip = TRUE)
   }
 
   message('Importing spacy...')
@@ -228,7 +228,7 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 #'   section title from the Sectionizer.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' clinspacy_single('This patient has diabetes and CKD stage 3 but no HTN.')
 #' }
 #'
@@ -556,7 +556,7 @@ clinspacy_single <- function(text, threshold = 0.99,
 #'   will be returned.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #'
 #' clinspacy(c('This pt has CKD and HTN', 'Pt only has CKD but no HTN'))
@@ -835,7 +835,7 @@ clinspacy <- function(x,
 #'   values containing frequencies.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' mtsamples <- dataset_mtsamples()
 #' mtsamples[1:5,] %>%
 #'   clinspacy(df_col = 'description') %>%
@@ -957,7 +957,7 @@ bind_clinspacy <- function(clinspacy_output, df,
 #'   The resulting data frame can be used to train a machine learning model.
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' mtsamples <- dataset_mtsamples()
 #' mtsamples[1:5,] %>%
 #'   clinspacy(df_col = 'description', return_scispacy_embeddings = TRUE) %>%
