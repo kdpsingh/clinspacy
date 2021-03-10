@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 The goal of clinspacy is to perform biomedical named entity recognition,
@@ -672,9 +672,9 @@ clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #>   clinspacy_id      cui      entity       lemma             semantic_type
 #> 1            1 C0030705     patient     patient Patient or Disabled Group
 #> 2            1 C1550655     patient     patient            Body Substance
-#> 3            1 C1578481     patient     patient           Idea or Concept
-#> 4            1 C1578483     patient     patient           Idea or Concept
-#> 5            1 C1578484     patient     patient           Idea or Concept
+#> 3            1 C1578484     patient     patient           Idea or Concept
+#> 4            1 C1578485     patient     patient      Intellectual Product
+#> 5            1 C1705908     patient     patient                  Organism
 #> 6            1 C0011847    diabetes    diabetes       Disease or Syndrome
 #> 7            1 C0011849    diabetes    diabetes       Disease or Syndrome
 #> 8            1 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome
@@ -682,9 +682,9 @@ clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #>                        definition is_family is_historical is_hypothetical
 #> 1                        Patients     FALSE         FALSE           FALSE
 #> 2         Specimen Type - Patient     FALSE         FALSE           FALSE
-#> 3      Mail Claim Party - Patient     FALSE         FALSE           FALSE
-#> 4         Report source - Patient     FALSE         FALSE           FALSE
-#> 5 Relationship modifier - Patient     FALSE         FALSE           FALSE
+#> 3 Relationship modifier - Patient     FALSE         FALSE           FALSE
+#> 4 Specimen Source Codes - Patient     FALSE         FALSE           FALSE
+#> 5              Veterinary Patient     FALSE         FALSE           FALSE
 #> 6                        Diabetes     FALSE         FALSE           FALSE
 #> 7               Diabetes Mellitus     FALSE         FALSE           FALSE
 #> 8  Chronic kidney disease stage 3     FALSE         FALSE           FALSE

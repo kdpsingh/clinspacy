@@ -10,3 +10,4 @@
 ^pkgdown$
 ^vignettes$
 ^cran-comments\.md$
+^CRAN-RELEASE$
