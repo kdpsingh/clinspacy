@@ -16,6 +16,9 @@ A data frame with 109053 rows and 501 variables: \describe{
 \usage{
 dataset_cui2vec_embeddings()
 }
+\value{
+Returns the cui2vec UMLS embeddings as a data frame.
+}
 \description{
 This dataset contains Unified Medical Langauge System (UMLS) concept
 embeddings from Andrew Beam's

@@ -32,6 +32,9 @@ linker_threshold can only be set once per session.}
 \item{...}{Additional settings available from:
 \href{https://github.com/allenai/scispacy}{https://github.com/allenai/scispacy}.}
 }
+\value{
+No return value.
+}
 \description{
 Initializes clinspacy. This function is optional to run but gives you more
 control over the parameters used by scispacy at initiation. If you do not run

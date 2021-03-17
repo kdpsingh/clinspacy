@@ -28,6 +28,7 @@
 #'   \item{emb_002}{Concept embedding vector #2} \item{...}{and so on...}
 #'   \item{emb_500}{Concept embedding vector #500} }
 #' @source \url{https://figshare.com/s/00d69861786cd0156d81}
+#' @return Returns the cui2vec UMLS embeddings as a data frame.
 #' @export
 dataset_cui2vec_embeddings <- function() {
   source_file = 'https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_embeddings.rds'
@@ -64,6 +65,7 @@ dataset_cui2vec_embeddings <- function() {
 #'   Identifier (CUI)} \item{semantic_type}{Semantic type of the CUI}
 #'   \item{definition}{Definition of the CUI} }
 #' @source \url{https://github.com/beamandrew/cui2vec}
+#' @return Returns the cui2vec UMLS definitions as a data frame.
 #' @export
 dataset_cui2vec_definitions <- function() {
   source_file = 'https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/cui2vec_definitions.rds'

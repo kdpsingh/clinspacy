@@ -19,6 +19,7 @@
 #'   \item{transcription}{Transcription of note text} \item{keywords}{Keywords}
 #'   }
 #' @source \url{https://www.kaggle.com/tboyle10/medicaltranscriptions/data}
+#' @return Returns the mtsamples dataset as a data frame.
 #' @export
 dataset_mtsamples <- function() {
   source_file = 'https://github.com/ML4LHS/clinspacy/releases/download/v0.1.0/mtsamples.rds'

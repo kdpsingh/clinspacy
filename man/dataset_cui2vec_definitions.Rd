@@ -15,6 +15,9 @@ A data frame with 3053795 rows and 3 variables: \describe{
 \usage{
 dataset_cui2vec_definitions()
 }
+\value{
+Returns the cui2vec UMLS definitions as a data frame.
+}
 \description{
 This dataset contains definitions for the Unified Medical Language System
 (UMLS) Concept Unique Identifiers (CUIs). These come from Andrew Beam's

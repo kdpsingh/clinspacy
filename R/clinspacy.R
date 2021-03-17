@@ -43,6 +43,8 @@ clinspacy_env = new.env(parent = emptyenv())
 #' @param ... Additional settings available from:
 #'   \href{https://github.com/allenai/scispacy}{https://github.com/allenai/scispacy}.
 #'
+#' @return No return value.
+#'
 #' @export
 clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshold = 0.99, ...) {
 
@@ -65,15 +67,15 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
       clinspacy_env$use_linker <- use_linker
       message('Adding the UMLS entity linker to the spacy pipeline...')
       clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
-      return()
+      return(invisible())
     } else if (clinspacy_env$use_linker == TRUE & use_linker == FALSE) {
       clinspacy_env$use_linker <- use_linker
       message('Removing the UMLS entity linker from the spacy pipeline...')
       clinspacy_env$nlp$remove_pipe('EntityLinker')
-      return()
+      return(invisible())
     } else {
       message('Clinspacy has already been initialized. Set the use_linker argument to turn the linker on or off.')
-      return()
+      return(invisible())
     }
   }
 
@@ -101,14 +103,14 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
     reticulate::use_miniconda(condaenv = 'clinspacy', required = TRUE)
   }
 
-  if (!reticulate::py_module_available('spacy')) {
+  if (!reticulate::py_module_available('spacy==2.3')) {
     message('Spacy not found. Installing spacy...')
-    reticulate::py_install('spacy', envname = 'clinspacy', pip = TRUE)
+    reticulate::py_install('spacy==2.3', envname = 'clinspacy', pip = TRUE)
   }
 
-  if (!reticulate::py_module_available('scispacy')) {
+  if (!reticulate::py_module_available('scispacy==0.3.0')) {
     message('Scispacy not found. Installing scispacy...')
-    reticulate::py_install('scispacy', envname = 'clinspacy', pip = TRUE)
+    reticulate::py_install('scispacy==0.3.0', envname = 'clinspacy', pip = TRUE)
   }
 
   # if (!reticulate::py_module_available('negspacy')) {
@@ -163,6 +165,7 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 
   clinspacy_env$sectionizer <- clinspacy_env$clinical_sectionizer$Sectionizer(clinspacy_env$nlp)
   clinspacy_env$nlp$add_pipe(clinspacy_env$sectionizer)
+  invisible()
 }
 
 #' Performs biomedical named entity recognition, Unified Medical Language System

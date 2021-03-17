@@ -17,6 +17,9 @@ A data frame with 4999 rows and 6 variables: \describe{
 \usage{
 dataset_mtsamples()
 }
+\value{
+Returns the mtsamples dataset as a data frame.
+}
 \description{
 This dataset contains sample medical transcriptions for various medical
 specialties.

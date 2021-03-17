@@ -1,12 +1,22 @@
 Package: clinspacy
 Type: Package
-Title: Clinical Natural Language Processing using spaCy, Scispacy, and Medspacy
+Title: Clinical Natural Language Processing using 'spaCy', 'scispaCy', and 'medspaCy'
 Version: 1.0.1
-Author: Karandeep Singh
-Maintainer: Karandeep Singh <kdpsingh@umich.edu>
+Authors@R: c(person("Karandeep", "Singh",
+            email = "kdpsingh@umich.edu", role = c("aut", "cre")),
+            person("Benjamin", "Kompa", role = c("aut")),
+            person("Andrew", "Beam", role = c("aut")),
+            person("Allen", "Schmaltz", role = c("aut")))
 Description: Performs biomedical named entity recognition,
     Unified Medical Language System (UMLS) concept mapping, and negation
-    detection using the Python spaCy, scispaCy, and medspaCy packages.
+    detection using the Python 'spaCy', 'scispaCy', and 'medspaCy' packages, and 
+    transforms extracted data into a wide format for inclusion in machine
+    learning models. The development of the 'scispaCy' package is described by
+    Neumann (2019) <doi:10.18653/v1/W19-5034>. The 'medspacy' package uses
+    'ConText', an algoritm for determining the context of clinical statements
+    described by Harkema (2009) <doi:10.1016/j.jbi.2009.05.002>. Clinspacy
+    also supports entity embeddings from 'scispaCy' and UMLS 'cui2vec' concept
+    embeddings developed by Beam (2018) <arXiv:1804.01486>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
