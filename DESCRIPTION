@@ -13,7 +13,7 @@ Description: Performs biomedical named entity recognition,
     transforms extracted data into a wide format for inclusion in machine
     learning models. The development of the 'scispaCy' package is described by
     Neumann (2019) <doi:10.18653/v1/W19-5034>. The 'medspacy' package uses
-    'ConText', an algoritm for determining the context of clinical statements
+    'ConText', an algorithm for determining the context of clinical statements
     described by Harkema (2009) <doi:10.1016/j.jbi.2009.05.002>. Clinspacy
     also supports entity embeddings from 'scispaCy' and UMLS 'cui2vec' concept
     embeddings developed by Beam (2018) <arXiv:1804.01486>.
