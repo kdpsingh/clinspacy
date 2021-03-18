@@ -15,3 +15,11 @@
 
 # clinspacy 1.0.1 (2021-03-08)
 * Bug fix: removed unnecessary arguments and some clean up in prep for CRAN submission
+
+# clinspacy 1.0.2 (2021-03-18)
+* Fixed documentation prior to CRAN submission based on feedback
+* Bug fix: Specified version numbers for spaCy (2.3.0), scispaCy (0.2.5), and medspaCy (0.1.0.2) to ensure that the versions are compatible with one another
+* Bug fix: spaCy 2.3.0 must be installed from conda-forge (`pip` set to `FALSE`) because the source fails to build properly on Windows even with Visual C++ build tools installed
+* Update: Switched to using medspaCy instead of its individual components because medspaCy 0.1.0.2 is compatible with spaCy 2.3.0 (an older version was not).
+* Bug fix: changed `section_title` to `section_category` due to updates in medspaCy sectionizer API
+* Known issue: After first running `clinspacy_init()` on Windows, sometimes it cannot find `numpy`. This is a known issue with `reticulate` [https://github.com/rstudio/reticulate/issues/367](https://github.com/rstudio/reticulate/issues/367). Restarting the R session and re-running `clinspacy_init()` appears to fix the issue

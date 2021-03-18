@@ -19,3 +19,5 @@
 * I am confirming that none of the functions write to the user's home directory, the working directory, or the package directory. Any files that are written by functions are written to the appropriate OS-specific app directory folder, which is identified using the rappdirs package.
 
 * Due to the inclusion of cui2vec data in this package (which is also licensed through an MIT license), I have added Benjamin Kompa, Andrew Beam, and Allen Schmaltz as authors on this package (with their permission) and listed them as copyright holders in the LICENSE file.
+
+* I discovered an issue related to Python spaCy, scispaCy, and medspaCy packages that clinspacy depends upon. Those have now been corrected by setting strict version requirements for Python dependencies so that recent package updates should not affect clinspacy.

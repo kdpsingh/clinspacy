@@ -1,7 +1,7 @@
 Package: clinspacy
 Type: Package
 Title: Clinical Natural Language Processing using 'spaCy', 'scispaCy', and 'medspaCy'
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(person("Karandeep", "Singh",
             email = "kdpsingh@umich.edu", role = c("aut", "cre")),
             person("Benjamin", "Kompa", role = c("aut")),

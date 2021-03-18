@@ -103,45 +103,33 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
     reticulate::use_miniconda(condaenv = 'clinspacy', required = TRUE)
   }
 
-  if (!reticulate::py_module_available('spacy==2.3')) {
-    message('Spacy not found. Installing spacy...')
-    reticulate::py_install('spacy==2.3', envname = 'clinspacy', pip = TRUE)
+  if (!reticulate::py_module_available('spacy')) {
+    message('SpaCy not found. Installing spaCy...')
+    # Do NOT install using pip because no binary available and build fails on Windows
+    reticulate::py_install('spacy==2.3.0', envname = 'clinspacy')
   }
 
-  if (!reticulate::py_module_available('scispacy==0.3.0')) {
-    message('Scispacy not found. Installing scispacy...')
-    reticulate::py_install('scispacy==0.3.0', envname = 'clinspacy', pip = TRUE)
+  if (!reticulate::py_module_available('scispacy')) {
+    message('ScispaCy not found. Installing scispaCy...')
+    reticulate::py_install('scispacy==0.2.5', envname = 'clinspacy', pip = TRUE)
   }
-
-  # if (!reticulate::py_module_available('negspacy')) {
-  #  message('Negspacy not found. Installing negspacy...')
-  #  reticulate::py_install('negspacy', pip = TRUE)
-  # }
 
   if (!reticulate::py_module_available('en_core_sci_lg')) {
     message('en_core_sci_lg language model not found. Installing en_core_sci_lg...')
     reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_lg-0.2.5.tar.gz', envname = 'clinspacy', pip = TRUE)
   }
 
-  if (!reticulate::py_module_available('cycontext')) {
-    message('Medspacy not found. Installing medspacy/cycontext...')
-    reticulate::py_install('cycontext', envname = 'clinspacy', pip = TRUE)
+  if (!reticulate::py_module_available('medspacy')) {
+    message('MedspaCy not found. Installing medspaCy...')
+    reticulate::py_install('medspacy==0.1.0.2', envname = 'clinspacy', pip = TRUE)
   }
 
-  if (!reticulate::py_module_available('clinical_sectionizer')) {
-    message('Medspacy not found. Installing medspacy/clinical-sectionizer...')
-    reticulate::py_install('clinical-sectionizer', envname = 'clinspacy', pip = TRUE)
-  }
-
-  message('Importing spacy...')
+  message('Importing spaCy...')
   clinspacy_env$spacy <- reticulate::import('spacy', delay_load = TRUE)
-  message('Importing scispacy...')
+  message('Importing scispaCy...')
   clinspacy_env$scispacy <-  reticulate::import('scispacy', delay_load = TRUE)
-  message('Importing medspacy modules...')
-  clinspacy_env$cycontext <-  reticulate::import('cycontext', delay_load = TRUE)
-  clinspacy_env$clinical_sectionizer <-  reticulate::import('clinical_sectionizer', delay_load = TRUE)
-  # message('Importing negspacy...')
-  # clinspacy_env$negspacy <- reticulate::import('negspacy', delay_load = TRUE)
+  message('Importing medspaCy...')
+  clinspacy_env$medspacy <-  reticulate::import('medspacy', delay_load = TRUE)
 
   message('Loading the en_core_sci_lg language model...')
   clinspacy_env$nlp <- clinspacy_env$spacy$load("en_core_sci_lg")
@@ -157,13 +145,10 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
     clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
   }
 
-  # message('Adding NegEx to the spacy pipeline...')
-  # clinspacy_env$nlp$add_pipe(clinspacy_env$negex)
-
-  clinspacy_env$context <- clinspacy_env$cycontext$ConTextComponent(clinspacy_env$nlp)
+  clinspacy_env$context <- clinspacy_env$medspacy$context$ConTextComponent(clinspacy_env$nlp)
   clinspacy_env$nlp$add_pipe(clinspacy_env$context)
 
-  clinspacy_env$sectionizer <- clinspacy_env$clinical_sectionizer$Sectionizer(clinspacy_env$nlp)
+  clinspacy_env$sectionizer <- clinspacy_env$medspacy$section_detection$Sectionizer(clinspacy_env$nlp)
   clinspacy_env$nlp$add_pipe(clinspacy_env$sectionizer)
   invisible()
 }
@@ -390,7 +375,7 @@ clinspacy_single <- function(text, threshold = 0.99,
                            is_hypothetical = logical(0),
                            is_negated = logical(0),
                            is_uncertain = logical(0),
-                           section_title = character(0),
+                           section_category = character(0),
                            stringsAsFactors = FALSE)
   } else {
     return_df = data.frame(entity = character(0),
@@ -400,7 +385,7 @@ clinspacy_single <- function(text, threshold = 0.99,
                            is_hypothetical = logical(0),
                            is_negated = logical(0),
                            is_uncertain = logical(0),
-                           section_title = character(0),
+                           section_category = character(0),
                            stringsAsFactors = FALSE)
   }
 
@@ -450,9 +435,9 @@ clinspacy_single <- function(text, threshold = 0.99,
              temp_df$is_hypothetical = parsed_text$ents[[entity_num]]$`_`$is_hypothetical
              temp_df$is_negated = parsed_text$ents[[entity_num]]$`_`$is_negated
              temp_df$is_uncertain = parsed_text$ents[[entity_num]]$`_`$is_uncertain
-             temp_df$section_title =
-               ifelse(!is.null(parsed_text$ents[[entity_num]]$`_`$section_title),
-                      parsed_text$ents[[entity_num]]$`_`$section_title,
+             temp_df$section_category =
+               ifelse(!is.null(parsed_text$ents[[entity_num]]$`_`$section_category),
+                      parsed_text$ents[[entity_num]]$`_`$section_category,
                       NA_character_)
 
              if (clinspacy_env$use_linker) {
@@ -751,6 +736,8 @@ clinspacy <- function(x,
 
   if (verbose) {
     pb = utils::txtProgressBar(min = 0, max = nrow(dt), style = 3)
+  } else {
+    pb = NULL
   }
 
   if (is.null(output_file)) {

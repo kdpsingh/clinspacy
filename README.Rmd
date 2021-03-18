@@ -6,6 +6,8 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
@@ -33,7 +35,6 @@ remotes::install_github('ML4LHS/clinspacy', INSTALL_opts = '--no-multiarch')
 
 ```{r}
 library(clinspacy)
-library(magrittr) # For the pipe %>%
 ```
 
 
