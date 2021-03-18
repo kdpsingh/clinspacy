@@ -81,7 +81,7 @@ of the package functions are run." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">clinspacy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -107,6 +107,9 @@ of the package functions are run." />
       <a href="../articles/using_embeddings_for_machine_learning_on_clinical_text.html">Using Embeddings for Machine Learning on Clinical Text</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -144,12 +147,12 @@ this function, it will be run with default parameters the first time that any
 of the package functions are run.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>clinspacy_init</span>(
-  <span class='kw'>miniconda</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>use_linker</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>linker_threshold</span> <span class='kw'>=</span> <span class='fl'>0.99</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>clinspacy_init</span><span class='op'>(</span>
+  miniconda <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  use_linker <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  linker_threshold <span class='op'>=</span> <span class='fl'>0.99</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,6 +184,9 @@ linker_threshold can only be set once per session.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>No return value.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -193,11 +199,11 @@ linker_threshold can only be set once per session.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Karandeep Singh.</p>
+  <p>Developed by Karandeep Singh, Benjamin Kompa, Andrew Beam, Allen Schmaltz.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

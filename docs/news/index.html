@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">clinspacy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -164,6 +164,18 @@
 <li>Bug fix: removed unnecessary arguments and some clean up in prep for CRAN submission</li>
 </ul>
 </div>
+    <div id="clinspacy-102-2021-03-18" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.2">
+<a href="#clinspacy-102-2021-03-18" class="anchor"></a>clinspacy 1.0.2 (2021-03-18)</h1>
+<ul>
+<li>Fixed documentation prior to CRAN submission based on feedback</li>
+<li>Bug fix: Specified version numbers for spaCy (2.3.0), scispaCy (0.2.5), and medspaCy (0.1.0.2) to ensure that the versions are compatible with one another</li>
+<li>Bug fix: spaCy 2.3.0 must be installed from conda-forge (<code>pip</code> set to <code>FALSE</code>) because the source fails to build properly on Windows even with Visual C++ build tools installed</li>
+<li>Update: Switched to using medspaCy instead of its individual components because medspaCy 0.1.0.2 is compatible with spaCy 2.3.0 (an older version was not).</li>
+<li>Bug fix: changed <code>section_title</code> to <code>section_category</code> due to updates in medspaCy sectionizer API</li>
+<li>Known issue: After first running <code><a href="../reference/clinspacy_init.html">clinspacy_init()</a></code> on Windows, sometimes it cannot find <code>numpy</code>. This is a known issue with <code>reticulate</code> <a href="https://github.com/rstudio/reticulate/issues/367">https://github.com/rstudio/reticulate/issues/367</a>. Restarting the R session and re-running <code><a href="../reference/clinspacy_init.html">clinspacy_init()</a></code> appears to fix the issue</li>
+</ul>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -177,7 +189,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Karandeep Singh.</p>
+  <p>Developed by Karandeep Singh, Benjamin Kompa, Andrew Beam, Allen Schmaltz.</p>
 </div>
 
 <div class="pkgdown">

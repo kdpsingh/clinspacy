@@ -75,7 +75,7 @@ cui2vec R package. There are
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">clinspacy</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@ cui2vec R package. There are
       <a href="../articles/using_embeddings_for_machine_learning_on_clinical_text.html">Using Embeddings for Machine Learning on Clinical Text</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,12 +138,12 @@ embeddings from Andrew Beam's
 500 embeddings included for each concept.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dataset_cui2vec_embeddings</span>()</pre>
+    <pre class="usage"><span class='fu'>dataset_cui2vec_embeddings</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 109053 rows and 501 variables:</p><dl'>
+    <p>A data frame with 109053 rows and 501 variables:</p><dl>
   <dt>cui</dt><dd><p>A Unified Medical Language System (UMLS) Concept Unique
   Identifier (CUI)</p></dd> <dt>emb_001</dt><dd><p>Concept embedding vector #1</p></dd>
   <dt>emb_002</dt><dd><p>Concept embedding vector #2</p></dd> <dt>...</dt><dd><p>and so on...</p></dd>
@@ -150,6 +153,9 @@ embeddings from Andrew Beam's
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
     <p><a href='https://figshare.com/s/00d69861786cd0156d81'>https://figshare.com/s/00d69861786cd0156d81</a></p>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns the cui2vec UMLS embeddings as a data frame.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This dataset is not viewable until it has been downloaded, which will occur
@@ -176,11 +182,11 @@ only change made to the original dataset is the renaming of columns.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Karandeep Singh.</p>
+  <p>Developed by Karandeep Singh, Benjamin Kompa, Andrew Beam, Allen Schmaltz.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
