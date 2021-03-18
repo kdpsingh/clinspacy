@@ -65,12 +65,12 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
                                                                             threshold = linker_threshold, ...)
       }
       clinspacy_env$use_linker <- use_linker
-      message('Adding the UMLS entity linker to the spacy pipeline...')
+      message('Adding the UMLS entity linker to the spaCy pipeline...')
       clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
       return(invisible())
     } else if (clinspacy_env$use_linker == TRUE & use_linker == FALSE) {
       clinspacy_env$use_linker <- use_linker
-      message('Removing the UMLS entity linker from the spacy pipeline...')
+      message('Removing the UMLS entity linker from the spaCy pipeline...')
       clinspacy_env$nlp$remove_pipe('EntityLinker')
       return(invisible())
     } else {

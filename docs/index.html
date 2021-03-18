@@ -18,7 +18,7 @@
     transforms extracted data into a wide format for inclusion in machine
     learning models. The development of the scispaCy package is described by
     Neumann (2019) &lt;doi:10.18653/v1/W19-5034&gt;. The medspacy package uses
-    ConText, an algoritm for determining the context of clinical statements
+    ConText, an algorithm for determining the context of clinical statements
     described by Harkema (2009) &lt;doi:10.1016/j.jbi.2009.05.002&gt;. Clinspacy
     also supports entity embeddings from scispaCy and UMLS cui2vec concept
     embeddings developed by Beam (2018) &lt;arXiv:1804.01486&gt;.">
@@ -112,6 +112,7 @@
 <div id="initiating-clinspacy" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initiating-clinspacy" class="anchor"></a>Initiating clinspacy</h2>
+<p><em>Note: the very first time you run <code><a href="reference/clinspacy_init.html">clinspacy_init()</a></code> or <code><a href="reference/clinspacy.html">clinspacy()</a></code> after installing the package, you may receive an error stating that <code>spaCy</code> was unable to be imported because it was not found. Restarting your R session should resolve the issue.</em></p>
 <p>Initiating clinspacy is optional. If you do not initiate the package using <code><a href="reference/clinspacy_init.html">clinspacy_init()</a></code>, it will be automatically initiated without the UMLS linker. The UMLS linker takes up ~12 GB of RAM, so if you would like to use the linker, you can initiate clinspacy with the linker. The linker can still be added on later by reinitiating with the <code>use_linker</code> argument set to <code>TRUE</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/clinspacy_init.html">clinspacy_init</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># This is optional! The default functionality is to initiatie clinspacy without the UMLS linker</span></code></pre></div>
@@ -487,8 +488,8 @@
 <span class="co">#&gt; 1            1 C0030705     patient     patient Patient or Disabled Group                        Patients     FALSE         FALSE</span>
 <span class="co">#&gt; 2            1 C1578481     patient     patient           Idea or Concept      Mail Claim Party - Patient     FALSE         FALSE</span>
 <span class="co">#&gt; 3            1 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient     FALSE         FALSE</span>
-<span class="co">#&gt; 4            1 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient     FALSE         FALSE</span>
-<span class="co">#&gt; 5            1 C1705908     patient     patient                  Organism              Veterinary Patient     FALSE         FALSE</span>
+<span class="co">#&gt; 4            1 C1578485     patient     patient      Intellectual Product Specimen Source Codes - Patient     FALSE         FALSE</span>
+<span class="co">#&gt; 5            1 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient     FALSE         FALSE</span>
 <span class="co">#&gt; 6            1 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes     FALSE         FALSE</span>
 <span class="co">#&gt; 7            1 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus     FALSE         FALSE</span>
 <span class="co">#&gt; 8            1 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3     FALSE         FALSE</span>

@@ -40,12 +40,13 @@ library(clinspacy)
 
 ## Initiating clinspacy
 
+*Note: the very first time you run `clinspacy_init()` or `clinspacy()` after installing the package, you may receive an error stating that `spaCy` was unable to be imported because it was not found. Restarting your R session should resolve the issue.*
+
 Initiating clinspacy is optional. If you do not initiate the package using `clinspacy_init()`, it will be automatically initiated without the UMLS linker. The UMLS linker takes up ~12 GB of RAM, so if you would like to use the linker, you can initiate clinspacy with the linker. The linker can still be added on later by reinitiating with the `use_linker` argument set to `TRUE`.
 
 ```{r}
 clinspacy_init() # This is optional! The default functionality is to initiatie clinspacy without the UMLS linker
 ```
-
 
 ## Named entity recognition (without the UMLS linker)
 

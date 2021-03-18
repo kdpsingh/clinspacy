@@ -28,6 +28,11 @@ library(clinspacy)
 
 ## Initiating clinspacy
 
+*Note: the very first time you run `clinspacy_init()` or `clinspacy()`
+after installing the package, you may receive an error stating that
+`spaCy` was unable to be imported because it was not found. Restarting
+your R session should resolve the issue.*
+
 Initiating clinspacy is optional. If you do not initiate the package
 using `clinspacy_init()`, it will be automatically initiated without the
 UMLS linker. The UMLS linker takes up \~12 GB of RAM, so if you would
@@ -434,8 +439,8 @@ clinspacy('This patient has diabetes and CKD stage 3 but no HTN.')
 #> 1            1 C0030705     patient     patient Patient or Disabled Group                        Patients     FALSE         FALSE
 #> 2            1 C1578481     patient     patient           Idea or Concept      Mail Claim Party - Patient     FALSE         FALSE
 #> 3            1 C1578484     patient     patient           Idea or Concept Relationship modifier - Patient     FALSE         FALSE
-#> 4            1 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient     FALSE         FALSE
-#> 5            1 C1705908     patient     patient                  Organism              Veterinary Patient     FALSE         FALSE
+#> 4            1 C1578485     patient     patient      Intellectual Product Specimen Source Codes - Patient     FALSE         FALSE
+#> 5            1 C1578486     patient     patient      Intellectual Product  Disabled Person Code - Patient     FALSE         FALSE
 #> 6            1 C0011847    diabetes    diabetes       Disease or Syndrome                        Diabetes     FALSE         FALSE
 #> 7            1 C0011849    diabetes    diabetes       Disease or Syndrome               Diabetes Mellitus     FALSE         FALSE
 #> 8            1 C2316787 CKD stage 3 ckd stage 3       Disease or Syndrome  Chronic kidney disease stage 3     FALSE         FALSE
