@@ -25,6 +25,13 @@ The goal of clinspacy is to perform biomedical named entity recognition, Unified
 
 ## Installation
 
+
+You can install the CRAN version of clinspacy with:
+
+```
+install.packages('clinspacy')
+```
+
 You can install the GitHub version of clinspacy with:
 
 ```
