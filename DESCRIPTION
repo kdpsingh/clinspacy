@@ -21,7 +21,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    reticulate (>= 1.16),
+    reticulate (>= 1.19),
     data.table,
     assertthat,
     rappdirs,

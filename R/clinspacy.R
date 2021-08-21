@@ -96,7 +96,7 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
 
     if (!is.null(is_clinspacy_env_installed)) { # this means the 'clinspacy' condaenv *is not* installed
       message('Clinspacy requires the clinspacy conda environment. Attempting to create...')
-      reticulate::conda_create(envname = 'clinspacy')
+      reticulate::conda_create(envname = 'clinspacy', python_version = '3.8')
     }
 
     # This is intentional -- will throw an error if environment creation failed
