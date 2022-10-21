@@ -1,0 +1,10 @@
+Cython
+git+https://github.com/jianlins/PyRuSH.git@master
+setuptools>=65.5.0
+medspacy==1.0.0
+medspacy-quickumls==2.6
+scispacy==0.5.1
+spacy==3.4.1
+spacy-legacy==3.0.10
+spacy-loggers==1.0.3
+en-core-sci-lg @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.1/en_core_sci_lg-0.5.1.tar.gz

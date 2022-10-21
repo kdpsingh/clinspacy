@@ -22,6 +22,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     reticulate (>= 1.19),
+    renv (>= 0.16),
     data.table,
     assertthat,
     rappdirs,
