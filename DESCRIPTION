@@ -23,6 +23,7 @@ LazyData: true
 Imports: 
     reticulate (>= 1.19),
     renv (>= 0.16),
+    cli (>= 3.4.0),
     data.table,
     assertthat,
     rappdirs,

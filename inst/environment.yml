@@ -1,0 +1,20 @@
+name: clinspacy 
+channels:
+  - conda-forge
+  - defaults
+variables:
+   CFLAGS: "-mavx -DWARN(a)=(a)"
+dependencies:
+  - python=3.10
+  - Cython
+  - pip
+  - pip:
+      - git+https://github.com/jianlins/PyRuSH.git@master
+      - spacy==3.4.1
+      - medspacy==1.0.0
+      - medspacy-quickumls==2.6
+      - scispacy==0.5.1
+      - en-core-sci-lg @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.1/en_core_sci_lg-0.5.1.tar.gz
+  - setuptools>=65.5.0
+  - spacy-loggers=1.0.3
+  - scikit-learn=1.1.3
