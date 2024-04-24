@@ -66,12 +66,12 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
       }
       clinspacy_env$use_linker <- use_linker
       message('Adding the UMLS entity linker to the spaCy pipeline...')
-      clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
+      clinspacy_env$nlp$add_pipe('entity_linker')
       return(invisible())
     } else if (clinspacy_env$use_linker == TRUE & use_linker == FALSE) {
       clinspacy_env$use_linker <- use_linker
       message('Removing the UMLS entity linker from the spaCy pipeline...')
-      clinspacy_env$nlp$remove_pipe('EntityLinker')
+      clinspacy_env$nlp$remove_pipe('entity_linker')
       return(invisible())
     } else {
       message('Clinspacy has already been initialized. Set the use_linker argument to turn the linker on or off.')
@@ -106,22 +106,22 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
   if (!reticulate::py_module_available('spacy')) {
     message('SpaCy not found. Installing spaCy...')
     # Do NOT install using pip because no binary available and build fails on Windows
-    reticulate::py_install('spacy==2.3.0', envname = 'clinspacy')
+    reticulate::py_install('spacy', envname = 'clinspacy')
   }
 
   if (!reticulate::py_module_available('scispacy')) {
     message('ScispaCy not found. Installing scispaCy...')
-    reticulate::py_install('scispacy==0.2.5', envname = 'clinspacy', pip = TRUE)
+    reticulate::py_install('scispacy', envname = 'clinspacy', pip = TRUE)
   }
 
   if (!reticulate::py_module_available('en_core_sci_lg')) {
     message('en_core_sci_lg language model not found. Installing en_core_sci_lg...')
-    reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_core_sci_lg-0.2.5.tar.gz', envname = 'clinspacy', pip = TRUE)
+    reticulate::py_install('https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_lg-0.5.4.tar.gz', envname = 'clinspacy', pip = TRUE)
   }
 
   if (!reticulate::py_module_available('medspacy')) {
     message('MedspaCy not found. Installing medspaCy...')
-    reticulate::py_install('medspacy==0.1.0.2', envname = 'clinspacy', pip = TRUE)
+    reticulate::py_install('medspacy', envname = 'clinspacy', pip = TRUE)
   }
 
   message('Importing spaCy...')
@@ -142,14 +142,14 @@ clinspacy_init <- function(miniconda = TRUE, use_linker = FALSE, linker_threshol
                                                                         name="umls",
                                                                         threshold = linker_threshold, ...)
     message('Adding the UMLS entity linker to the spacy pipeline...')
-    clinspacy_env$nlp$add_pipe(clinspacy_env$linker)
+    clinspacy_env$nlp$add_pipe('entity_linker')
   }
 
-  clinspacy_env$context <- clinspacy_env$medspacy$context$ConTextComponent(clinspacy_env$nlp)
-  clinspacy_env$nlp$add_pipe(clinspacy_env$context)
+  clinspacy_env$context <- clinspacy_env$medspacy$context$ConText(clinspacy_env$nlp)
+  clinspacy_env$nlp$add_pipe('medspacy_context')
 
   clinspacy_env$sectionizer <- clinspacy_env$medspacy$section_detection$Sectionizer(clinspacy_env$nlp)
-  clinspacy_env$nlp$add_pipe(clinspacy_env$sectionizer)
+  clinspacy_env$nlp$add_pipe('medspacy_sectionizer')
   invisible()
 }
 
